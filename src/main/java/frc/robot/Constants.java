@@ -22,6 +22,9 @@ public final class Constants {
 
         public static final SwerveDriveKinematics kinematics = new SwerveDriveKinematics(fl, fr, rl, rr);
         public static SwerveDrivetrain swerve = TunerConstants.DriveTrain;
+
+        public static double maxLinearVelocity = 4;
+        public static double maxAngularVelocity = 4;
     }
 
     public static final class Limelight {
@@ -62,6 +65,11 @@ public final class Constants {
     public static final class CandleSubsystem{
         public static final int CANDLE_ID = 62;
         public static boolean cone = true;
+    }
+
+    public static final class ShooterSubsystem{
+        public static final int TopID = 62;
+        public static final int BottomID = 61;
     }
 
     // public static final class 

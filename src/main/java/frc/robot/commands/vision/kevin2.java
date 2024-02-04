@@ -4,6 +4,7 @@
 
 package frc.robot.commands.vision;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.Vision;
 
@@ -17,7 +18,7 @@ public class kevin2 extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new vision2(vision),
-      new kevin(vision)
+      new NoteRun(vision)
     );
   }
 }

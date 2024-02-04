@@ -65,7 +65,6 @@ public class vision2 extends Command {
     if(gyro.getYaw().getValueAsDouble() > gyroGoal + threshold){
       System.out.println("Too far left");
       drivetrain.setControl(request.withSpeeds(speedsRight));
-
     }
 
     else if(gyro.getYaw().getValueAsDouble() < gyroGoal - threshold){

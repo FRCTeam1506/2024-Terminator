@@ -4,14 +4,21 @@
 
 package frc.robot;
 
+import java.util.List;
+
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PneumaticHub;
@@ -25,8 +32,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.Vision;
-import frc.robot.commands.vision.kevin2;
-import frc.robot.commands.vision.vision2;
+import frc.robot.commands.vision.*;
 import frc.robot.generated.TunerConstants;
 
 public class RobotContainer {
@@ -146,7 +152,24 @@ public class RobotContainer {
   }
 
   public Command getAutonomousCommand() {
+
+    List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
+        new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)),
+        new Pose2d(20.0, 20.0, Rotation2d.fromDegrees(0))
+
+    );
+
+    PathPlannerPath path = new PathPlannerPath(
+            bezierPoints,
+            new PathConstraints(5.0, 5.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
+            new GoalEndState(3.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
+    );
+
+
     /* First put the drivetrain into auto run mode, then run the auto */
-    return runAuto;
+    // return drivetrain.followPathCommand(path);
+
+    Command goForward = drivetrain.getAutoPath("Forward");
+    return goForward;
   }
 }

@@ -11,6 +11,7 @@ import frc.robot.generated.TunerConstants;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public final class Constants {
 
@@ -25,6 +26,8 @@ public final class Constants {
 
         public static double maxLinearVelocity = 4;
         public static double maxAngularVelocity = 4;
+
+        public static Field2d m_field = new Field2d();
     }
 
     public static final class Limelight {
@@ -44,22 +47,12 @@ public final class Constants {
     }
 
     public static final class IntakeSubsystem{
-        public static final int MOTOR_ID = 61;
-        public static final double CUBE_DEFAULT_INTAKE_SPEED = 0.3;
-        public static final double CONE_DEFAULT_INTAKE_SPEED = 0.75; // 0.35 standish
-        public static double CUBE_DEFAULT_OUTTAKE_SPEED = 1.0; //0.4
-        public static final double CONE_DEFAULT_OUTTAKE_SPEED = 0.44; // 0.2  //0.25 //0.3 too slow standish
+        public static final int MOTOR_ID = 51;
+        public static final int INDEXER_ID = 52;
+        public static final double DEFAULT_INTAKE_SPEED = 0.3;
+        public static final double DEFAULT_INDEXER_SPEED = 0.2;
 
-        public static final int SolenoidId1 = 5; //in
-        public static final int SolenoidId2 = 6; //out
-
-
-    }
-
-    public static final class TelescopingSubsystem{
-        public static final int MOTOR_ID = 60;
-        public static final int DIO_PORT = 1;
-        public static final double DEFAULT_SPEED = 0.9; //0.65
+        public static boolean ring = false;
     }
 
     public static final class CandleSubsystem{
@@ -70,6 +63,9 @@ public final class Constants {
     public static final class ShooterSubsystem{
         public static final int TopID = 62;
         public static final int BottomID = 61;
+        public static final int AnglerID = 60;
+
+        public static final double anglerDefaultSpeed = 0.075; //david -- 0.05
     }
 
     // public static final class 

@@ -3,6 +3,7 @@ package frc.robot;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrainConstants;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
@@ -18,6 +19,7 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
@@ -36,6 +38,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     private double m_lastSimTime;
 
     private final SwerveRequest.ApplyChassisSpeeds autoRequest = new SwerveRequest.ApplyChassisSpeeds();
+
+    private SwerveDriveOdometry odometry;
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
@@ -154,6 +158,13 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         for(int i=0; i<4; i++){
             TunerConstants.DriveTrain.getModule(i).apply(setpointStates[i], DriveRequestType.Velocity);
         }
+    }
+
+    public SwerveDriveOdometry getOdometry(){
+        Pigeon2 pigeon = new Pigeon2(50);
+        odometry = new SwerveDriveOdometry(m_kinematics, pigeon.getRotation2d(), m_modulePositions);
+        pigeon.close();
+        return odometry;
     }
 
     private void startSimThread() {

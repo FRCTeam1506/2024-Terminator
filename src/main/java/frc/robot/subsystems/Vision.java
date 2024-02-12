@@ -43,14 +43,14 @@ public class Vision extends SubsystemBase {
 
   public static double x, y, area, target;
 
-  Pigeon2 gyro = new Pigeon2(50);
+  static Pigeon2 gyro = new Pigeon2(50);
 
-  SwerveModule fl = new SwerveModule(TunerConstants.FrontLeft, "");
-  SwerveModule fr = new SwerveModule(TunerConstants.FrontRight, "");
-  SwerveModule rl = new SwerveModule(TunerConstants.BackLeft, "");
-  SwerveModule rr = new SwerveModule(TunerConstants.BackRight, "");
+  static SwerveModule fl = new SwerveModule(TunerConstants.FrontLeft, "");
+  static SwerveModule fr = new SwerveModule(TunerConstants.FrontRight, "");
+  static SwerveModule rl = new SwerveModule(TunerConstants.BackLeft, "");
+  static SwerveModule rr = new SwerveModule(TunerConstants.BackRight, "");
 
-  public final SwerveDrivePoseEstimator estimator = 
+  public static final SwerveDrivePoseEstimator estimator = 
     new SwerveDrivePoseEstimator(
         Constants.Swerve.kinematics, 
         gyro.getRotation2d(), 
@@ -72,8 +72,9 @@ public class Vision extends SubsystemBase {
   }
 
   public void dashboard(){
-    Field2d m_field = new Field2d();
-    m_field.setRobotPose(estimator.getEstimatedPosition());
+    // Field2d m_field = new Field2d();
+    // m_field.setRobotPose(estimator.getEstimatedPosition());
+    // m_field.setRobotPose(TunerConstants.DriveTrain.getOdometry().getPoseMeters());
 
     //post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);
@@ -90,6 +91,8 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("pose y", estimator.getEstimatedPosition().getY());
     SmartDashboard.putNumber("pose rotation", estimator.getEstimatedPosition().getRotation().getDegrees());
     SmartDashboard.putString("pose translation", estimator.getEstimatedPosition().getTranslation().toString());
+
+    // SmartDashboard.putData("Field", m_field);
 
 
     // tab.addDouble("cam x", () -> x);
@@ -110,6 +113,8 @@ public class Vision extends SubsystemBase {
   public void periodic() {
     //read values periodically
     dashboard();
+
+    Constants.Swerve.m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());
 
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);

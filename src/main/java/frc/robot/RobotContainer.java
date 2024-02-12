@@ -6,6 +6,7 @@ package frc.robot;
 
 import java.util.List;
 
+import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.Pigeon2;
@@ -19,37 +20,40 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj.PneumaticHub;
 import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
-import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.Vision;
+import frc.robot.Constants.IntakeSubsystem;
+import frc.robot.Constants.ShooterSubsystem;
+import frc.robot.commands.shooter.moveAngler;
 import frc.robot.commands.vision.*;
 import frc.robot.generated.TunerConstants;
 
 public class RobotContainer {
 
-  private double MaxSpeed = 6; // 6 meters per second desired top speed
+  private double MaxSpeed = 5; // 6 meters per second desired top speed
   private double MaxAngularRate = 1.5 * Math.PI; // 3/4 of a rotation per second max angular velocity
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final PS4Controller driver = new PS4Controller(0); // My joystick
   private final PS4Controller operator = new PS4Controller(1); // My joystick
 
-  public static PneumaticHub hub      = new PneumaticHub();
-  public static Compressor compressor = new Compressor(1, PneumaticsModuleType.REVPH);
-
+  //Subsystems!!!!
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  public final ArmSubsystem arm = new ArmSubsystem(hub);
   public final Vision vision = new Vision();
+  public final frc.robot.subsystems.IntakeSubsystem intake = new frc.robot.subsystems.IntakeSubsystem();
+  public final frc.robot.subsystems.ShooterSubsystem shooter = new frc.robot.subsystems.ShooterSubsystem(vision);
 
   //Commands
   vision2 visionCommand = new vision2(vision);
@@ -65,7 +69,8 @@ public class RobotContainer {
   /* Path follower */
   private Command runAuto = drivetrain.getAutoPath("SWPTestAuto");
 
-  private final Telemetry logger = new Telemetry(MaxSpeed);
+  // private final Telemetry logger = new Telemetry(MaxSpeed);
+  // private final Field2d m_field = Constants.Swerve.m_field;
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -75,43 +80,67 @@ public class RobotContainer {
             .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ).ignoringDisable(true));
 
-    j.dX.whileTrue(drivetrain.applyRequest(() -> brake));
-    j.dTriangle.whileTrue(drivetrain
+    j.dA.whileTrue(drivetrain.applyRequest(() -> brake));
+    j.dY.whileTrue(drivetrain
         .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
     // reset the field-centric heading on left bumper press
-    j.dCircle.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    j.dB.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
+    j.dY.onTrue(drivetrain.applyRequest(() -> brake));
 
-    // if (Utils.isSimulation()) {
-    //   drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
-    // }
-    drivetrain.registerTelemetry(logger::telemeterize);
+    if (Utils.isSimulation()) {
+      drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
+    }
+    // drivetrain.registerTelemetry(logger::telemeterize);
 
     j.dUp.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
     j.dDown.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
     j.dLeft.whileTrue(new vision2(vision));
     j.dRight.whileTrue(new kevin2(vision));
 
+    RepeatCommand repeat = new RepeatCommand(new InstantCommand(() -> intake.intake()));
+    // j.oRT.whileTrue(new InstantCommand(() -> intake.intake()));
+    j.oRT.whileTrue(repeat);
+    j.oRT.whileFalse(new InstantCommand(() -> intake.stopIntakeWithReset()));
+    j.oLT.whileTrue(new InstantCommand(() -> intake.outtake()));
+    j.oLT.whileFalse(new InstantCommand(() -> intake.stopIntake()));
 
-    j.oDown.whileTrue(new InstantCommand( () -> arm.setHigh()));
-    j.oLeft.whileTrue(new InstantCommand( () -> arm.setLow()));
-    j.oRight.whileTrue(new InstantCommand( () -> arm.setMid()));
+    j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMid()));
+    j.oRB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+
+    j.oUp.whileTrue(new InstantCommand(() -> shooter.anglerUp()));
+    j.oDown.whileTrue(new InstantCommand(() -> shooter.anglerDown()));
+    j.oUp.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
+    j.oDown.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
+
+    RepeatCommand setAngler = new RepeatCommand(new moveAngler(shooter, 5));
+    RepeatCommand setAngler2 = new RepeatCommand(new InstantCommand(() -> shooter.setAnglerOld(5)));
+
+    // j.oRight.whileTrue(new InstantCommand(() -> shooter.setAngler(0.5)));
+    j.oRight.whileTrue(new moveAngler(shooter, 5));
+    j.oRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+
   }
 
   public RobotContainer() {
     configureBindings();
-    hub.enableCompressorAnalog(100, 120);
     dashboardStuff();
     runCurrentLimits();
+
+    SmartDashboard.putData("Field", Constants.Swerve.m_field);
+
   }
 
   public void dashboardStuff(){
     Pigeon2 gyro = new Pigeon2(50);
-    ShuffleboardTab tab = Shuffleboard.getTab("LiftingArm");
-    tab.addNumber("PSI", () -> hub.getPressure(0));
+    ShuffleboardTab tab = Shuffleboard.getTab("Robot");
     tab.addNumber("Pitch: ", () -> gyro.getPitch().getValueAsDouble() );
     tab.addNumber("Yaw: ", () -> gyro.getYaw().getValueAsDouble());
     tab.addNumber("Roll: ", () -> gyro.getRoll().getValueAsDouble());
+
+    tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());
+    tab.addNumber("Angler angle", () -> shooter.getAngle());
+
 
   }
 
@@ -151,6 +180,7 @@ public class RobotContainer {
 
   }
 
+
   public Command getAutonomousCommand() {
 
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
@@ -171,5 +201,16 @@ public class RobotContainer {
 
     Command goForward = drivetrain.getAutoPath("Forward");
     return goForward;
+  }
+
+  public void periodic(){
+    // Do this in either robot or subsystem init
+    // SmartDashboard.putData("Field", m_field);
+
+    // Do this in either robot periodic or subsystem periodic ---- odometry
+    // m_field.setRobotPose(drivetrain.getOdometry().getPoseMeters());
+    // m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());
+
+
   }
 }

@@ -37,6 +37,7 @@ import frc.robot.subsystems.Vision;
 import frc.robot.Constants.IntakeSubsystem;
 import frc.robot.Constants.ShooterSubsystem;
 import frc.robot.commands.shooter.moveAngler;
+import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.vision.*;
 import frc.robot.generated.TunerConstants;
 
@@ -113,13 +114,14 @@ public class RobotContainer {
     j.oUp.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
     j.oDown.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
 
-    RepeatCommand setAngler = new RepeatCommand(new moveAngler(shooter, 5));
-    RepeatCommand setAngler2 = new RepeatCommand(new InstantCommand(() -> shooter.setAnglerOld(5)));
+    // RepeatCommand setAngler = new RepeatCommand(new moveAngler(shooter, 5));
+    RepeatCommand setAngler2 = new RepeatCommand(new InstantCommand(() -> shooter.setAnglerNew()));
 
-    // j.oRight.whileTrue(new InstantCommand(() -> shooter.setAngler(0.5)));
-    j.oRight.whileTrue(new moveAngler(shooter, 5));
+    j.oRight.whileTrue(setAngler2);
+    j.oRight.whileTrue(new shoot(shooter, intake));
+    // j.oRight.whileTrue(new InstantCommand(() -> shooter.setAnglerNew()));
     j.oRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
-
+    j.oRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
   }
 
   public RobotContainer() {

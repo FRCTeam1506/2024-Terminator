@@ -66,6 +66,12 @@ public final class Constants {
         public static final int AnglerID = 60;
 
         public static final double anglerDefaultSpeed = 0.075; //david -- 0.05
+
+        public static final int DRIVE_CONTINUOUS_CL = 35;
+        public static final int DRIVE_PEAK_CL       = 60;
+        public static final double DRIVE_PEAK_CURRENT_DURATION = 0.1;
+        public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
+
     }
 
     // public static final class 

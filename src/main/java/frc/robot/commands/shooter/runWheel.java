@@ -5,19 +5,14 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
-public class moveAngler extends Command {
-  /** Creates a new moveAngler. */
-  frc.robot.subsystems.ShooterSubsystem shooter;
-  double moe = .15;
-  double setpoint;
-  boolean finished = false;
-
-  public moveAngler(frc.robot.subsystems.ShooterSubsystem shooter, double setpoint) {
+public class runWheel extends Command {
+  /** Creates a new runWheel. */
+  ShooterSubsystem shooter;
+  public runWheel(ShooterSubsystem shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
-    this.setpoint = setpoint;
   }
 
   // Called when the command is initially scheduled.
@@ -27,7 +22,7 @@ public class moveAngler extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.setAnglerNew();
+    shooter.shootMax();
   }
 
   // Called once the command ends or is interrupted.
@@ -37,6 +32,6 @@ public class moveAngler extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }

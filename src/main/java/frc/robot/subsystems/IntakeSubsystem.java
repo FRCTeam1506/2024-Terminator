@@ -87,6 +87,10 @@ public class IntakeSubsystem extends SubsystemBase {
     resetRing();
   }
 
+  public void runIndexerShoot(){
+    indexer.set(.5);
+  }
+
 
   public void stopIndexer(){
     indexer.set(0);

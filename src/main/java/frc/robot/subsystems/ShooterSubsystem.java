@@ -5,8 +5,6 @@
 package frc.robot.subsystems;
 
 
-import javax.swing.text.Position;
-
 import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
@@ -18,13 +16,16 @@ import com.ctre.phoenix6.controls.DutyCycleOut;
 import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
+import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.compound.Diff_DutyCycleOut_Position;
 import com.ctre.phoenix6.controls.compound.Diff_PositionDutyCycle_Position;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.lib.math.Conversions;
 import frc.robot.Constants;
@@ -40,7 +41,38 @@ public class ShooterSubsystem extends SubsystemBase {
   double maxVelocity = 1;
   double midVelocity = .5;
   double minVelocity = .3;
-  MotionMagicVoltage m_mmReq;
+
+  final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
+
+  double encoderCount = angler.getPosition().getValue();
+  double startingEncoderCount = encoderCount;
+  double speed = 0.3;
+  private static final double kP = 0.61; // 0.84
+  private static final double kI = 0.00025;
+  private static final double kD = 0;
+  private static final double kF = 0.4;  // 0.4
+
+  private static final double kVelocity = 40_000.0;       // 62_000.0
+  private static final double kAcceleration = 30_000.0;   // 44_000.0
+
+  private static final double MIN_POSITION = -1_500.0;
+  private static final double MAX_POSITION = 230_000.0; // 200_000
+
+
+
+
+          // class member variable
+    final PositionVoltage m_position = new PositionVoltage(.4); //.6 good for zone line  5.5 for subwoofer(50*)
+    //^^^this was making the shooter rise. 2.5 good for stage leg
+    // Trapezoid profile with max velocity 80 rps, max accel 160 rps/s
+    final TrapezoidProfile m_profile = new TrapezoidProfile(
+      new TrapezoidProfile.Constraints(10, 8)
+    );
+    // Final target of 200 rot, 0 rps
+    TrapezoidProfile.State m_goal = new TrapezoidProfile.State(.4, 0);
+    TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
+
+
 
   public ShooterSubsystem(Vision vision) {
 
@@ -52,6 +84,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
     TalonFXConfiguration config = new TalonFXConfiguration();
     config.MotorOutput = output;
+    config.MotionMagic.MotionMagicAcceleration = kVelocity;
+    config.MotionMagic.MotionMagicAcceleration = kAcceleration;
 
     motor1.getConfigurator().apply(config);
     motor2.getConfigurator().apply(config);
@@ -61,36 +95,20 @@ public class ShooterSubsystem extends SubsystemBase {
     angler.setInverted(false);
     motor1.setInverted(false);
 
-    // set Motion Magic settings
-    /* Configure current limits */
-    m_mmReq = new MotionMagicVoltage(0);
-    MotionMagicConfigs mm = config.MotionMagic;
-    mm.MotionMagicCruiseVelocity = 0.5; // 5 rotations per second cruise
-    mm.MotionMagicAcceleration = 5; // Take approximately 0.5 seconds to reach max vel OG 10
-    // Take approximately 0.2 seconds to reach max accel 
-    mm.MotionMagicJerk = 50;
+    // Slot0Configs vegas = new Slot0Configs();
 
-    Slot0Configs slot0 = config.Slot0;
-    slot0.kP = 1;//60 //2
-    slot0.kI = .5;//0
-    slot0.kD = 0.1;
-    slot0.kV = 0.12;
-    slot0.kS = 0.25; // Approximately 0.25V to get the mechanism moving
+    // vegas.kP = kP;
+    // vegas.kI = kI;
+    // vegas.kD = kD;
+    // vegas.kS = 0.24; // add 0.24 V to overcome friction
+    // vegas.kV = 0.12; // apply 12 V for a target velocity of 100 rps
+    // vegas.GravityType = GravityTypeValue.Arm_Cosine;
 
-    FeedbackConfigs fdb = config.Feedback;
-    fdb.SensorToMechanismRatio = 48.89; //12.8 //48.89
+    // angler.getConfigurator().apply(vegas);
 
-    StatusCode status = StatusCode.StatusCodeNotInitialized;
-    for(int i = 0; i < 5; ++i) {
-      status = angler.getConfigurator().apply(config);
-      if (status.isOK()) break;
-    }
-    if (!status.isOK()) {
-      System.out.println("Could not configure device. Error: " + status.toString());
-    }
-    angler.setInverted(false);
+    angler.setPosition(0);
 
-
+    configAngler();
   }
 
   public void shoot(){
@@ -146,6 +164,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shootStop(){
     motor1.set(0);
     motor2.set(0);
+    angler.set(0);
   }
 
   public double getIncrement(){
@@ -182,39 +201,52 @@ public class ShooterSubsystem extends SubsystemBase {
     // angler.setControl(pos);
 
     // angler.setPosition(2);
-    System.out.println("ANGLER!!!!!");
+    // System.out.println("ANGLER!!!!!");
 
-    DifferentialMotionMagicVoltage pos = new DifferentialMotionMagicVoltage(setpoint, setpoint);
-    angler.setControl(pos.withTargetPosition(setpoint));
-  }
+    // DifferentialMotionMagicVoltage pos = new DifferentialMotionMagicVoltage(setpoint, setpoint);
+    // angler.setControl(pos.withTargetPosition(setpoint));
 
-  boolean finished = false;
-  public void setAnglerOld(double setpoint){
-    if(getAngle() > setpoint + 0.1 && getAngle() < setpoint - 0.1 || finished){
-      anglerStop();
-      finished = true;
-    }
-    else if(getAngle() > setpoint){
-      anglerDown();
-      finished = false;
-    }
-    else if (getAngle() < setpoint){
-      anglerUp();
-      finished = false;
-    }
-  }
-
-  public void finishedReset(){
-    finished = false;
+    m_motmag.Slot = 0;
+    angler.setControl(m_motmag.withPosition(setpoint));
   }
 
   public double getAngle(){
     return angler.getRotorPosition().getValueAsDouble();
   }
 
+  public double getAvgShooterSpeed(){
+    return (motor1.getVelocity().getValueAsDouble() + motor2.getVelocity().getValueAsDouble())/2;
+  }
+
+  public void configAngler(){
+    // robot init, set slot 0 gains
+    var slot0Configs = new Slot0Configs();
+    slot0Configs.kS = 0.24; // add 0.24 V to overcome friction
+    slot0Configs.kV = 0.12; // apply 12 V for a target velocity of 100 rps
+    slot0Configs.kP = 4.8;
+    slot0Configs.kI = 0;
+    slot0Configs.kD = 0.1;
+    angler.getConfigurator().apply(slot0Configs, 0.050);
+
+  }
+
+  public void setAnglerNew(){
+    // periodic, update the profile setpoint for 20 ms loop time
+    m_setpoint = m_profile.calculate(0.020, m_setpoint, m_goal);
+    // apply the setpoint to the control request
+    m_position.Position = m_setpoint.position;
+    m_position.Velocity = m_setpoint.velocity;
+    angler.setControl(m_position);
+
+  }
+
+  public void shootRing(){
+    setAnglerNew();
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+    encoderCount = angler.getPosition().getValue();
   }
 }

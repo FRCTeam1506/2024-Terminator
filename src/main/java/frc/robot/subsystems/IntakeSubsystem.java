@@ -13,9 +13,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 // import frc.lib.math.Conversions;
 import frc.robot.Constants;
@@ -25,8 +27,13 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private TalonFX motor = new TalonFX(Constants.IntakeSubsystem.MOTOR_ID);
   private TalonFX indexer = new TalonFX(Constants.IntakeSubsystem.INDEXER_ID);
+  private DigitalInput irNine = new DigitalInput(7);
+  private DigitalInput irEight = new DigitalInput(6);
+
+  ShuffleboardTab tab = Shuffleboard.getTab("Vision");
 
   Timer timer = new Timer();
+
 
   public IntakeSubsystem() {
 
@@ -51,7 +58,14 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void intake() {
 
-    if(indexer.getTorqueCurrent().getValueAsDouble() > 23 || Constants.IntakeSubsystem.ring){
+    //by motor torque
+    // if(indexer.getTorqueCurrent().getValueAsDouble() > 23 || Constants.IntakeSubsystem.ring){
+    //   Constants.IntakeSubsystem.ring = true;
+    //   // Timer.delay(.1);
+    //   stopIntake();
+    // }
+
+    if(!irNine.get()){
       Constants.IntakeSubsystem.ring = true;
       // Timer.delay(.1);
       stopIntake();
@@ -114,5 +128,17 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // System.out.println("infra eight: " + irEight.get());    
+    // System.out.println("infra nine: " + irNine.get());
+
+    SmartDashboard.putBoolean("ir 8", irEight.get());
+    SmartDashboard.putBoolean("ir 9", irNine.get());
+    
+    
+    if(Constants.IntakeSubsystem.ring){
+      // tab.ad
+    }
+
+
   }
 }

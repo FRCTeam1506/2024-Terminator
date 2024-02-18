@@ -33,9 +33,11 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
+import frc.robot.subsystems.Angler;
 import frc.robot.subsystems.Vision;
 import frc.robot.Constants.IntakeSubsystem;
 import frc.robot.Constants.ShooterSubsystem;
+import frc.robot.commands.shooter.angle;
 import frc.robot.commands.shooter.moveAngler;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.vision.*;
@@ -55,6 +57,8 @@ public class RobotContainer {
   public final Vision vision = new Vision();
   public final frc.robot.subsystems.IntakeSubsystem intake = new frc.robot.subsystems.IntakeSubsystem();
   public final frc.robot.subsystems.ShooterSubsystem shooter = new frc.robot.subsystems.ShooterSubsystem(vision);
+  public final Angler angler = new Angler();
+  public final Autos autos = new Autos(intake, shooter, angler, vision);
 
   //Commands
   vision2 visionCommand = new vision2(vision);
@@ -82,12 +86,10 @@ public class RobotContainer {
         ).ignoringDisable(true));
 
     j.dA.whileTrue(drivetrain.applyRequest(() -> brake));
-    j.dY.whileTrue(drivetrain
-        .applyRequest(() -> point.withModuleDirection(new Rotation2d(-driver.getLeftY(), -driver.getLeftX()))));
 
     // reset the field-centric heading on left bumper press
     j.dB.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    j.dY.onTrue(drivetrain.applyRequest(() -> brake));
+    // j.dY.onTrue(drivetrain.applyRequest(() -> brake));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
@@ -96,8 +98,10 @@ public class RobotContainer {
 
     j.dUp.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
     j.dDown.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
-    j.dLeft.whileTrue(new vision2(vision));
-    j.dRight.whileTrue(new kevin2(vision));
+    
+    // j.dLeft.whileTrue(new RepeatCommand(new vision2(vision))); //shooter alignment
+    j.dLeft.whileTrue(new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold)); //shooter alignment
+    j.dRight.whileTrue(new kevin2(vision)); //intake alignment
 
     RepeatCommand repeat = new RepeatCommand(new InstantCommand(() -> intake.intake()));
     // j.oRT.whileTrue(new InstantCommand(() -> intake.intake()));
@@ -106,19 +110,26 @@ public class RobotContainer {
     j.oLT.whileTrue(new InstantCommand(() -> intake.outtake()));
     j.oLT.whileFalse(new InstantCommand(() -> intake.stopIntake()));
 
-    j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMid()));
+    j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMax()));
     j.oRB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
 
     j.oUp.whileTrue(new InstantCommand(() -> shooter.anglerUp()));
     j.oDown.whileTrue(new InstantCommand(() -> shooter.anglerDown()));
+    j.oTouchpad.whileTrue(new RepeatCommand(new angle(angler, 5.5)));
     j.oUp.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
     j.oDown.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
+    j.oTouchpad.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
+
+    j.oA.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
+    j.oY.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
+    
+
 
     // RepeatCommand setAngler = new RepeatCommand(new moveAngler(shooter, 5));
     RepeatCommand setAngler2 = new RepeatCommand(new InstantCommand(() -> shooter.setAnglerNew()));
 
     j.oRight.whileTrue(setAngler2);
-    j.oRight.whileTrue(new shoot(shooter, intake));
+    j.oRight.whileTrue(new shoot(shooter, intake, angler, vision));
     // j.oRight.whileTrue(new InstantCommand(() -> shooter.setAnglerNew()));
     j.oRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
@@ -128,6 +139,7 @@ public class RobotContainer {
     configureBindings();
     dashboardStuff();
     runCurrentLimits();
+    autos.registerCommands();
 
     SmartDashboard.putData("Field", Constants.Swerve.m_field);
 
@@ -143,7 +155,7 @@ public class RobotContainer {
     tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());
     tab.addNumber("Angler angle", () -> shooter.getAngle());
 
-
+    gyro.close();
   }
 
   public void runCurrentLimits(){

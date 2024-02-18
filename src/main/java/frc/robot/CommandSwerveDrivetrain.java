@@ -148,6 +148,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
     }
 
 
+
     public void runVelocity(ChassisSpeeds speeds){
         //this method is partially  i got line 131 myself tho from https://www.chiefdelphi.com/t/using-path-planner-with-swerve/449544/4
         ChassisSpeeds discreteSpeeds = ChassisSpeeds.discretize(speeds, 0.2);

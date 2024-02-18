@@ -12,6 +12,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SwerveControlRequestPar
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -20,22 +21,21 @@ import frc.robot.Constants.Swerve;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Vision;
 
-public class vision2 extends Command {
+public class newVision extends Command {
   /** Creates a new vision2. */
   Vision vision;
   SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
   double x,y,theta;
   double angularSpeed = Math.PI / 2;
-  double farAngularSpeed = Math.PI / 6;
   boolean finished = false;
-  double threshold = 4;
+  double threshold = 5;
   Pigeon2 gyro = new Pigeon2(50);
 
-  double initialX, initialArea, initialYaw, gyroGoal;
+  double initialX, initialYaw, gyroGoal;
 
 
 
-  public vision2(Vision vision) {
+  public newVision(Vision vision) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.vision = vision;
   }
@@ -44,7 +44,6 @@ public class vision2 extends Command {
   @Override
   public void initialize() {
     initialX = Vision.x;
-    initialArea = Vision.area;
     initialYaw = gyro.getYaw().getValueAsDouble();
     gyroGoal = initialYaw - initialX;
   }
@@ -52,16 +51,9 @@ public class vision2 extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    ChassisSpeeds speedsLeft = new ChassisSpeeds(0,0, angularSpeed);
-    ChassisSpeeds speedsRight = new ChassisSpeeds(0,0, -angularSpeed);
-    ChassisSpeeds slowLeft = new ChassisSpeeds(0,0, farAngularSpeed);
-    ChassisSpeeds slowRight = new ChassisSpeeds(0,0, -farAngularSpeed);
-
-    ChassisSpeeds stop = new ChassisSpeeds(0,0, 0);
-    SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
+    SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle();
 
     if(gyro.getYaw().getValueAsDouble() < gyroGoal + threshold && gyro.getYaw().getValueAsDouble() > gyroGoal-threshold){
-      TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));
       finished = true;
     }
     else{
@@ -69,24 +61,13 @@ public class vision2 extends Command {
     }
 
     if(gyro.getYaw().getValueAsDouble() > gyroGoal + threshold){
-      if(initialArea >0.2){
-        System.out.println("Too far left");
-        TunerConstants.DriveTrain.setControl(request.withSpeeds(speedsRight));
-      }
-      else{
-        TunerConstants.DriveTrain.setControl(request.withSpeeds(slowRight));
-      }
+      System.out.println("Too far left");
+      TunerConstants.DriveTrain.setControl(request.withTargetDirection(new Rotation2d(gyroGoal * Math.PI / 180)));
     }
 
     else if(gyro.getYaw().getValueAsDouble() < gyroGoal - threshold){
-      if(initialArea > 0.2){
-        System.out.println("Too far right");
-        TunerConstants.DriveTrain.setControl(request.withSpeeds(speedsLeft));
-      }
-      else{
-        TunerConstants.DriveTrain.setControl(request.withSpeeds(slowLeft));
-      }
-
+      System.out.println("Too far right");
+      TunerConstants.DriveTrain.setControl(request.withTargetDirection(new Rotation2d(gyroGoal * Math.PI / 180)));
     }
 
     

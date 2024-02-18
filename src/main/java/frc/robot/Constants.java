@@ -36,6 +36,8 @@ public final class Constants {
         public static final Double THRESHOLD = 0.1;
         public static final Double CONVERSION = 0.03355;
         public static final Double LIMIT = 0.4;
+
+        public static final double shooterThreshold = 3;
     }
 
     public static final class ArmSubsystem {
@@ -49,6 +51,7 @@ public final class Constants {
     public static final class IntakeSubsystem{
         public static final int MOTOR_ID = 51;
         public static final int INDEXER_ID = 52;
+        public static final int DIO_PORT = 0;
         public static final double DEFAULT_INTAKE_SPEED = 0.3;
         public static final double DEFAULT_INDEXER_SPEED = 0.2;
 

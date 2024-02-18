@@ -7,24 +7,31 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
+
+import frc.robot.Constants;
 import frc.robot.commands.intake.runIndexer;
 import frc.robot.commands.intake.stopIndexer;
+import frc.robot.commands.vision.vision2;
+import frc.robot.subsystems.Angler;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Vision;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class shoot extends SequentialCommandGroup {
   /** Creates a new shoot. */
-  public shoot(ShooterSubsystem shooter, IntakeSubsystem intake) {
+  public shoot(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
-        new moveAngler(shooter, 0).repeatedly().until(() -> shooter.getAngle() > .35),
-        new runWheel(shooter).until(() -> shooter.getAvgShooterSpeed() > 0.9)
-      ),
+        new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
+        new RepeatCommand(new angle(angler, 2.5)),
+        new runWheel(shooter)
+      ).withTimeout(0.8),
       new WaitCommand(0.5),
       new runIndexer(intake),
       new WaitCommand(0.1),

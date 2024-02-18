@@ -41,7 +41,16 @@ public class Vision extends SubsystemBase {
   NetworkTableEntry tv = table.getEntry("tv");
   NetworkTableEntry botpose = table.getEntry("botpose");
 
+  NetworkTable tableIntake = NetworkTableInstance.getDefault().getTable("limelight-front");
+  NetworkTableEntry tx2 = tableIntake.getEntry("tx");
+  NetworkTableEntry ty2 = tableIntake.getEntry("ty");
+  NetworkTableEntry ta2 = tableIntake.getEntry("ta");
+  NetworkTableEntry tv2 = tableIntake.getEntry("tv");
+  NetworkTableEntry botpose2 = tableIntake.getEntry("botpose");
+
+
   public static double x, y, area, target;
+  public static double x2, y2, area2, target2;
 
   static Pigeon2 gyro = new Pigeon2(50);
 
@@ -120,6 +129,12 @@ public class Vision extends SubsystemBase {
     y = ty.getDouble(0.0);
     area = ta.getDouble(0.0);
     target = tv.getDouble(0.0);
+
+    x2 = tx2.getDouble(0.0);
+    y2 = ty2.getDouble(0.0);
+    area2 = ta2.getDouble(0.0);
+    target2 = tv2.getDouble(0.0);
+
         
     estimator.updateWithTime(timer.getFPGATimestamp(), gyro.getRotation2d(), new SwerveModulePosition[] {fl.getPosition(true), fr.getPosition(true), rl.getPosition(true), rr.getPosition(true)});
 

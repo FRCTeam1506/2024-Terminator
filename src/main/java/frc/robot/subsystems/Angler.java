@@ -9,8 +9,10 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 
 public class Angler extends SubsystemBase {
   /** Creates a new Angler. */
@@ -39,7 +41,9 @@ public class Angler extends SubsystemBase {
     motionMagicConfigs.MotionMagicJerk = 1600; // 1600 rps/s^2 jerk (0.1 seconds)
 
     motor.getConfigurator().apply(talonFXConfigs, 0.050);
+    motor.setPosition(0);
 
+    // SmartDashboard.putNumber("angler set", getVisionPosition());
 
   }
 
@@ -48,9 +52,72 @@ public class Angler extends SubsystemBase {
     motor.setControl(m_motmag.withPosition(position));
   }
 
+  public void anglerUp(){
+    motor.set(0.3);
+  }
+
+  public void anglerDown(){
+    motor.set(-0.3);
+  }
+
+  public void stopAngler(){
+    motor.set(0);
+    motor.stopMotor();
+  }
+
+  public void anglerZero(){
+    motor.setPosition(0);
+  }
+
+  public double getPos(){
+    return motor.getPosition().getValueAsDouble();
+  }
+
+  public double getVisionPosition(){
+    double number = Vision.z;
+    
+    if(number < 1.5){
+      return Math.abs((Math.toDegrees(Math.atan(77/(Math.abs(number) * 39.37))) - 20)/5.14);
+    }
+
+    if(number < 1.9){
+      return Math.abs((Math.toDegrees(Math.atan(72/(Math.abs(number) * 39.37))) - 20)/5.14);
+    }
+
+    if(number < 2.6){
+      return Math.abs((Math.toDegrees(Math.atan(74/(Math.abs(number) * 39.37))) - 20)/5.14);
+    }
+
+    if(number < 3.2){
+      return Math.abs((Math.toDegrees(Math.atan(78/(Math.abs(number) * 39.37))) - 20)/5.14);
+    }
+
+    if(number < 4.1){
+      return Math.abs((Math.toDegrees(Math.atan(80.5/(Math.abs(number) * 39.37))) - 20)/5.14);
+    }
+
+    if(number < 5.0){
+      return 1;//Math.abs((Math.toDegrees(Math.atan(40/(Math.abs(number) * 39.37))) - 20)/5.14);
+    }
+
+    if(number < 5.5){
+      return 0.5;
+    }
+
+    if(number > 6.5){
+      return 0;
+    }
+
+
+    else{
+      return Math.abs((Math.toDegrees(Math.atan(79/(Math.abs(number) * 39.37))) - 20)/5.14);
+    }
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+        SmartDashboard.putNumber("angler set", getVisionPosition());
 
   }
 }

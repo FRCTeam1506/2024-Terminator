@@ -27,8 +27,8 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private TalonFX motor = new TalonFX(Constants.IntakeSubsystem.MOTOR_ID);
   private TalonFX indexer = new TalonFX(Constants.IntakeSubsystem.INDEXER_ID);
-  private DigitalInput irNine = new DigitalInput(7);
-  private DigitalInput irEight = new DigitalInput(6);
+  private DigitalInput irNine = Constants.IntakeSubsystem.irNine;
+  private DigitalInput irEight = Constants.IntakeSubsystem.irNine;
 
   ShuffleboardTab tab = Shuffleboard.getTab("Vision");
 

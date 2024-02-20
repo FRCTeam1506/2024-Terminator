@@ -2,42 +2,35 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.angler;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterSubsystem;
 import frc.robot.subsystems.Angler;
+import frc.robot.subsystems.IntakeSubsystem;
 
-public class angle extends Command {
-  /** Creates a new moveAngler. */
+public class stopAngler extends Command {
+  /** Creates a new runWheel. */
   Angler angler;
-  double angle;
   boolean finished = false;
-
-  public angle(Angler angler, double angle) {
+  public stopAngler(Angler angler) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.angler = angler;
-    this.angle = angle;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {    
-    
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    angler.setPosition(angle);
-    
+    angler.stopAngler();
+    finished = true;
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    // angler.stopAngler();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override

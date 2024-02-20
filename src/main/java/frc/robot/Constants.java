@@ -11,6 +11,7 @@ import frc.robot.generated.TunerConstants;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public final class Constants {
@@ -55,8 +56,21 @@ public final class Constants {
         public static final double DEFAULT_INTAKE_SPEED = 0.3;
         public static final double DEFAULT_INDEXER_SPEED = 0.2;
 
+        public static final DigitalInput irNine = new DigitalInput(7);
+        public static final DigitalInput irEight = new DigitalInput(6);
+
+
         public static boolean ring = false;
     }
+
+    public static final class ClimberSubsystem{
+        public static final int LEFT_ID = 55;
+        public static final int RIGHT_ID = 56;
+
+        public static final double DEFAULT_SPEED = 0.3;
+        public static final double CLIMB_POSITION = 5;
+    }
+
 
     public static final class CandleSubsystem{
         public static final int CANDLE_ID = 62;

@@ -12,6 +12,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -34,9 +35,11 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.Angler;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Vision;
 import frc.robot.Constants.IntakeSubsystem;
 import frc.robot.Constants.ShooterSubsystem;
+import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.angle;
 import frc.robot.commands.shooter.moveAngler;
 import frc.robot.commands.shooter.shoot;
@@ -59,6 +62,7 @@ public class RobotContainer {
   public final frc.robot.subsystems.ShooterSubsystem shooter = new frc.robot.subsystems.ShooterSubsystem(vision);
   public final Angler angler = new Angler();
   public final Autos autos = new Autos(intake, shooter, angler, vision);
+  public final Climber climber = new Climber();
 
   //Commands
   vision2 visionCommand = new vision2(vision);
@@ -72,7 +76,6 @@ public class RobotContainer {
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
   /* Path follower */
-  private Command runAuto = drivetrain.getAutoPath("SWPTestAuto");
 
   // private final Telemetry logger = new Telemetry(MaxSpeed);
   // private final Field2d m_field = Constants.Swerve.m_field;
@@ -113,12 +116,13 @@ public class RobotContainer {
     j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMax()));
     j.oRB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
 
-    j.oUp.whileTrue(new InstantCommand(() -> shooter.anglerUp()));
-    j.oDown.whileTrue(new InstantCommand(() -> shooter.anglerDown()));
-    j.oTouchpad.whileTrue(new RepeatCommand(new angle(angler, 5.5)));
-    j.oUp.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
-    j.oDown.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
-    j.oTouchpad.whileFalse(new InstantCommand(() -> shooter.anglerStop()));
+    j.oUp.whileTrue(new InstantCommand(() -> angler.anglerUp()));
+    j.oDown.whileTrue(new InstantCommand(() -> angler.anglerDown()));
+    j.oTouchpad.whileTrue(new angle(angler, 0.58));
+    j.oA.whileTrue(new InstantCommand(() -> angler.anglerZero()));
+    j.oUp.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    j.oDown.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    j.oTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
     j.oA.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
     j.oY.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
@@ -128,18 +132,30 @@ public class RobotContainer {
     // RepeatCommand setAngler = new RepeatCommand(new moveAngler(shooter, 5));
     RepeatCommand setAngler2 = new RepeatCommand(new InstantCommand(() -> shooter.setAnglerNew()));
 
-    j.oRight.whileTrue(setAngler2);
     j.oRight.whileTrue(new shoot(shooter, intake, angler, vision));
+    // j.oRight.whileTrue(new shoot(shooter, intake, angler, vision));
     // j.oRight.whileTrue(new InstantCommand(() -> shooter.setAnglerNew()));
     j.oRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    j.oRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+    j.oB.whileTrue(new InstantCommand(() -> climber.up()));
+    j.oX.whileTrue(new InstantCommand(() -> climber.down()));
+    j.oB.whileFalse(new InstantCommand(() -> climber.stop()));
+    j.oX.whileFalse(new InstantCommand(() -> climber.stop()));
+
   }
 
   public RobotContainer() {
     configureBindings();
     dashboardStuff();
     runCurrentLimits();
-    autos.registerCommands();
+    // autos.registerCommands();
+    // drivetrain.configurePathPlanner();
+    // NamedCommands.registerCommand("Intake", new intake(intake));
+    // NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
+    // autos.getAutos();
+
 
     SmartDashboard.putData("Field", Constants.Swerve.m_field);
 
@@ -151,9 +167,9 @@ public class RobotContainer {
     tab.addNumber("Pitch: ", () -> gyro.getPitch().getValueAsDouble() );
     tab.addNumber("Yaw: ", () -> gyro.getYaw().getValueAsDouble());
     tab.addNumber("Roll: ", () -> gyro.getRoll().getValueAsDouble());
-
+    tab.addNumber("Necessary Angle", () -> Math.toDegrees(Math.atan(66/(Vision.z * 39.37)))/5.14);
     tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());
-    tab.addNumber("Angler angle", () -> shooter.getAngle());
+    // tab.addNumber("Angler angle", () -> shooter.getAngle());
 
     gyro.close();
   }
@@ -197,6 +213,8 @@ public class RobotContainer {
 
   public Command getAutonomousCommand() {
 
+
+    autos.registerCommands();
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
         new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)),
         new Pose2d(20.0, 20.0, Rotation2d.fromDegrees(0))
@@ -213,13 +231,16 @@ public class RobotContainer {
     /* First put the drivetrain into auto run mode, then run the auto */
     // return drivetrain.followPathCommand(path);
 
-    Command goForward = drivetrain.getAutoPath("Forward");
-    return goForward;
+    // Command goForward = drivetrain.getAutoPath("Forward");
+    // return goForward;
+    return autos.sendAutos();
   }
 
   public void periodic(){
     // Do this in either robot or subsystem init
     // SmartDashboard.putData("Field", m_field);
+    NamedCommands.registerCommand("Intake", new intake(intake));
+    NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
 
     // Do this in either robot periodic or subsystem periodic ---- odometry
     // m_field.setRobotPose(drivetrain.getOdometry().getPoseMeters());

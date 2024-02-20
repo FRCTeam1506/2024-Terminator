@@ -22,19 +22,18 @@ import frc.robot.subsystems.Vision;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class shoot extends SequentialCommandGroup {
+public class shootAuto extends SequentialCommandGroup {
   /** Creates a new shoot. */
-  public shoot(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision) {
+  public shootAuto(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision, double setpoint) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    double z = vision.z;
     addCommands(
       new ParallelCommandGroup(
         new vision2(vision),//.until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
-        new angle(angler, angler.getVisionPosition()),//.until(() -> angler.getPos() > angler.getVisionPosition()),
+        new angle(angler, setpoint),//.until(() -> angler.getPos() > angler.getVisionPosition()),
         new runWheel(shooter).withTimeout(0.1)
         // new angle(angler, Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14).until(() -> angler.getPos() > Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14)
-      ).withTimeout(0.4),
+      ).withTimeout(0.8),
       //new stopShooter(shooter),
       new stopAngler(angler),
       //new WaitCommand(0.5),

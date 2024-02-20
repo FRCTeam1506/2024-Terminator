@@ -37,6 +37,7 @@ public class Vision extends SubsystemBase {
   NetworkTable table = NetworkTableInstance.getDefault().getTable("limelight");
   NetworkTableEntry tx = table.getEntry("tx");
   NetworkTableEntry ty = table.getEntry("ty");
+  NetworkTableEntry tz = table.getEntry("tz");
   NetworkTableEntry ta = table.getEntry("ta");
   NetworkTableEntry tv = table.getEntry("tv");
   NetworkTableEntry botpose = table.getEntry("botpose");
@@ -44,13 +45,14 @@ public class Vision extends SubsystemBase {
   NetworkTable tableIntake = NetworkTableInstance.getDefault().getTable("limelight-front");
   NetworkTableEntry tx2 = tableIntake.getEntry("tx");
   NetworkTableEntry ty2 = tableIntake.getEntry("ty");
+  NetworkTableEntry tz2 = tableIntake.getEntry("tz");
   NetworkTableEntry ta2 = tableIntake.getEntry("ta");
   NetworkTableEntry tv2 = tableIntake.getEntry("tv");
   NetworkTableEntry botpose2 = tableIntake.getEntry("botpose");
 
 
-  public static double x, y, area, target;
-  public static double x2, y2, area2, target2;
+  public static double x, y, z, area, target;
+  public static double x2, y2, z2, area2, target2;
 
   static Pigeon2 gyro = new Pigeon2(50);
 
@@ -88,6 +90,7 @@ public class Vision extends SubsystemBase {
     //post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
+    SmartDashboard.putNumber("LimelightZ", z);
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("Target Exists", target);
 
@@ -127,6 +130,7 @@ public class Vision extends SubsystemBase {
 
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
+    z = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
     area = ta.getDouble(0.0);
     target = tv.getDouble(0.0);
 

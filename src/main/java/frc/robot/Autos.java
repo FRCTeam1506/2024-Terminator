@@ -35,7 +35,8 @@ public class Autos {
         this.shooter = shooter;
         this.vision = vision;
         this.angler = angler;
-        // isBlueAlliance = 
+        // registerCommands();
+        getAutos();
     }
 
     public void registerCommands(){

@@ -1,7 +1,3 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
-
 package frc.robot.commands.vision;
 
 import frc.robot.commands.drivetrain.*;
@@ -56,10 +52,14 @@ public class vision2 extends Command {
     ChassisSpeeds speedsRight = new ChassisSpeeds(0,0, -angularSpeed);
     ChassisSpeeds slowLeft = new ChassisSpeeds(0,0, farAngularSpeed);
     ChassisSpeeds slowRight = new ChassisSpeeds(0,0, -farAngularSpeed);
+    ChassisSpeeds slowLeft2 = new ChassisSpeeds(0,0, farAngularSpeed/3*2);
+    ChassisSpeeds slowRight2 = new ChassisSpeeds(0,0, -farAngularSpeed/3*2);
+
 
     ChassisSpeeds stop = new ChassisSpeeds(0,0, 0);
     SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
 
+    
     if(gyro.getYaw().getValueAsDouble() < gyroGoal + threshold && gyro.getYaw().getValueAsDouble() > gyroGoal-threshold){
       TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));
       finished = true;
@@ -68,23 +68,31 @@ public class vision2 extends Command {
       finished = false; // otherwise the true carries over from the last alignment
     }
 
+    //Aligning the robot with the speaker apriltag
     if(gyro.getYaw().getValueAsDouble() > gyroGoal + threshold){
-      if(initialArea >0.2){
+      if(Vision.z < 3.5){
         System.out.println("Too far left");
         TunerConstants.DriveTrain.setControl(request.withSpeeds(speedsRight));
       }
-      else{
+      else if(vision.z > 3.49 && vision.z < 6){
         TunerConstants.DriveTrain.setControl(request.withSpeeds(slowRight));
+      }
+      else if(vision.z > 5.99){
+        TunerConstants.DriveTrain.setControl(request.withSpeeds(slowRight2));
       }
     }
 
+    //Aligning the robot with the speaker apriltag
     else if(gyro.getYaw().getValueAsDouble() < gyroGoal - threshold){
-      if(initialArea > 0.2){
+      if(Vision.z < 3.5){
         System.out.println("Too far right");
         TunerConstants.DriveTrain.setControl(request.withSpeeds(speedsLeft));
       }
-      else{
+      else if(vision.z > 3.49 && vision.z < 6){
         TunerConstants.DriveTrain.setControl(request.withSpeeds(slowLeft));
+      }
+      else if(vision.z > 5.99){
+        TunerConstants.DriveTrain.setControl(request.withSpeeds(slowLeft2));
       }
 
     }

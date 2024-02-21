@@ -83,7 +83,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             this); // Subsystem for requirements
 
             NamedCommands.registerCommand("Intake", new intake(new IntakeSubsystem()));
-            NamedCommands.registerCommand("Shoot", new shoot(new ShooterSubsystem(new Vision()), new IntakeSubsystem(), new Angler(), new Vision()));
+            NamedCommands.registerCommand("Shoot", new shoot(new ShooterSubsystem(), new IntakeSubsystem(), new Angler(), new Vision()));
 
     }
 

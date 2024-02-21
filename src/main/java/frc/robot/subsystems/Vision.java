@@ -51,7 +51,8 @@ public class Vision extends SubsystemBase {
   NetworkTableEntry botpose2 = tableIntake.getEntry("botpose");
 
 
-  public static double x, y, z, area, target;
+  public static double x, y, area, target;
+  public static double xshot, zshot, shotdist;
   public static double x2, y2, z2, area2, target2;
 
   static Pigeon2 gyro = new Pigeon2(50);
@@ -82,6 +83,7 @@ public class Vision extends SubsystemBase {
     TunerConstants.DriveTrain.applyRequest(() -> forwardStraight.withVelocityX(1).withVelocityY(1).withRotationalRate(1));
   }
 
+
   public void dashboard(){
     // Field2d m_field = new Field2d();
     // m_field.setRobotPose(estimator.getEstimatedPosition());
@@ -90,7 +92,7 @@ public class Vision extends SubsystemBase {
     //post to smart dashboard periodically
     SmartDashboard.putNumber("LimelightX", x);
     SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightZ", z);
+    SmartDashboard.putNumber("LimelightShooterDistance", shotdist);
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("Target Exists", target);
 
@@ -130,9 +132,12 @@ public class Vision extends SubsystemBase {
 
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
-    z = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
     area = ta.getDouble(0.0);
     target = tv.getDouble(0.0);
+
+    xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+    zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+    shotdist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
 
     x2 = tx2.getDouble(0.0);
     y2 = ty2.getDouble(0.0);

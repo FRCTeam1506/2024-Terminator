@@ -36,7 +36,7 @@ public class Autos {
         this.vision = vision;
         this.angler = angler;
         // registerCommands();
-        getAutos();
+        // getAutos();
     }
 
     public void registerCommands(){

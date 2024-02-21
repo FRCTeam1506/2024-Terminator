@@ -1,6 +1,5 @@
-// Copyright (c) FIRST and other WPILib contributors.
-// Open Source Software; you can modify and/or share it under the terms of
-// the WPILib BSD license file in the root directory of this project.
+// Copyright (c) FIRST and other WPILib contributors. Open Source Software.
+// FRC TEAM 1506 --- METAL MUSCLE --- 2024 ROBOT CODE --- TERMINATOR
 
 package frc.robot;
 
@@ -22,8 +21,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.PS4Controller;
-import edu.wpi.first.wpilibj.PneumaticHub;
-import edu.wpi.first.wpilibj.PneumaticsModuleType;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -31,17 +28,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.subsystems.Angler;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.Vision;
-import frc.robot.Constants.IntakeSubsystem;
-import frc.robot.Constants.ShooterSubsystem;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.angle;
-import frc.robot.commands.shooter.moveAngler;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.vision.*;
 import frc.robot.generated.TunerConstants;
@@ -59,7 +50,7 @@ public class RobotContainer {
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
   public final Vision vision = new Vision();
   public final frc.robot.subsystems.IntakeSubsystem intake = new frc.robot.subsystems.IntakeSubsystem();
-  public final frc.robot.subsystems.ShooterSubsystem shooter = new frc.robot.subsystems.ShooterSubsystem(vision);
+  public final frc.robot.subsystems.ShooterSubsystem shooter = new frc.robot.subsystems.ShooterSubsystem();
   public final Angler angler = new Angler();
   public final Autos autos = new Autos(intake, shooter, angler, vision);
   public final Climber climber = new Climber();
@@ -90,74 +81,72 @@ public class RobotContainer {
 
     j.dA.whileTrue(drivetrain.applyRequest(() -> brake));
 
-    // reset the field-centric heading on left bumper press
+    // zero gyro
     j.dB.onTrue(drivetrain.runOnce(() -> drivetrain.seedFieldRelative()));
-    // j.dY.onTrue(drivetrain.applyRequest(() -> brake));
 
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
     // drivetrain.registerTelemetry(logger::telemeterize);
 
-    j.dUp.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
-    j.dDown.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
+    // j.dUp.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
+    // j.dDown.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
     
     // j.dLeft.whileTrue(new RepeatCommand(new vision2(vision))); //shooter alignment
     j.dLeft.whileTrue(new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold)); //shooter alignment
     j.dRight.whileTrue(new kevin2(vision)); //intake alignment
 
-    RepeatCommand repeat = new RepeatCommand(new InstantCommand(() -> intake.intake()));
-    // j.oRT.whileTrue(new InstantCommand(() -> intake.intake()));
-    j.oRT.whileTrue(repeat);
+    //ACTUAL CONTROLS!!!
+
+    //intake
+    j.oRT.whileTrue(new RepeatCommand(new InstantCommand(() -> intake.intake())));
     j.oRT.whileFalse(new InstantCommand(() -> intake.stopIntakeWithReset()));
     j.oLT.whileTrue(new InstantCommand(() -> intake.outtake()));
     j.oLT.whileFalse(new InstantCommand(() -> intake.stopIntake()));
 
+    //manual shooter
     j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMax()));
     j.oRB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
 
+    //manual angler
     j.oUp.whileTrue(new InstantCommand(() -> angler.anglerUp()));
     j.oDown.whileTrue(new InstantCommand(() -> angler.anglerDown()));
-    j.oTouchpad.whileTrue(new angle(angler, 0.58));
     j.oA.whileTrue(new InstantCommand(() -> angler.anglerZero()));
     j.oUp.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     j.oDown.whileFalse(new InstantCommand(() -> angler.stopAngler()));
-    j.oTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
-
-    j.oA.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
-    j.oY.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
     
-
-
-    // RepeatCommand setAngler = new RepeatCommand(new moveAngler(shooter, 5));
-    RepeatCommand setAngler2 = new RepeatCommand(new InstantCommand(() -> shooter.setAnglerNew()));
-
+    //auto shooting
     j.oRight.whileTrue(new shoot(shooter, intake, angler, vision));
-    // j.oRight.whileTrue(new shoot(shooter, intake, angler, vision));
-    // j.oRight.whileTrue(new InstantCommand(() -> shooter.setAnglerNew()));
     j.oRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
+    //climber
     j.oB.whileTrue(new InstantCommand(() -> climber.up()));
     j.oX.whileTrue(new InstantCommand(() -> climber.down()));
     j.oB.whileFalse(new InstantCommand(() -> climber.stop()));
     j.oX.whileFalse(new InstantCommand(() -> climber.stop()));
 
+    //increment testing
+    j.oA.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
+    j.oY.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
+    j.oTouchpad.whileTrue(new angle(angler, shooter.increment));
+    j.oTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
   }
 
   public RobotContainer() {
+    NamedCommands.registerCommand("Intake", new intake(intake));
+    NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
+
     configureBindings();
     dashboardStuff();
     runCurrentLimits();
+    
     // autos.registerCommands();
-    // drivetrain.configurePathPlanner();
-    // NamedCommands.registerCommand("Intake", new intake(intake));
-    // NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
-    // autos.getAutos();
+    autos.getAutos();
 
-
-    SmartDashboard.putData("Field", Constants.Swerve.m_field);
+    //our lovely field
+    // SmartDashboard.putData("Field", Constants.Swerve.m_field);
 
   }
 
@@ -169,7 +158,7 @@ public class RobotContainer {
     tab.addNumber("Roll: ", () -> gyro.getRoll().getValueAsDouble());
     tab.addNumber("Necessary Angle", () -> Math.toDegrees(Math.atan(66/(Vision.z * 39.37)))/5.14);
     tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());
-    // tab.addNumber("Angler angle", () -> shooter.getAngle());
+    tab.addNumber("Angler increment", () -> shooter.increment);
 
     gyro.close();
   }
@@ -239,8 +228,6 @@ public class RobotContainer {
   public void periodic(){
     // Do this in either robot or subsystem init
     // SmartDashboard.putData("Field", m_field);
-    NamedCommands.registerCommand("Intake", new intake(intake));
-    NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
 
     // Do this in either robot periodic or subsystem periodic ---- odometry
     // m_field.setRobotPose(drivetrain.getOdometry().getPoseMeters());

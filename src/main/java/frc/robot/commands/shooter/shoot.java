@@ -27,17 +27,18 @@ public class shoot extends SequentialCommandGroup {
   public shoot(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    double z = vision.z;
+    double z = vision.zshot;
     addCommands(
       new ParallelCommandGroup(
         new vision2(vision),//.until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
-        new angle(angler, angler.getVisionPosition()),//.until(() -> angler.getPos() > angler.getVisionPosition()),
-        new runWheel(shooter).withTimeout(0.1)
+        new angle(angler, shooter.getIncrement()),//.until(() -> angler.getPos() > angler.getVisionPosition()),
+        new runWheel(shooter)
         // new angle(angler, Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14).until(() -> angler.getPos() > Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14)
-      ).withTimeout(0.4),
+      ).withTimeout(0.8),
       //new stopShooter(shooter),
-      new stopAngler(angler),
+      // new stopAngler(angler),
       //new WaitCommand(0.5),
+      new runWheel(shooter).withTimeout(0.2),
       new runIndexer(intake),
       new WaitCommand(0.1),
       new stopIndexer(intake)

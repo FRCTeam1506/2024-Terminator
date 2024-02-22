@@ -20,6 +20,8 @@ public class j {
     public static JoystickButton dY = new JoystickButton(driver, PS4Controller.Button.kTriangle.value);
     public static JoystickButton dX = new JoystickButton(driver, PS4Controller.Button.kSquare.value);
     public static JoystickButton dTouchpad = new JoystickButton(driver, PS4Controller.Button.kTouchpad.value);
+    public static JoystickButton dShare = new JoystickButton(driver, PS4Controller.Button.kShare.value);
+    public static JoystickButton dOptions = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
 
     public static JoystickButton oA = new JoystickButton(operator, PS4Controller.Button.kCross.value);
     public static JoystickButton oB = new JoystickButton(operator, PS4Controller.Button.kCircle.value);

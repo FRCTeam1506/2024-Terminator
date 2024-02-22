@@ -16,13 +16,13 @@ public class ShooterSubsystem extends SubsystemBase {
 
   double speed = 0.3;
 
-  public double increment = 0.6;
+  public double increment = 0.64;
       
   
   public ShooterSubsystem() {
     MotorOutputConfigs output = new MotorOutputConfigs();
     output.Inverted = InvertedValue.Clockwise_Positive;
-    output.NeutralMode = NeutralModeValue.Brake;
+    output.NeutralMode = NeutralModeValue.Coast;
 
     motor1.getConfigurator().apply(output);
     motor2.getConfigurator().apply(output);
@@ -31,9 +31,14 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shootMax(){
-    motor1.set(1);
+    motor1.set(0.9);
     motor2.set(1);
     System.out.println("Shoot Max");
+  }
+
+  public void ampPower(){
+    motor1.set(0.4);
+    motor2.set(0.05);
   }
 
   public void shootRPM(){
@@ -53,10 +58,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void increaseIncrement(){
-    increment+=0.1;
+    increment+=0.05;
   }
   public void decreaseIncrement(){
-    increment-=0.1;
+    increment-=0.05;
   }
 
 

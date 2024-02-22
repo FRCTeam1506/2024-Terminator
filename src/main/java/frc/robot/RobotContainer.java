@@ -3,7 +3,9 @@
 
 package frc.robot;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
@@ -30,10 +32,12 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.subsystems.Angler;
 import frc.robot.subsystems.Climber;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.angle;
 import frc.robot.commands.shooter.shoot;
+import frc.robot.commands.shooter.shootAmp;
 import frc.robot.commands.vision.*;
 import frc.robot.generated.TunerConstants;
 
@@ -104,6 +108,13 @@ public class RobotContainer {
     j.oLT.whileTrue(new InstantCommand(() -> intake.outtake()));
     j.oLT.whileFalse(new InstantCommand(() -> intake.stopIntake()));
 
+    //delete
+    j.dRT.whileTrue(new RepeatCommand(new InstantCommand(() -> intake.intake())));
+    j.dRT.whileFalse(new InstantCommand(() -> intake.stopIntakeWithReset()));
+    j.dLT.whileTrue(new InstantCommand(() -> intake.outtake()));
+    j.dLT.whileFalse(new InstantCommand(() -> intake.stopIntake()));
+
+
     //manual shooter
     j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMax()));
     j.oRB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
@@ -121,6 +132,18 @@ public class RobotContainer {
     j.oRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
+    j.dRight.whileTrue(new shoot(shooter, intake, angler, vision));
+    j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+    j.dTouchpad.whileTrue(new shootAmp(angler, shooter, intake));
+    j.dTouchpad.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    j.dTouchpad.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    j.dTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+
+
     //climber
     j.oB.whileTrue(new InstantCommand(() -> climber.up()));
     j.oX.whileTrue(new InstantCommand(() -> climber.down()));
@@ -128,21 +151,28 @@ public class RobotContainer {
     j.oX.whileFalse(new InstantCommand(() -> climber.stop()));
 
     //increment testing
-    j.oA.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
-    j.oY.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
+    j.dShare.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
+    j.dOptions.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
     j.oTouchpad.whileTrue(new angle(angler, shooter.increment));
     j.oTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
   }
 
+  private final intake intakecommand = new intake(intake);
+
   public RobotContainer() {
-    NamedCommands.registerCommand("Intake", new intake(intake));
-    NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
+    Map<String, Command> map = new HashMap<String, Command>();
+    map.put("IntakeCommand", intakecommand);
+    // map.put("Shoot", new shoot(shooter, intake, angler, vision));
+
+    NamedCommands.registerCommands(map);
 
     configureBindings();
     dashboardStuff();
     runCurrentLimits();
-    
-    // autos.registerCommands();
+
+    drivetrain.configurePathPlanner();
+
+    autos.registerCommands();
     autos.getAutos();
 
     //our lovely field
@@ -156,7 +186,7 @@ public class RobotContainer {
     tab.addNumber("Pitch: ", () -> gyro.getPitch().getValueAsDouble() );
     tab.addNumber("Yaw: ", () -> gyro.getYaw().getValueAsDouble());
     tab.addNumber("Roll: ", () -> gyro.getRoll().getValueAsDouble());
-    tab.addNumber("Necessary Angle", () -> Math.toDegrees(Math.atan(66/(Vision.z * 39.37)))/5.14);
+    // tab.addNumber("Necessary Angle", () -> Math.toDegrees(Math.atan(66/(Vision.z * 39.37)))/5.14);
     tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());
     tab.addNumber("Angler increment", () -> shooter.increment);
 

@@ -21,7 +21,7 @@ public class vision2 extends Command {
   Vision vision;
   SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
   double x,y,theta;
-  double angularSpeed = Math.PI / 2;
+  double angularSpeed = Math.PI / 4;
   double farAngularSpeed = Math.PI / 6;
   boolean finished = false;
   double threshold = 4;
@@ -70,28 +70,28 @@ public class vision2 extends Command {
 
     //Aligning the robot with the speaker apriltag
     if(gyro.getYaw().getValueAsDouble() > gyroGoal + threshold){
-      if(Vision.z < 3.5){
+      if(Vision.zshot < 3.5){
         System.out.println("Too far left");
         TunerConstants.DriveTrain.setControl(request.withSpeeds(speedsRight));
       }
-      else if(vision.z > 3.49 && vision.z < 6){
+      else if(vision.zshot > 3.49 && vision.zshot < 6){
         TunerConstants.DriveTrain.setControl(request.withSpeeds(slowRight));
       }
-      else if(vision.z > 5.99){
+      else if(vision.zshot > 5.99){
         TunerConstants.DriveTrain.setControl(request.withSpeeds(slowRight2));
       }
     }
 
     //Aligning the robot with the speaker apriltag
     else if(gyro.getYaw().getValueAsDouble() < gyroGoal - threshold){
-      if(Vision.z < 3.5){
+      if(Vision.zshot < 3.5){
         System.out.println("Too far right");
         TunerConstants.DriveTrain.setControl(request.withSpeeds(speedsLeft));
       }
-      else if(vision.z > 3.49 && vision.z < 6){
+      else if(vision.zshot > 3.49 && vision.zshot < 6){
         TunerConstants.DriveTrain.setControl(request.withSpeeds(slowLeft));
       }
-      else if(vision.z > 5.99){
+      else if(vision.zshot > 5.99){
         TunerConstants.DriveTrain.setControl(request.withSpeeds(slowLeft2));
       }
 

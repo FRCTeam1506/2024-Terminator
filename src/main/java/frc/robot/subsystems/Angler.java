@@ -49,7 +49,15 @@ public class Angler extends SubsystemBase {
 
   public void setPosition(double position){
     m_motmag.Slot = 0;
-    motor.setControl(m_motmag.withPosition(position));
+    double dist = Vision.shotdist;
+    double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
+    motor.setControl(m_motmag.withPosition(pos));
+  }
+
+
+  public void setPositionIncrement(double position){
+    m_motmag.Slot = 0;
+    motor.setControl(m_motmag.withPosition(new ShooterSubsystem().getIncrement()));
   }
 
   public void anglerUp(){
@@ -58,6 +66,11 @@ public class Angler extends SubsystemBase {
 
   public void anglerDown(){
     motor.set(-0.3);
+  }
+
+  public void ampPosition(){
+    m_motmag.Slot = 0;
+    motor.setControl(m_motmag.withPosition(4.8));
   }
 
   public void stopAngler(){
@@ -74,44 +87,9 @@ public class Angler extends SubsystemBase {
   }
 
   public double getVisionPosition(){
-    double number = Vision.z;
+    // double number = Vision.z;
+    return 0;
     
-    if(number < 1.5){
-      return Math.abs((Math.toDegrees(Math.atan(77/(Math.abs(number) * 39.37))) - 20)/5.14);
-    }
-
-    if(number < 1.9){
-      return Math.abs((Math.toDegrees(Math.atan(72/(Math.abs(number) * 39.37))) - 20)/5.14);
-    }
-
-    if(number < 2.6){
-      return Math.abs((Math.toDegrees(Math.atan(74/(Math.abs(number) * 39.37))) - 20)/5.14);
-    }
-
-    if(number < 3.2){
-      return Math.abs((Math.toDegrees(Math.atan(78/(Math.abs(number) * 39.37))) - 20)/5.14);
-    }
-
-    if(number < 4.1){
-      return Math.abs((Math.toDegrees(Math.atan(80.5/(Math.abs(number) * 39.37))) - 20)/5.14);
-    }
-
-    if(number < 5.0){
-      return 1;//Math.abs((Math.toDegrees(Math.atan(40/(Math.abs(number) * 39.37))) - 20)/5.14);
-    }
-
-    if(number < 5.5){
-      return 0.5;
-    }
-
-    if(number > 6.5){
-      return 0;
-    }
-
-
-    else{
-      return Math.abs((Math.toDegrees(Math.atan(79/(Math.abs(number) * 39.37))) - 20)/5.14);
-    }
   }
 
   @Override

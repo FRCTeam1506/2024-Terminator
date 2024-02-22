@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 // import frc.lib.math.Conversions;
 import frc.robot.Constants;
 
@@ -67,6 +68,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     if(!irNine.get()){
       Constants.IntakeSubsystem.ring = true;
+
+      //probably delete eventually
+      for(int i = 0; i<50; i++){
+        new WaitCommand(0.01);
+      }
       // Timer.delay(.1);
       stopIntake();
     }

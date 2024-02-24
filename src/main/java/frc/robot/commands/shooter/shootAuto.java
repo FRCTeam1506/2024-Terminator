@@ -30,7 +30,7 @@ public class shootAuto extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new vision2(vision),//.until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
-        new angle(angler, setpoint),//.until(() -> angler.getPos() > angler.getVisionPosition()),
+        new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
         new runWheel(shooter).withTimeout(0.1)
         // new angle(angler, Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14).until(() -> angler.getPos() > Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14)
       ).withTimeout(0.8),

@@ -29,7 +29,7 @@ public class angleDistance extends Command {
   @Override
   public void execute() {
     double angle = Math.toDegrees(Math.atan(66/(distance * 39.37)))/5.14; 
-    angler.setPosition(angle);
+    angler.setPosition();
   }
 
   // Called once the command ends or is interrupted.

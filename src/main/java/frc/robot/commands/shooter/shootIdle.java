@@ -5,17 +5,17 @@
 package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ShooterSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Angler;
 
-public class angle extends Command {
+public class shootIdle extends Command {
   /** Creates a new moveAngler. */
-  Angler angler;
-  boolean finished = false;
 
-  public angle(Angler angler) {
+  ShooterSubsystem shooter;
+
+  public shootIdle(ShooterSubsystem shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.angler = angler;
+    this.shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
@@ -27,19 +27,18 @@ public class angle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    angler.setPosition();
+    shooter.shootIdle();
     
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    // angler.stopAngler();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }

@@ -73,8 +73,8 @@ public final class Constants {
 
 
     public static final class CandleSubsystem{
-        public static final int CANDLE_ID = 62;
-        public static boolean cone = true;
+        public static final int CANDLE_ID = 53;
+        public static boolean note = false;
     }
 
     public static final class ShooterSubsystem{
@@ -90,8 +90,6 @@ public final class Constants {
         public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
 
     }
-
-    // public static final class 
 
 
 

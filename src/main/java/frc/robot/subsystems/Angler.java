@@ -47,15 +47,19 @@ public class Angler extends SubsystemBase {
 
   }
 
-  public void setPosition(double position){
+  public void setPosition(){
     m_motmag.Slot = 0;
     double dist = Vision.shotdist;
     double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
     motor.setControl(m_motmag.withPosition(pos));
   }
 
+  public void setPositionManual(double position){
+    m_motmag.Slot = 0;
+    motor.setControl(m_motmag.withPosition(position));
+  }
 
-  public void setPositionIncrement(double position){
+  public void setPositionIncrement(){
     m_motmag.Slot = 0;
     motor.setControl(m_motmag.withPosition(new ShooterSubsystem().getIncrement()));
   }

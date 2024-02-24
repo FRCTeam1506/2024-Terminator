@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.autos.CenterLine;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.subsystems.Angler;
@@ -58,7 +59,8 @@ public class Autos {
                 return new WaitCommand(15.0);
             
             case CenterLine:
-                return new PathPlannerAuto("CenterLine");
+                // return new PathPlannerAuto("CenterLine");
+                return new CenterLine(angler, intake, shooter, vision);
             
             default:
                 return new WaitCommand(15.0);

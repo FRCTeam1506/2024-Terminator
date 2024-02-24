@@ -53,6 +53,12 @@ public class ShooterSubsystem extends SubsystemBase {
     motor2.set(0);
   }
 
+  public void shootIdle(){
+    motor1.set(0.3);
+    motor2.set(0.3);
+  }
+
+
   public double getIncrement(){
     return increment;
   }

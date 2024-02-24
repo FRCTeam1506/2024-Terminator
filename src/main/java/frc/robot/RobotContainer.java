@@ -38,6 +38,7 @@ import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.angle;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
+import frc.robot.commands.shooter.shootIdle;
 import frc.robot.commands.vision.*;
 import frc.robot.generated.TunerConstants;
 
@@ -82,6 +83,9 @@ public class RobotContainer {
             .withVelocityY(-driver.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-driver.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ).ignoringDisable(true));
+
+    //idle shooter
+    shooter.setDefaultCommand(new shootIdle(shooter));
 
     j.dA.whileTrue(drivetrain.applyRequest(() -> brake));
 

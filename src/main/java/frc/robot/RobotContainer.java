@@ -31,8 +31,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.subsystems.Angler;
+import frc.robot.subsystems.Candle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Trapper;
 import frc.robot.subsystems.Vision;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.angle;
@@ -59,6 +61,8 @@ public class RobotContainer {
   public final Angler angler = new Angler();
   public final Autos autos = new Autos(intake, shooter, angler, vision);
   public final Climber climber = new Climber();
+  public final Trapper trapper = new Trapper();
+  public final Candle candle = new Candle();
 
   //Commands
   vision2 visionCommand = new vision2(vision);
@@ -85,7 +89,7 @@ public class RobotContainer {
         ).ignoringDisable(true));
 
     //idle shooter
-    shooter.setDefaultCommand(new shootIdle(shooter));
+    // shooter.setDefaultCommand(new shootIdle(shooter));
 
     j.dA.whileTrue(drivetrain.applyRequest(() -> brake));
 
@@ -157,8 +161,21 @@ public class RobotContainer {
     //increment testing
     j.dShare.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
     j.dOptions.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
-    j.oTouchpad.whileTrue(new angle(angler, shooter.increment));
+    j.oTouchpad.whileTrue(new angle(angler));
     j.oTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+    //trapper
+    j.dUp.whileTrue(new InstantCommand(() -> trapper.up()));
+    j.dDown.whileTrue(new InstantCommand(() -> trapper.down()));
+    j.dRB.whileTrue(new InstantCommand(() -> trapper.intake()));
+    j.dLB.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
+    j.dUp.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    j.dDown.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    j.dRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    j.dLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+
+
+    
   }
 
   private final intake intakecommand = new intake(intake);
@@ -199,9 +216,7 @@ public class RobotContainer {
 
   public void runCurrentLimits(){
     int[] swerveMotors = {11,12,21,22,31,32,41,42};
-    int[] otherMotors = {60,61};
-
-    TalonFXConfiguration config = new TalonFXConfiguration();
+    int[] otherMotors = {51,57,58,52,60,61,62,55,56};
 
     CurrentLimitsConfigs swerveConfig = new CurrentLimitsConfigs();
     swerveConfig.SupplyCurrentLimitEnable = true;
@@ -209,15 +224,16 @@ public class RobotContainer {
     swerveConfig.SupplyCurrentThreshold = 60;
     swerveConfig.SupplyTimeThreshold = 0.1;
 
-    
+    /* Stator Limiting Not Being Used
     CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs();
     currentConfig.StatorCurrentLimitEnable = true;
     currentConfig.StatorCurrentLimit = 50;
 
     currentConfig.SupplyCurrentLimitEnable = true;
-    currentConfig.SupplyCurrentLimit = 35;
+    currentConfig.SupplyCurrentLimit = 38;
     currentConfig.SupplyCurrentThreshold = 60;
     currentConfig.SupplyTimeThreshold = 0.1;
+    */
 
     for(int i: swerveMotors){
       TalonFX motor = new TalonFX(i);

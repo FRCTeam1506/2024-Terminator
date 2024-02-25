@@ -89,6 +89,14 @@ public final class Constants {
         public static final double DRIVE_PEAK_CURRENT_DURATION = 0.1;
         public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
 
+        public static boolean isShooting = false;
+
+    }
+
+    public static final class TrapperSubsystem{
+        public static final int TRAPPER_VERTICAL_ID = 57;
+        public static final int TRAPPER_SHOOTER_ID = 58;
+
     }
 
 

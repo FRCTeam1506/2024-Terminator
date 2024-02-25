@@ -41,6 +41,7 @@ public class Vision extends SubsystemBase {
   NetworkTableEntry ta = table.getEntry("ta");
   NetworkTableEntry tv = table.getEntry("tv");
   NetworkTableEntry botpose = table.getEntry("botpose");
+  public static double shooterID = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(0);
 
   NetworkTable tableIntake = NetworkTableInstance.getDefault().getTable("limelight-front");
   NetworkTableEntry tx2 = tableIntake.getEntry("tx");
@@ -95,6 +96,7 @@ public class Vision extends SubsystemBase {
     SmartDashboard.putNumber("LimelightShooterDistance", shotdist);
     SmartDashboard.putNumber("LimelightArea", area);
     SmartDashboard.putNumber("Target Exists", target);
+    SmartDashboard.putNumber("AprilTag ID", shooterID);
 
     SmartDashboard.putNumber("cam x", x);
     SmartDashboard.putNumber("cam y", y);
@@ -134,6 +136,7 @@ public class Vision extends SubsystemBase {
     y = ty.getDouble(0.0);
     area = ta.getDouble(0.0);
     target = tv.getDouble(0.0);
+    shooterID = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(0);
 
     xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
     zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);

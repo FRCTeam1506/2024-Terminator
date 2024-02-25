@@ -70,9 +70,9 @@ public class IntakeSubsystem extends SubsystemBase {
       Constants.IntakeSubsystem.ring = true;
 
       //probably delete eventually
-      for(int i = 0; i<50; i++){
-        new WaitCommand(0.01);
-      }
+      // for(int i = 0; i<50; i++){
+      //   new WaitCommand(0.01);
+      // }
       // Timer.delay(.1);
       stopIntake();
     }

@@ -130,6 +130,9 @@ public class vision2 extends Command {
   @Override
   public void end(boolean interrupted) {
     gyro.close();
+    ChassisSpeeds stop = new ChassisSpeeds(0,0, 0);
+    SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
+    TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));
   }
 
   // Returns true when the command should end.

@@ -11,11 +11,17 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
+import com.ctre.phoenix.led.StrobeAnimation;
 
 
 public class Candle extends SubsystemBase {
   /** Creates a new Candle. */
   CANdle candle = new CANdle(Constants.CandleSubsystem.CANDLE_ID);
+
+  int[] orange = {0, 0, 255};
+  int[] green = {0, 191, 0};
+  int[] red = {191, 0, 0};
+
 
   public Candle() {
     CANdleConfiguration config = new CANdleConfiguration();
@@ -24,12 +30,39 @@ public class Candle extends SubsystemBase {
     candle.configAllSettings(config);
   }
 
-  public void yellow(){
-    // stopGSA();
-    // color = "yellow";
-    // candle.setLEDs(rY, gY, bY); // set the CANdle LEDs to white
-    // Constants.CandleSubsystem.cone = true;
+  public void orange(){
+    stopGSA();
+    candle.setLEDs(orange[0], orange[1], orange[2]);
+    Constants.CandleSubsystem.note = true;
+    
+  }
 
+  public void strobeOrange(){
+    stopGSA();
+    StrobeAnimation strobe = new StrobeAnimation(orange[0], orange[1], orange[2]);
+    candle.animate(strobe);
+  }
+
+  public void green(){
+    stopGSA();
+    candle.setLEDs(green[0], green[1], green[2]);
+  }
+
+  public void strobeGreen(){
+    stopGSA();
+    StrobeAnimation strobe = new StrobeAnimation(green[0], green[1], green[2]);
+    candle.animate(strobe);
+  }
+
+  public void red(){
+    stopGSA();
+    candle.setLEDs(red[0], red[1], red[2]);
+  }
+
+  public void strobeRed(){
+    stopGSA();
+    StrobeAnimation strobe = new StrobeAnimation(red[0], red[1], red[2]);
+    candle.animate(strobe);
   }
 
   public void gsa(){
@@ -38,12 +71,23 @@ public class Candle extends SubsystemBase {
   }
 
   public void stopGSA(){
-      candle.animate(null);
+    candle.animate(null);
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    if(!Constants.IntakeSubsystem.irNine.get()){
+      if(Vision.shooterID == 4 || Vision.shooterID == 7){
+        green();
+      }else{
+        orange();
+      }
+    }
+    else{
+      red();
+    }
+
   }
 }

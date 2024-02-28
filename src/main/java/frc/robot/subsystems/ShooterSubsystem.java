@@ -37,8 +37,8 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void ampPower(){
-    motor1.set(0.4);
-    motor2.set(0.05);
+    motor1.set(0.45); //og 0.4
+    motor2.set(0.05*1.2);
   }
 
   public void shootRPM(){

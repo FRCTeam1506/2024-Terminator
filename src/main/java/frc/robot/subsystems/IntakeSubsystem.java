@@ -52,6 +52,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void justIntake(){
     motor.set(Constants.IntakeSubsystem.DEFAULT_INTAKE_SPEED);
+    indexer.set(Constants.IntakeSubsystem.DEFAULT_INDEXER_SPEED);
     // indexer.set(maxVelocity);
     System.out.println("Intake");
 
@@ -66,20 +67,34 @@ public class IntakeSubsystem extends SubsystemBase {
     //   stopIntake();
     // }
 
-    if(!irNine.get()){
-      Constants.IntakeSubsystem.ring = true;
+    if(!Constants.IntakeSubsystem.manualIntake){
 
-      //probably delete eventually
-      // for(int i = 0; i<50; i++){
-      //   new WaitCommand(0.01);
-      // }
+      if(!irNine.get()){
+            Constants.IntakeSubsystem.ring = true;
+            stopIntake();
+      }
+      else{
+        motor.set(Constants.IntakeSubsystem.DEFAULT_INTAKE_SPEED);
+        indexer.set(Constants.IntakeSubsystem.DEFAULT_INDEXER_SPEED);
+      }
+    }
+    else{
+      intakeByCurrent();
+    }
+
+    
+  }
+
+  public void intakeByCurrent(){
+    if(indexer.getTorqueCurrent().getValueAsDouble() > 23 || Constants.IntakeSubsystem.ring){
+      Constants.IntakeSubsystem.ring = true;
       // Timer.delay(.1);
       stopIntake();
     }
     else{
-      motor.set(Constants.IntakeSubsystem.DEFAULT_INTAKE_SPEED);
-      indexer.set(Constants.IntakeSubsystem.DEFAULT_INDEXER_SPEED);
+      justIntake();
     }
+
   }
 
 

@@ -61,6 +61,7 @@ public final class Constants {
 
 
         public static boolean ring = false;
+        public static boolean manualIntake = false;
     }
 
     public static final class ClimberSubsystem{
@@ -90,6 +91,7 @@ public final class Constants {
         public static final boolean DRIVE_ENABLE_CURRENT_LIMIT = true;
 
         public static boolean isShooting = false;
+        public static boolean autoAim = true;
 
     }
 

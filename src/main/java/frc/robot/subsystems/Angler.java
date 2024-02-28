@@ -52,7 +52,8 @@ public class Angler extends SubsystemBase {
 
     if(Vision.target != 0){
       double dist = Vision.shotdist;
-      double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
+      //double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
+      double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0
       motor.setControl(m_motmag.withPosition(pos));
     }
   }
@@ -60,6 +61,12 @@ public class Angler extends SubsystemBase {
   public void setPositionManual(double position){
     m_motmag.Slot = 0;
     motor.setControl(m_motmag.withPosition(position));
+  }
+
+  public void goVertical(){
+    m_motmag.Slot = 0;
+    double vertPos = 12.5;
+    motor.setControl(m_motmag.withPosition(vertPos));
   }
 
   public void setPositionIncrement(){

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.autos.BackAndShoot;
 import frc.robot.commands.autos.CenterLine;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.shoot;
@@ -28,7 +29,7 @@ public class Autos {
     ShooterSubsystem shooter;
     Vision vision;
     Angler angler;
-    enum autos { Nothing, CenterLine }
+    enum autos { Nothing, CenterLine, ShootAndBack }
 
 
     public Autos(IntakeSubsystem intake, ShooterSubsystem shooter, Angler angler, Vision vision){
@@ -41,14 +42,15 @@ public class Autos {
     }
 
     public void registerCommands(){
-        NamedCommands.registerCommand("Intake", new intake(intake));
-        NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
+        // NamedCommands.registerCommand("Intake", new intake(intake));
+        // NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
     }
 
     public void getAutos(){
 
         autoChooser.setDefaultOption("Nothing", autos.Nothing);
         autoChooser.addOption("CenterLine", autos.CenterLine);
+        autoChooser.addOption("Shoot and Back", autos.ShootAndBack);
         SmartDashboard.putData(autoChooser);
     }
 
@@ -61,6 +63,10 @@ public class Autos {
             case CenterLine:
                 // return new PathPlannerAuto("CenterLine");
                 return new CenterLine(angler, intake, shooter, vision);
+
+            case ShootAndBack:
+                // return new PathPlannerAuto("CenterLine");
+                return new BackAndShoot(angler, intake, shooter, vision);
             
             default:
                 return new WaitCommand(15.0);

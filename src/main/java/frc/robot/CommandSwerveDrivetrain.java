@@ -50,21 +50,21 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, double OdometryUpdateFrequency, SwerveModuleConstants... modules) {
         super(driveTrainConstants, OdometryUpdateFrequency, modules);
-        // configurePathPlanner();
+        configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
         }
     }
     public CommandSwerveDrivetrain(SwerveDrivetrainConstants driveTrainConstants, SwerveModuleConstants... modules) {
         super(driveTrainConstants, modules);
-        // configurePathPlanner();
+        configurePathPlanner();
         if (Utils.isSimulation()) {
             startSimThread();
         }
     }
 
     public void configurePathPlanner() {
-        double driveBaseRadius = 0;
+        double driveBaseRadius = 0.3;
         for (var moduleLocation : m_moduleLocations) {
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
         }
@@ -74,16 +74,16 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             this::seedFieldRelative,  // Consumer for seeding pose against auto
             this::getCurrentRobotChassisSpeeds,
             (speeds)->this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
-            new HolonomicPathFollowerConfig(new PIDConstants(10, 0, 0),
-                                            new PIDConstants(10, 0, 0),
+            new HolonomicPathFollowerConfig(new PIDConstants(3, 0, 0),
+                                            new PIDConstants(100, 0, 0.2),
                                             TunerConstants.kSpeedAt12VoltsMps,
                                             driveBaseRadius,
                                             new ReplanningConfig()),
-            ()->false, // Change this if the path needs to be flipped on red vs blue
+            ()->true, // Change this if the path needs to be flipped on red vs blue
             this); // Subsystem for requirements
 
-            NamedCommands.registerCommand("Intake", new intake(new IntakeSubsystem()));
-            NamedCommands.registerCommand("Shoot", new shoot(new ShooterSubsystem(), new IntakeSubsystem(), new Angler(), new Vision()));
+            // NamedCommands.registerCommand("Intake", new intake(new IntakeSubsystem()));
+            // NamedCommands.registerCommand("Shoot", new shoot(new ShooterSubsystem(), new IntakeSubsystem(), new Angler(), new Vision()));
 
     }
 

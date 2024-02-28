@@ -10,7 +10,9 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 
 import frc.robot.Constants;
+import frc.robot.commands.angler.setPosition;
 import frc.robot.commands.angler.stopAngler;
+import frc.robot.commands.drivetrain.stop;
 import frc.robot.commands.intake.runIndexer;
 import frc.robot.commands.intake.stopIndexer;
 import frc.robot.commands.vision.vision2;
@@ -22,26 +24,28 @@ import frc.robot.subsystems.Vision;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class shootAuto extends SequentialCommandGroup {
+public class shootPower extends SequentialCommandGroup {
   /** Creates a new shoot. */
-  public shootAuto(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision, double setpoint) {
+  public shootPower(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision, double anglerSetpoint) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
-        new vision2(vision),//.until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
-        new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
+        new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
+        new stop().withTimeout(0.1),
+        new setPosition(angler, anglerSetpoint),//.until(() -> angler.getPos() > angler.getVisionPosition()),
         new runWheel(shooter).withTimeout(0.1)
         // new angle(angler, Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14).until(() -> angler.getPos() > Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14)
       ).withTimeout(0.8),
       //new stopShooter(shooter),
-      new stopAngler(angler).withTimeout(0.1),
+      new stopAngler(angler),
       //new WaitCommand(0.5),
-      new runIndexer(intake).withTimeout(0.4),
+      new runIndexer(intake),
+      new WaitCommand(0.1),
       new ParallelCommandGroup(
         new stopIndexer(intake),
         new stopShooter(shooter)
-      ).withTimeout(0.2)
+      ).withTimeout(0.1)
     );
   }
 }

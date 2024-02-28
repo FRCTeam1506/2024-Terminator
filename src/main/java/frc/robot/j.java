@@ -22,12 +22,17 @@ public class j {
     public static JoystickButton dTouchpad = new JoystickButton(driver, PS4Controller.Button.kTouchpad.value);
     public static JoystickButton dShare = new JoystickButton(driver, PS4Controller.Button.kShare.value);
     public static JoystickButton dOptions = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
+    public static JoystickButton dPS = new JoystickButton(driver, PS4Controller.Button.kPS.value);
 
     public static JoystickButton oA = new JoystickButton(operator, PS4Controller.Button.kCross.value);
     public static JoystickButton oB = new JoystickButton(operator, PS4Controller.Button.kCircle.value);
     public static JoystickButton oY = new JoystickButton(operator, PS4Controller.Button.kTriangle.value);
     public static JoystickButton oX = new JoystickButton(operator, PS4Controller.Button.kSquare.value);
     public static JoystickButton oTouchpad = new JoystickButton(operator, PS4Controller.Button.kTouchpad.value);
+    public static JoystickButton oShare = new JoystickButton(operator, PS4Controller.Button.kShare.value);
+    public static JoystickButton oOptions = new JoystickButton(operator, PS4Controller.Button.kOptions.value);
+    public static JoystickButton oPS = new JoystickButton(operator, PS4Controller.Button.kPS.value);
+
 
     //triggers
     public static JoystickButton oRT = new JoystickButton(operator, PS4Controller.Button.kR2.value);

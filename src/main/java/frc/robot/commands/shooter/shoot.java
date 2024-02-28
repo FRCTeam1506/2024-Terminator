@@ -48,9 +48,11 @@ public class shoot extends SequentialCommandGroup {
         new runWheel(shooter),
         new brake()
       ).withTimeout(0.2),
-      new runIndexer(intake),
-      new WaitCommand(0.1),
-      new stopIndexer(intake)
+      new runIndexer(intake).withTimeout(0.4),
+      new ParallelCommandGroup(
+        new stopIndexer(intake),
+        new stopShooter(shooter)
+      ).withTimeout(0.1)
     );
     Constants.ShooterSubsystem.isShooting = false;
   }

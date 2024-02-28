@@ -139,7 +139,9 @@ public class Vision extends SubsystemBase {
     shooterID = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(0);
 
     xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+    //xshot = 1;
     zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+    //zshot = 1;
     shotdist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
 
     x2 = tx2.getDouble(0.0);

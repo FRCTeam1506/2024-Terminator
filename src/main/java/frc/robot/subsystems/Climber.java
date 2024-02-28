@@ -40,13 +40,11 @@ public class Climber extends SubsystemBase {
     motionMagicConfigs.MotionMagicAcceleration = 8; // 160 rps/s acceleration (0.5 seconds)
     motionMagicConfigs.MotionMagicJerk = 1600; // 1600 rps/s^2 jerk (0.1 seconds)
     
-
     left.getConfigurator().apply(talonFXConfigs, 0.050);
     right.getConfigurator().apply(talonFXConfigs, 0.050);
     left.setPosition(0);
     right.setPosition(0);
-    right.setInverted(true);
-
+    left.setInverted(true);
   }
 
   public void up(){

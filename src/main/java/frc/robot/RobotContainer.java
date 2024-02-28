@@ -14,6 +14,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
@@ -36,11 +37,18 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Trapper;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.intake.indexToShoot;
 import frc.robot.commands.intake.intake;
+import frc.robot.commands.intake.toggleManualIntake;
 import frc.robot.commands.shooter.angle;
+import frc.robot.commands.shooter.runWheel;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
+import frc.robot.commands.shooter.shootConditional;
 import frc.robot.commands.shooter.shootIdle;
+import frc.robot.commands.shooter.shootPower;
+import frc.robot.commands.shooter.toggleAim;
+import frc.robot.commands.trapper.sendTrapperHome;
 import frc.robot.commands.vision.*;
 import frc.robot.generated.TunerConstants;
 
@@ -104,9 +112,9 @@ public class RobotContainer {
     // j.dUp.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
     // j.dDown.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
     
-    // j.dLeft.whileTrue(new RepeatCommand(new vision2(vision))); //shooter alignment
+    // j.dLeft.whileTrue(new align(vision)); //shooter alignment
     j.dLeft.whileTrue(new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold)); //shooter alignment
-    j.dRight.whileTrue(new kevin2(vision)); //intake alignment
+    // j.dRight.whileTrue(new kevin2(vision)); //intake alignment
 
     //ACTUAL CONTROLS!!!
 
@@ -116,6 +124,9 @@ public class RobotContainer {
     j.oLT.whileTrue(new InstantCommand(() -> intake.outtake()));
     j.oLT.whileFalse(new InstantCommand(() -> intake.stopIntake()));
 
+    //just in case
+    j.oShare.whileTrue(new toggleManualIntake());
+
     //delete
     j.dRT.whileTrue(new RepeatCommand(new InstantCommand(() -> intake.intake())));
     j.dRT.whileFalse(new InstantCommand(() -> intake.stopIntakeWithReset()));
@@ -124,55 +135,65 @@ public class RobotContainer {
 
 
     //manual shooter
-    j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMax()));
-    j.oRB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    // j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMax()));
+    // j.oRB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
 
     //manual angler
-    j.oUp.whileTrue(new InstantCommand(() -> angler.anglerUp()));
-    j.oDown.whileTrue(new InstantCommand(() -> angler.anglerDown()));
-    j.oA.whileTrue(new InstantCommand(() -> angler.anglerZero()));
-    j.oUp.whileFalse(new InstantCommand(() -> angler.stopAngler()));
-    j.oDown.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    j.dUp.whileTrue(new InstantCommand(() -> angler.anglerUp()));
+    j.dDown.whileTrue(new InstantCommand(() -> angler.anglerDown()));
+    j.oPS.whileTrue(new InstantCommand(() -> angler.anglerZero()));
+    j.dUp.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    j.dDown.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     
     //auto shooting
-    j.oRight.whileTrue(new shoot(shooter, intake, angler, vision));
+    j.oRight.whileTrue(new shootConditional(shooter, intake, angler, vision));
     j.oRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-    j.dRight.whileTrue(new shoot(shooter, intake, angler, vision));
+    j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-    j.dTouchpad.whileTrue(new shootAmp(angler, shooter, intake));
-    j.dTouchpad.whileFalse(new InstantCommand(() -> shooter.shootStop()));
-    j.dTouchpad.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
-    j.dTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
-
-
-
-    //climber
-    j.oB.whileTrue(new InstantCommand(() -> climber.up()));
-    j.oX.whileTrue(new InstantCommand(() -> climber.down()));
-    j.oB.whileFalse(new InstantCommand(() -> climber.stop()));
-    j.oX.whileFalse(new InstantCommand(() -> climber.stop()));
-
-    //increment testing
-    j.dShare.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
-    j.dOptions.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
-    j.oTouchpad.whileTrue(new angle(angler));
+    j.oTouchpad.whileTrue(new shootAmp(angler, shooter, intake));
+    j.oTouchpad.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    j.oTouchpad.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
+    j.dTouchpad.whileTrue(new toggleAim());
+
+    //manual shooting
+    j.oX.whileTrue(new shootPower(shooter, intake, angler, vision, 2.6));
+    j.oX.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+    //climber
+    j.oY.whileTrue(new InstantCommand(() -> climber.up()));
+    j.oY.whileTrue(new InstantCommand(() -> angler.goVertical()));
+    j.oA.whileTrue(new InstantCommand(() -> climber.down()));
+    j.oY.whileFalse(new InstantCommand(() -> climber.stop()));
+    j.oA.whileFalse(new InstantCommand(() -> climber.stop()));
+    
+
+    //increment testing
+    // j.dShare.whileTrue(new InstantCommand(() -> shooter.decreaseIncrement()));
+    // j.dOptions.whileTrue(new InstantCommand(() -> shooter.increaseIncrement()));
+    // j.oTouchpad.whileTrue(new angle(angler));
+    // j.oTouchpad.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
     //trapper
-    j.dUp.whileTrue(new InstantCommand(() -> trapper.up()));
-    j.dDown.whileTrue(new InstantCommand(() -> trapper.down()));
-    j.dRB.whileTrue(new InstantCommand(() -> trapper.intake()));
-    j.dLB.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
-    j.dUp.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
-    j.dDown.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
-    j.dRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
-    j.dLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    j.oUp.whileTrue(new InstantCommand(() -> trapper.up()));
+    j.oDown.whileTrue(new InstantCommand(() -> trapper.down()));
+    j.oRB.whileTrue(new InstantCommand(() -> trapper.trapPosition()));
+    j.oRB.whileTrue(new InstantCommand(() -> trapper.intake()));
+    j.oLB.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
+    j.oUp.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    j.oDown.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    j.oRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    // j.oRB.whileFalse(new sendTrapperHome(trapper));
+    j.oLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
 
 
     
@@ -181,19 +202,17 @@ public class RobotContainer {
   private final intake intakecommand = new intake(intake);
 
   public RobotContainer() {
-    Map<String, Command> map = new HashMap<String, Command>();
-    map.put("IntakeCommand", intakecommand);
-    // map.put("Shoot", new shoot(shooter, intake, angler, vision));
-
-    NamedCommands.registerCommands(map);
+    // NamedCommands.registerCommands(map);
+    NamedCommands.registerCommand("Intake", new intake(intake).withTimeout(0.1));
+    NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
 
     configureBindings();
     dashboardStuff();
     runCurrentLimits();
 
-    drivetrain.configurePathPlanner();
+    // drivetrain.configurePathPlanner();
 
-    autos.registerCommands();
+    // autos.registerCommands();
     autos.getAutos();
 
     //our lovely field
@@ -209,7 +228,9 @@ public class RobotContainer {
     tab.addNumber("Roll: ", () -> gyro.getRoll().getValueAsDouble());
     // tab.addNumber("Necessary Angle", () -> Math.toDegrees(Math.atan(66/(Vision.z * 39.37)))/5.14);
     tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());
-    tab.addNumber("Angler increment", () -> shooter.increment);
+    tab.addBoolean("AutoAim", () -> Constants.ShooterSubsystem.autoAim);
+    tab.addBoolean("Auto Intake", () -> !Constants.IntakeSubsystem.manualIntake);
+
 
     gyro.close();
   }
@@ -235,11 +256,11 @@ public class RobotContainer {
     currentConfig.SupplyTimeThreshold = 0.1;
     */
 
-    for(int i: swerveMotors){
-      TalonFX motor = new TalonFX(i);
-      motor.getConfigurator().apply(swerveConfig);
-      motor.close();
-    }
+    // for(int i: swerveMotors){
+    //   TalonFX motor = new TalonFX(i);
+    //   motor.getConfigurator().apply(swerveConfig);
+    //   motor.close();
+    // }
 
     for(int i: otherMotors){
       TalonFX motor = new TalonFX(i);
@@ -253,7 +274,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
 
 
-    autos.registerCommands();
+    // autos.registerCommands();
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
         new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)),
         new Pose2d(20.0, 20.0, Rotation2d.fromDegrees(0))
@@ -272,7 +293,8 @@ public class RobotContainer {
 
     // Command goForward = drivetrain.getAutoPath("Forward");
     // return goForward;
-    return autos.sendAutos();
+    // return autos.sendAutos();
+    return new PathPlannerAuto("CenterLine");
   }
 
   public void periodic(){

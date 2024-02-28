@@ -55,7 +55,7 @@ public class Trapper extends SubsystemBase {
   }
 
   public void shootTrap(){
-    shooter.set(-0.6);
+    shooter.set(-0.45); //-0.3
   }
 
   public void intake(){
@@ -64,8 +64,14 @@ public class Trapper extends SubsystemBase {
 
   public void trapPosition(){
     m_motmag.Slot = 0;
-    vertical.setControl(m_motmag.withPosition(4.8));
+    vertical.setControl(m_motmag.withPosition(4.6)); //5.1 too high //4.85 too high
   }
+
+  public void sendTrapperHome(){
+    m_motmag.Slot = 0;
+    vertical.setControl(m_motmag.withPosition(5.1));
+  }
+
 
   public void HP(){
     m_motmag.Slot = 0;

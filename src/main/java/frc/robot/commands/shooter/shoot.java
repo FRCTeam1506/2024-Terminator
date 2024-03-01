@@ -33,9 +33,10 @@ public class shoot extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     double z = vision.zshot;
     Constants.ShooterSubsystem.isShooting = true;
-    addCommands(        
+    addCommands(
+      new runWheel(shooter).withTimeout(0.05),
       new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
-      new stop().withTimeout(0.1),
+      new stop().withTimeout(0.05),
       new ParallelDeadlineGroup(
         new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
         new runWheel(shooter).withTimeout(0.1),
@@ -44,11 +45,7 @@ public class shoot extends SequentialCommandGroup {
       //new stopShooter(shooter),
       // new stopAngler(angler),
       //new WaitCommand(0.5),
-      new ParallelCommandGroup(
-        new runWheel(shooter),
-        new brake()
-      ).withTimeout(0.2),
-      new runIndexer(intake).withTimeout(0.4),
+      new runIndexer(intake).withTimeout(0.2),
       new ParallelCommandGroup(
         new stopIndexer(intake),
         new stopShooter(shooter)

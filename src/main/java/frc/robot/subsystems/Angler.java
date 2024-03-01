@@ -9,6 +9,8 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -24,6 +26,9 @@ public class Angler extends SubsystemBase {
     var talonFXConfigs = new TalonFXConfiguration();
 
     talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+
+    talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+    talonFXConfigs.CurrentLimits.StatorCurrentLimit = 120; //maybe change this
 
     // set slot 0 gains
     var slot0Configs = talonFXConfigs.Slot0;
@@ -50,11 +55,25 @@ public class Angler extends SubsystemBase {
   public void setPosition(){
     m_motmag.Slot = 0;
 
+    double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+    // xshot = 1;
+    double zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+    // zshot = 1;
+    double dist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
+
+
     if(Vision.target != 0){
-      double dist = Vision.shotdist;
-      //double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
-      double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0
-      motor.setControl(m_motmag.withPosition(pos));
+
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
+        //double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0
+        motor.setControl(m_motmag.withPosition(pos));
+      }
+      else if(DriverStation.getAlliance().get() == Alliance.Red){
+        //double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
+        double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0
+        motor.setControl(m_motmag.withPosition(pos));
+      }
     }
   }
 

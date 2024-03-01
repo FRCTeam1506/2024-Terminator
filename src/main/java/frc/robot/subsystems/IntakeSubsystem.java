@@ -144,6 +144,13 @@ public class IntakeSubsystem extends SubsystemBase {
     Constants.IntakeSubsystem.ring = false;
   }
 
+  public boolean isRingThere(){
+    if(!irNine.get()){
+      return true;
+    }
+    return false;
+  }
+
 
 
   @Override

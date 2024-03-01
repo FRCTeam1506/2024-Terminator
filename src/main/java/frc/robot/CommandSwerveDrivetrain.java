@@ -25,8 +25,10 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
+import frc.robot.Constants.Swerve;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.generated.TunerConstants;
@@ -69,22 +71,48 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             driveBaseRadius = Math.max(driveBaseRadius, moduleLocation.getNorm());
         }
 
+        /*
         AutoBuilder.configureHolonomic(
             ()->this.getState().Pose, // Supplier of current robot pose
             this::seedFieldRelative,  // Consumer for seeding pose against auto
             this::getCurrentRobotChassisSpeeds,
             (speeds)->this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
-            new HolonomicPathFollowerConfig(new PIDConstants(3, 0, 0),
-                                            new PIDConstants(100, 0, 0.2),
+            new HolonomicPathFollowerConfig(new PIDConstants(Swerve.driveP, Swerve.driveI, Swerve.driveD),
+                                            new PIDConstants(Swerve.rotationP, Swerve.rotationI, Swerve.rotationD),
                                             TunerConstants.kSpeedAt12VoltsMps,
                                             driveBaseRadius,
                                             new ReplanningConfig()),
             ()->true, // Change this if the path needs to be flipped on red vs blue
             this); // Subsystem for requirements
+        */
+
+        AutoBuilder.configureHolonomic(
+            ()->this.getState().Pose, // Supplier of current robot pose
+            this::seedFieldRelative,  // Consumer for seeding pose against auto
+            this::getCurrentRobotChassisSpeeds,
+            (speeds)->this.setControl(autoRequest.withSpeeds(speeds)), // Consumer of ChassisSpeeds to drive the robot
+            new HolonomicPathFollowerConfig(
+                                            TunerConstants.kSpeedAt12VoltsMps,
+                                            driveBaseRadius,
+                                            new ReplanningConfig()),
+            ()->needsFlipping(), // Change this if the path needs to be flipped on red vs blue
+            this); // Subsystem for requirements
+
+
+
 
             // NamedCommands.registerCommand("Intake", new intake(new IntakeSubsystem()));
             // NamedCommands.registerCommand("Shoot", new shoot(new ShooterSubsystem(), new IntakeSubsystem(), new Angler(), new Vision()));
 
+    }
+
+    public boolean needsFlipping(){
+        if(DriverStation.getAlliance().get() == Alliance.Red){
+            return true;
+        }
+        else{
+            return false;
+        }
     }
 
     public Command applyRequest(Supplier<SwerveRequest> requestSupplier) {
@@ -108,8 +136,8 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 () -> TunerConstants.DriveTrain.getCurrentRobotChassisSpeeds(), // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
                 this::runVelocity, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
-                        new PIDConstants(3, 0.0, 0.0), // Translation PID constants
-                        new PIDConstants(100, 0.0, 0.2), // Rotation PID constants
+                        new PIDConstants(Swerve.driveP, Swerve.driveI, Swerve.driveD), // Translation PID constants
+                        new PIDConstants(Swerve.rotationP, Swerve.rotationI, Swerve.rotationD), // Rotation PID constants
                         4.5, // Max module speed, in m/s
                         0.4, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
@@ -121,7 +149,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
 
                     var alliance = DriverStation.getAlliance();
                     if (alliance.isPresent()) {
-                        return alliance.get() == DriverStation.Alliance.Red;
+                        return alliance.get() != DriverStation.Alliance.Red; //change == to !=
                     }
                     return false;
                 },

@@ -9,6 +9,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants.SteerFeedbackTy
 
 import edu.wpi.first.math.util.Units;
 import frc.robot.CommandSwerveDrivetrain;
+import frc.robot.Constants.Swerve;
 
 public class TunerConstants {
     // Both sets of gains need to be tuned to your individual robot.
@@ -16,12 +17,12 @@ public class TunerConstants {
     // The steer motor uses any SwerveModule.SteerRequestType control request with the
     // output type specified by SwerveModuleConstants.SteerMotorClosedLoopOutput
     private static final Slot0Configs steerGains = new Slot0Configs()
-        .withKP(100).withKI(0).withKD(0.2)
+        .withKP(Swerve.rotationP).withKI(Swerve.rotationI).withKD(Swerve.rotationD)
         .withKS(0).withKV(1.5).withKA(0);
     // When using closed-loop control, the drive motor uses the control
     // output type specified by SwerveModuleConstants.DriveMotorClosedLoopOutput
     private static final Slot0Configs driveGains = new Slot0Configs()
-        .withKP(3).withKI(0).withKD(0)
+        .withKP(Swerve.driveP).withKI(Swerve.driveI).withKD(Swerve.driveD)
         .withKS(0).withKV(0).withKA(0);
 
     // The closed-loop output type to use for the steer motors;
@@ -37,13 +38,13 @@ public class TunerConstants {
 
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
-    public static final double kSpeedAt12VoltsMps = 4.73;
+    public static final double kSpeedAt12VoltsMps = 6;//4.73
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
     private static final double kCoupleRatio = 3.5;
 
-    private static final double kDriveGearRatio = 6.75;
+    private static final double kDriveGearRatio = 5.75; //6.75
     private static final double kSteerGearRatio = 13.371428571428572;
     private static final double kWheelRadiusInches = 2;
 

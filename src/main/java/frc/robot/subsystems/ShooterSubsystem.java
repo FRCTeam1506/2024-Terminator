@@ -6,6 +6,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -37,8 +39,14 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void ampPower(){
-    motor1.set(0.45); //og 0.4
-    motor2.set(0.05*1.2);
+    if(DriverStation.getAlliance().get() == Alliance.Blue){
+      motor1.set(0.45); //og 0.4
+      motor2.set(0.05*1.2);
+    }
+    else{
+      motor1.set(0.45 * 1.3); //og 0.4
+      motor2.set(0.05*1.2 * 1.3);
+    }
   }
 
   public void shootRPM(){

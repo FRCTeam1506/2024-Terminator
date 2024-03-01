@@ -27,8 +27,26 @@ public final class Constants {
 
         public static double maxLinearVelocity = 4;
         public static double maxAngularVelocity = 4;
+        public static double deadband = 0.08;
 
         public static Field2d m_field = new Field2d();
+
+        // https://www.reddit.com/r/FRC/comments/r6siuy/pid_tuning/
+
+        public static double rotationP = 100 * 2.4; //100
+        public static double rotationI = 0; //0
+        public static double rotationD = 0.2; //0.2
+        public static double driveP = 3*8; //3 //3*8
+        public static double driveI = 0; //0
+        public static double driveD = 0; //0
+        
+        // public static double rotationP = 100; //100
+        // public static double rotationI = 0; //0
+        // public static double rotationD = 12; //0.2
+        // public static double driveP = 0.1; //3 //3*8
+        // public static double driveI = 0; //0
+        // public static double driveD = 0; //0
+
     }
 
     public static final class Limelight {
@@ -53,7 +71,7 @@ public final class Constants {
         public static final int MOTOR_ID = 51;
         public static final int INDEXER_ID = 52;
         public static final int DIO_PORT = 0;
-        public static final double DEFAULT_INTAKE_SPEED = 0.3;
+        public static final double DEFAULT_INTAKE_SPEED = 0.5; //0.3
         public static final double DEFAULT_INDEXER_SPEED = 0.2;
 
         public static final DigitalInput irNine = new DigitalInput(7);
@@ -76,6 +94,7 @@ public final class Constants {
     public static final class CandleSubsystem{
         public static final int CANDLE_ID = 53;
         public static boolean note = false;
+        public static boolean noah = false; // noahs ark
     }
 
     public static final class ShooterSubsystem{

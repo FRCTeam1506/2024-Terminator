@@ -78,15 +78,20 @@ public class Candle extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(!Constants.IntakeSubsystem.irNine.get()){
-      if(Vision.shooterID == 4 || Vision.shooterID == 7){
-        green();
-      }else{
-        orange();
-      }
+    if(Constants.CandleSubsystem.noah){
+      gsa();
     }
     else{
-      red();
+      if(!Constants.IntakeSubsystem.irNine.get()){
+        if(Vision.shooterID == 4 || Vision.shooterID == 7){
+          green();
+        }else{
+          orange();
+        }
+      }
+      else{
+        red();
+      }
     }
 
   }

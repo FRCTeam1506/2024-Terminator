@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 
 import frc.robot.Constants;
+import frc.robot.commands.angler.setPosition;
 import frc.robot.commands.angler.stopAngler;
 import frc.robot.commands.intake.runIndexer;
 import frc.robot.commands.intake.stopIndexer;
@@ -29,8 +30,7 @@ public class shootAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
-        new vision2(vision),//.until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
-        new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
+        new setPosition(angler, setpoint),//.until(() -> angler.getPos() > angler.getVisionPosition()),
         new runWheel(shooter).withTimeout(0.1)
         // new angle(angler, Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14).until(() -> angler.getPos() > Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14)
       ).withTimeout(0.8),
@@ -41,7 +41,7 @@ public class shootAuto extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new stopIndexer(intake),
         new stopShooter(shooter)
-      ).withTimeout(0.2)
+      ).withTimeout(0.1)
     );
   }
 }

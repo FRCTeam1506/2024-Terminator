@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7284778050297884,
-      "y": 6.5463576290918635
+      "x": 1.5508684863523587,
+      "y": 4.075047380863993
     },
-    "rotation": 56.30993247402022
+    "rotation": -53.506535869662564
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootBase"
+            "name": "Shoot"
           }
         },
         {
@@ -24,7 +24,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CLTest"
+                  "pathName": "Central1"
                 }
               },
               {
@@ -37,15 +37,28 @@
           }
         },
         {
-          "type": "wait",
+          "type": "deadline",
           "data": {
-            "waitTime": 0.5
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Watch Intake"
+                }
+              }
+            ]
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "ShootLine"
+            "name": "Shoot"
           }
         }
       ]

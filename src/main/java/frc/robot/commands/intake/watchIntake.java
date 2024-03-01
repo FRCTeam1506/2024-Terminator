@@ -8,10 +8,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.IntakeSubsystem;
 
-public class intake extends Command {
+public class watchIntake extends Command {
   /** Creates a new runWheel. */
   IntakeSubsystem intake;
-  public intake(IntakeSubsystem intake) {
+  boolean finished = false;
+  public watchIntake(IntakeSubsystem intake) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.intake = intake;
   }
@@ -23,18 +24,23 @@ public class intake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intake();
+    if(intake.isRingThere()){
+      intake.stopIntake();
+      finished = true;
+    }
+    else{
+      intake.intake();
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Constants.IntakeSubsystem.ring;
+    return finished;
   }
 }

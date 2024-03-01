@@ -4,6 +4,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PS4Controller;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
@@ -55,5 +56,4 @@ public class j {
     public static POVButton oRight = new POVButton(operator, 90);
     public static POVButton oDown = new POVButton(operator, 180);
     public static POVButton oLeft = new POVButton(operator, 270);
-
 }

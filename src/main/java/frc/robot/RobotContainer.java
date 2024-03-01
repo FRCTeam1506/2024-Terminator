@@ -10,6 +10,7 @@ import java.util.Map;
 import com.ctre.phoenix6.Utils;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.hardware.ParentDevice;
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
@@ -37,13 +38,17 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Trapper;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.climber.individualControl;
+import frc.robot.commands.drivetrain.zeroGyro;
 import frc.robot.commands.intake.indexToShoot;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.intake.toggleManualIntake;
+import frc.robot.commands.intake.watchIntake;
 import frc.robot.commands.shooter.angle;
 import frc.robot.commands.shooter.runWheel;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
+import frc.robot.commands.shooter.shootAuto;
 import frc.robot.commands.shooter.shootConditional;
 import frc.robot.commands.shooter.shootIdle;
 import frc.robot.commands.shooter.shootPower;
@@ -76,7 +81,7 @@ public class RobotContainer {
   vision2 visionCommand = new vision2(vision);
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDeadband(MaxSpeed * Constants.Swerve.deadband).withRotationalDeadband(MaxAngularRate * Constants.Swerve.deadband) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -98,6 +103,7 @@ public class RobotContainer {
 
     //idle shooter
     // shooter.setDefaultCommand(new shootIdle(shooter));
+    // climber.setDefaultCommand(new individualControl(climber));
 
     j.dA.whileTrue(drivetrain.applyRequest(() -> brake));
 
@@ -141,7 +147,7 @@ public class RobotContainer {
     //manual angler
     j.dUp.whileTrue(new InstantCommand(() -> angler.anglerUp()));
     j.dDown.whileTrue(new InstantCommand(() -> angler.anglerDown()));
-    j.oPS.whileTrue(new InstantCommand(() -> angler.anglerZero()));
+    j.dPS.whileTrue(new InstantCommand(() -> angler.anglerZero()));
     j.dUp.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     j.dDown.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     
@@ -164,7 +170,7 @@ public class RobotContainer {
     j.dTouchpad.whileTrue(new toggleAim());
 
     //manual shooting
-    j.oX.whileTrue(new shootPower(shooter, intake, angler, vision, 2.6));
+    j.oX.whileTrue(new shootPower(shooter, intake, angler, vision, 3.15));//2.6 og //2.9 for blue
     j.oX.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
@@ -175,6 +181,7 @@ public class RobotContainer {
     j.oA.whileTrue(new InstantCommand(() -> climber.down()));
     j.oY.whileFalse(new InstantCommand(() -> climber.stop()));
     j.oA.whileFalse(new InstantCommand(() -> climber.stop()));
+    
     
 
     //increment testing
@@ -189,22 +196,29 @@ public class RobotContainer {
     j.oRB.whileTrue(new InstantCommand(() -> trapper.trapPosition()));
     j.oRB.whileTrue(new InstantCommand(() -> trapper.intake()));
     j.oLB.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
-    j.oUp.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    j.oUp.whileFalse(new InstantCommand(() -> trapper.sendTrapperHome()));
     j.oDown.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     // j.oRB.whileFalse(new sendTrapperHome(trapper));
     j.oLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
-
-
-    
+    j.oPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
   }
 
   private final intake intakecommand = new intake(intake);
 
   public RobotContainer() {
     // NamedCommands.registerCommands(map);
-    NamedCommands.registerCommand("Intake", new intake(intake).withTimeout(0.1));
+    NamedCommands.registerCommand("Intake", new intake(intake).until(() -> Constants.IntakeSubsystem.irNine.get() == false));
+    NamedCommands.registerCommand("Watch Intake", new watchIntake(intake));
+    NamedCommands.registerCommand("ZeroGyro", new zeroGyro());
+
     NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
+    NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
+    NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, 2.8));
+    NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 0.725));
+    NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, 4));
+    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.6));
+
 
     configureBindings();
     dashboardStuff();
@@ -217,6 +231,8 @@ public class RobotContainer {
 
     //our lovely field
     // SmartDashboard.putData("Field", Constants.Swerve.m_field);
+
+    // ParentDevice.optimizeBusUtilizationForAll(new ParentDevice[])
 
   }
 
@@ -245,26 +261,28 @@ public class RobotContainer {
     swerveConfig.SupplyCurrentThreshold = 60;
     swerveConfig.SupplyTimeThreshold = 0.1;
 
-    /* Stator Limiting Not Being Used
+    //Stator Limiting Not Being Used
     CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs();
     currentConfig.StatorCurrentLimitEnable = true;
-    currentConfig.StatorCurrentLimit = 50;
+    currentConfig.StatorCurrentLimit = 120;
 
-    currentConfig.SupplyCurrentLimitEnable = true;
-    currentConfig.SupplyCurrentLimit = 38;
-    currentConfig.SupplyCurrentThreshold = 60;
-    currentConfig.SupplyTimeThreshold = 0.1;
-    */
+    // currentConfig.SupplyCurrentLimitEnable = true;
+    // currentConfig.SupplyCurrentLimit = 38;
+    // currentConfig.SupplyCurrentThreshold = 60;
+    // currentConfig.SupplyTimeThreshold = 0.1;
+    
 
     // for(int i: swerveMotors){
     //   TalonFX motor = new TalonFX(i);
-    //   motor.getConfigurator().apply(swerveConfig);
+    //   motor.getConfigurator().apply(currentConfig);
+    //   motor.optimizeBusUtilization();
     //   motor.close();
     // }
 
     for(int i: otherMotors){
       TalonFX motor = new TalonFX(i);
-      motor.getConfigurator().apply(swerveConfig); /// !!!!! CURRENTLY WE ARE NOT DOING STATOR LIMITING ONLY SUPPLY LIMITING !!!!!
+      motor.getConfigurator().apply(currentConfig); /// !!!!! CURRENTLY WE ARE NOT DOING STATOR LIMITING ONLY SUPPLY LIMITING !!!!!
+      motor.optimizeBusUtilization();
       motor.close();
     }
 
@@ -293,8 +311,8 @@ public class RobotContainer {
 
     // Command goForward = drivetrain.getAutoPath("Forward");
     // return goForward;
-    // return autos.sendAutos();
-    return new PathPlannerAuto("CenterLine");
+    return autos.sendAutos();
+    // return new PathPlannerAuto("CenterLine");
   }
 
   public void periodic(){

@@ -2,18 +2,18 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.climber;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.Climber;
 
-public class intake extends Command {
-  /** Creates a new runWheel. */
-  IntakeSubsystem intake;
-  public intake(IntakeSubsystem intake) {
+public class individualControl extends Command {
+  /** Creates a new individualControl. */
+  Climber climber;
+  public individualControl(Climber climber) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
+    this.climber = climber;
+    addRequirements(climber);
   }
 
   // Called when the command is initially scheduled.
@@ -23,18 +23,16 @@ public class intake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.intake();
+    climber.individualControl();
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Constants.IntakeSubsystem.ring;
+    return false;
   }
 }

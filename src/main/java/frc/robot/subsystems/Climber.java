@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.j;
 
 public class Climber extends SubsystemBase {
   /** Creates a new Climber. */
@@ -48,19 +49,58 @@ public class Climber extends SubsystemBase {
   }
 
   public void up(){
-    left.set(Constants.ClimberSubsystem.DEFAULT_SPEED);
-    right.set(Constants.ClimberSubsystem.DEFAULT_SPEED);
+    double avgPos = (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
+    if(avgPos < 145){
+      left.set(Constants.ClimberSubsystem.DEFAULT_SPEED*2);
+      right.set(Constants.ClimberSubsystem.DEFAULT_SPEED*2);
+    }
+    else if(avgPos > 145 && avgPos < 165){
+      left.set(Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
+      right.set(Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
+    }
+    else if (avgPos > 165){
+      left.set(0.1);
+      right.set(0.1);
+    }
   }
 
   public void down(){
-    left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED);
-    right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED);
+    double avgPos = (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
+    if(avgPos > 25){
+      left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED*2+0.2);
+      right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED*2+0.2);
+    }
+    else if(avgPos < 25){
+      left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
+      right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
+    }
   }
 
   public void climb(){
     m_motmag.Slot = 0;
     left.setControl(m_motmag.withPosition(Constants.ClimberSubsystem.CLIMB_POSITION));
     right.setControl(m_motmag.withPosition(Constants.ClimberSubsystem.CLIMB_POSITION));
+  }
+
+  public void individualControl(){
+    double leftSetpoint;
+    double rightSetpoint;
+    if(Math.abs(j.operator.getLeftX()) > 0.3){
+      leftSetpoint = j.operator.getLeftX();
+    }
+    else{
+      leftSetpoint = 0;
+    }
+
+    if(Math.abs(j.operator.getRightX()) > 0.3){
+      rightSetpoint = j.operator.getRightX();
+    }
+    else{
+      rightSetpoint = 0;
+    }
+
+    left.set(leftSetpoint * Constants.ClimberSubsystem.DEFAULT_SPEED);
+    right.set(rightSetpoint * Constants.ClimberSubsystem.DEFAULT_SPEED);
   }
 
   public void stop(){

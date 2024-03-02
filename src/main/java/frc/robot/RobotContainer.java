@@ -254,7 +254,7 @@ public class RobotContainer {
   }
 
   public void dashboardStuff(){
-    Pigeon2 gyro = new Pigeon2(50);
+    Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
     ShuffleboardTab tab = Shuffleboard.getTab("Robot");
     tab.addNumber("Pitch: ", () -> gyro.getPitch().getValueAsDouble() );
     tab.addNumber("Yaw: ", () -> gyro.getYaw().getValueAsDouble());
@@ -339,7 +339,7 @@ public class RobotContainer {
     // SmartDashboard.putData("Field", m_field);
 
     // Do this in either robot periodic or subsystem periodic ---- odometry
-    // m_field.setRobotPose(drivetrain.getOdometry().getPoseMeters());
+    // m_field.setRobotPose(drivetrain.getOdometry().getPoseMeters()); ////say TunerConstants.DriveTrain.getState().Pose or something like that
     // m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());
 
 

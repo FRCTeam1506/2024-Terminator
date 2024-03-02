@@ -29,7 +29,7 @@ public class newVision extends Command {
   double angularSpeed = Math.PI / 2;
   boolean finished = false;
   double threshold = 5;
-  Pigeon2 gyro = new Pigeon2(50);
+  Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
 
   double initialX, initialYaw, gyroGoal;
 

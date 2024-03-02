@@ -25,7 +25,7 @@ public class vision2 extends Command {
   double farAngularSpeed = Math.PI / 6;
   boolean finished = false;
   double threshold = 4;
-  Pigeon2 gyro = new Pigeon2(50);
+  Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
 
   double initialX, initialArea, initialYaw, gyroGoal;
 

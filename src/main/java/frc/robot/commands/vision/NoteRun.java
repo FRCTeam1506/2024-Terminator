@@ -40,7 +40,7 @@ public class NoteRun extends Command {
   double x,y,theta;
   double angularSpeed = Math.PI / 2;
   boolean finished = false;
-  Pigeon2 gyro = new Pigeon2(50);
+  Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
 
   double initialX, initialYaw, gyroGoal;
 

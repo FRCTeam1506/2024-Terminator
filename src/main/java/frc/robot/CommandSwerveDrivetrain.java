@@ -200,12 +200,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
         }
     }
 
-    public SwerveDriveOdometry getOdometry(){
-        Pigeon2 pigeon = new Pigeon2(50);
-        odometry = new SwerveDriveOdometry(m_kinematics, pigeon.getRotation2d(), m_modulePositions);
-        pigeon.close();
-        return odometry;
-    }
+    //no need for this getOdometry anymore see github if you want this old useless method -- was causing us errors
 
     private void startSimThread() {
         m_lastSimTime = Utils.getCurrentTimeSeconds();

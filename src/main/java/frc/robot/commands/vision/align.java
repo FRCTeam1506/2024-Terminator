@@ -24,7 +24,8 @@ public class align extends Command {
   double x,y,theta;
   boolean finished = false;
   double threshold = 3;
-  Pigeon2 gyro = new Pigeon2(50);
+  Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
+  
 
   double initialX, initialArea, initialYaw, gyroGoal;
 

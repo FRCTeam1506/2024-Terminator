@@ -57,32 +57,32 @@ public class Climber extends SubsystemBase {
 
   public void up(){
     double avgPos = (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
-    if(avgPos < 60){ //145
-      left.set(Constants.ClimberSubsystem.DEFAULT_SPEED*2);
-      right.set(Constants.ClimberSubsystem.DEFAULT_SPEED*2);
+    if(avgPos < 150){ //145
+      left.set(Constants.ClimberSubsystem.NEW_DEFAULT_SPEED);
+      right.set(Constants.ClimberSubsystem.NEW_DEFAULT_SPEED);
     }
-    else if(avgPos > 60 && avgPos < 165){
-      left.set(Constants.ClimberSubsystem.DEFAULT_SPEED / 2);
-      right.set(Constants.ClimberSubsystem.DEFAULT_SPEED / 2);
+    else if(avgPos > 150 && avgPos < 165){
+      left.set(Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
+      right.set(Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
     }
-    else if (avgPos > 165){
-      left.set(0.1);
-      right.set(0.1);
+    else if (avgPos > 175){
+      left.set(0.05);
+      right.set(0.05);
     }
   }
 
   public void down(){
     double avgPos = (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
-    // if(avgPos > 25){
-    //   left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED*2+0.2);
-    //   right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED*2+0.2);
-    // }
-    // else if(avgPos < 25){
-    //   left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
-    //   right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
-    // }
-    left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED);
-    right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED);
+    if(avgPos > 25){
+      left.set(-Constants.ClimberSubsystem.NEW_DEFAULT_SPEED);
+      right.set(-Constants.ClimberSubsystem.NEW_DEFAULT_SPEED);
+    }
+    else if(avgPos < 25){
+      left.set(-Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
+      right.set(-Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
+    }
+    // left.set(-Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
+    // right.set(-Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
   }
 
   public void set(double speed){
@@ -113,8 +113,8 @@ public class Climber extends SubsystemBase {
       rightSetpoint = 0;
     }
 
-    left.set(leftSetpoint * Constants.ClimberSubsystem.DEFAULT_SPEED);
-    right.set(rightSetpoint * Constants.ClimberSubsystem.DEFAULT_SPEED);
+    left.set(leftSetpoint * Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
+    right.set(rightSetpoint * Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
   }
 
   public void stop(){
@@ -131,8 +131,10 @@ public class Climber extends SubsystemBase {
   }
 
   public void zeroClimber(){
-    // left.setPosition(0);
-    // right.setPosition(0);
+    System.out.println(getAvgPosition());
+    left.setPosition(0);
+    right.setPosition(0);
+    System.out.println(getAvgPosition());
   }
 
 

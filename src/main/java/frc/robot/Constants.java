@@ -86,7 +86,7 @@ public final class Constants {
         public static final int LEFT_ID = 55;
         public static final int RIGHT_ID = 56;
 
-        public static final double DEFAULT_SPEED = 0.15; //0.3
+        public static final double SLOW_DEFAULT_SPEED = 0.15; //0.3
         public static final double NEW_DEFAULT_SPEED = 0.6;
         public static final double CLIMB_POSITION = 5;
 

@@ -48,6 +48,7 @@ import frc.robot.commands.intake.intake;
 import frc.robot.commands.intake.toggleManualIntake;
 import frc.robot.commands.intake.watchIntake;
 import frc.robot.commands.shooter.angle;
+import frc.robot.commands.shooter.mailNotes;
 import frc.robot.commands.shooter.runWheel;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
@@ -184,6 +185,18 @@ public class RobotContainer {
     j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
+    j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision));
+    j.oR3.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    j.oR3.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    j.oR3.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+    j.oB.whileTrue(new mailNotes(shooter, intake, angler, vision));
+    j.oB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    j.oB.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    j.oB.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+
+
     //climber
     // j.oY.whileTrue(new RepeatCommand(new InstantCommand(() -> climber.up())));
     j.oY.whileTrue(new RepeatCommand(new climberUp(climber)));
@@ -296,7 +309,7 @@ public class RobotContainer {
     for(int i: otherMotors){
       TalonFX motor = new TalonFX(i);
       motor.getConfigurator().apply(currentConfig); /// !!!!! CURRENTLY WE ARE NOT DOING STATOR LIMITING ONLY SUPPLY LIMITING !!!!!
-      motor.optimizeBusUtilization();
+      // motor.optimizeBusUtilization();
       motor.close();
     }
 

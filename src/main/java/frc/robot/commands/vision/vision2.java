@@ -21,8 +21,8 @@ public class vision2 extends Command {
   Vision vision;
   SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
   double x,y,theta;
-  double angularSpeed = Math.PI / 4;
-  double farAngularSpeed = Math.PI / 6;
+  double angularSpeed = Math.PI / 3.5;  // pi/4 at kettering week 1
+  double farAngularSpeed = Math.PI / 5;  //pi/6 at kettering week 1
   boolean finished = false;
   double threshold = 4;
 

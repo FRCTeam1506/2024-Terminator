@@ -45,7 +45,7 @@
   "reversed": false,
   "folder": "GoFar",
   "previewStartingState": {
-    "rotation": 0.0,
+    "rotation": 6.5,
     "velocity": 0
   },
   "useDefaultConstraints": true

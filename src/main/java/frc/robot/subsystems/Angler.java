@@ -81,7 +81,7 @@ public class Angler extends SubsystemBase {
         motor.setControl(m_motmag.withPosition(pos + 0.05)); //we are shooting low on blue alliance //0.2 too high
       }
       else{
-        motor.setControl(m_motmag.withPosition(pos)); //shooting high on red
+        motor.setControl(m_motmag.withPosition(pos + 0.07)); //shooting high on red
       }
     }
   }

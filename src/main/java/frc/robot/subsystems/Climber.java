@@ -7,9 +7,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ForwardLimitTypeValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.j;
@@ -20,6 +23,7 @@ public class Climber extends SubsystemBase {
   TalonFX left = new TalonFX(Constants.ClimberSubsystem.LEFT_ID);
   TalonFX right = new TalonFX(Constants.ClimberSubsystem.RIGHT_ID);
   final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
+  double maxPos = 174;
 
   public Climber() {
     TalonFXConfiguration talonFXConfigs = new TalonFXConfiguration();
@@ -34,6 +38,9 @@ public class Climber extends SubsystemBase {
     slot0Configs.kI = 0;
     slot0Configs.kD = 0.1;
     slot0Configs.GravityType = GravityTypeValue.Elevator_Static;
+
+    talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+    talonFXConfigs.CurrentLimits.StatorCurrentLimit = 80; //maybe change this
 
     // set Motion Magic settings
     var motionMagicConfigs = talonFXConfigs.MotionMagic;
@@ -50,13 +57,13 @@ public class Climber extends SubsystemBase {
 
   public void up(){
     double avgPos = (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
-    if(avgPos < 145){
+    if(avgPos < 60){ //145
       left.set(Constants.ClimberSubsystem.DEFAULT_SPEED*2);
       right.set(Constants.ClimberSubsystem.DEFAULT_SPEED*2);
     }
-    else if(avgPos > 145 && avgPos < 165){
-      left.set(Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
-      right.set(Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
+    else if(avgPos > 60 && avgPos < 165){
+      left.set(Constants.ClimberSubsystem.DEFAULT_SPEED / 2);
+      right.set(Constants.ClimberSubsystem.DEFAULT_SPEED / 2);
     }
     else if (avgPos > 165){
       left.set(0.1);
@@ -66,14 +73,21 @@ public class Climber extends SubsystemBase {
 
   public void down(){
     double avgPos = (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
-    if(avgPos > 25){
-      left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED*2+0.2);
-      right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED*2+0.2);
-    }
-    else if(avgPos < 25){
-      left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
-      right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
-    }
+    // if(avgPos > 25){
+    //   left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED*2+0.2);
+    //   right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED*2+0.2);
+    // }
+    // else if(avgPos < 25){
+    //   left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
+    //   right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED * 3 / 4);
+    // }
+    left.set(-Constants.ClimberSubsystem.DEFAULT_SPEED);
+    right.set(-Constants.ClimberSubsystem.DEFAULT_SPEED);
+  }
+
+  public void set(double speed){
+    left.set(speed);
+    right.set(speed);
   }
 
   public void climb(){
@@ -108,8 +122,29 @@ public class Climber extends SubsystemBase {
     right.stopMotor();
   }
 
+  public void setRightClimber(double speed){
+    right.set(speed);
+  }
+
+  public void setLeftClimber(double speed){
+    left.set(speed);
+  }
+
+  public void zeroClimber(){
+    // left.setPosition(0);
+    // right.setPosition(0);
+  }
+
+
+  public double getAvgPosition(){
+    return (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    // double avgPos = (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
+
+    // System.out.println(getAvgPosition());
   }
 }

@@ -63,7 +63,7 @@ public class Angler extends SubsystemBase {
 
 
     if(Vision.target != 0){
-
+      /*
       if(DriverStation.getAlliance().get() == Alliance.Blue){
         double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
         //double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0
@@ -73,6 +73,15 @@ public class Angler extends SubsystemBase {
         //double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
         double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0
         motor.setControl(m_motmag.withPosition(pos));
+      }
+      */
+      double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0
+
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        motor.setControl(m_motmag.withPosition(pos + 0.05)); //we are shooting low on blue alliance //0.2 too high
+      }
+      else{
+        motor.setControl(m_motmag.withPosition(pos)); //shooting high on red
       }
     }
   }
@@ -128,7 +137,6 @@ public class Angler extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-        SmartDashboard.putNumber("angler set", getVisionPosition());
-
+    SmartDashboard.putNumber("angler set", getVisionPosition());
   }
 }

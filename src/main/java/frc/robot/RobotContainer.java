@@ -38,7 +38,10 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Trapper;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.autos.toggleGSA;
+import frc.robot.commands.climber.climberUp;
 import frc.robot.commands.climber.individualControl;
+import frc.robot.commands.climber.toggleEndGame;
 import frc.robot.commands.drivetrain.zeroGyro;
 import frc.robot.commands.intake.indexToShoot;
 import frc.robot.commands.intake.intake;
@@ -68,7 +71,7 @@ public class RobotContainer {
 
   //Subsystems!!!!
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
-  public final Vision vision = new Vision();
+  public final Vision vision = new Vision(drivetrain);
   public final frc.robot.subsystems.IntakeSubsystem intake = new frc.robot.subsystems.IntakeSubsystem();
   public final frc.robot.subsystems.ShooterSubsystem shooter = new frc.robot.subsystems.ShooterSubsystem();
   public final Angler angler = new Angler();
@@ -139,6 +142,8 @@ public class RobotContainer {
     j.dLT.whileTrue(new InstantCommand(() -> intake.outtake()));
     j.dLT.whileFalse(new InstantCommand(() -> intake.stopIntake()));
 
+    j.dY.whileTrue(new toggleGSA());
+
 
     //manual shooter
     // j.oRB.whileTrue(new InstantCommand(() -> shooter.shootMax()));
@@ -152,12 +157,13 @@ public class RobotContainer {
     j.dDown.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     
     //auto shooting
-    j.oRight.whileTrue(new shootConditional(shooter, intake, angler, vision));
+    j.oRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
     j.oRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    j.oRight.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
 
-    j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision));
+    j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
@@ -169,6 +175,9 @@ public class RobotContainer {
 
     j.dTouchpad.whileTrue(new toggleAim());
 
+    //switch to endgame mode
+    j.dR3.whileTrue(new toggleEndGame());
+
     //manual shooting
     j.oX.whileTrue(new shootPower(shooter, intake, angler, vision, 3.15));//2.6 og //2.9 for blue
     j.oX.whileFalse(new InstantCommand(() -> shooter.shootStop()));
@@ -176,11 +185,13 @@ public class RobotContainer {
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
     //climber
-    j.oY.whileTrue(new InstantCommand(() -> climber.up()));
+    // j.oY.whileTrue(new RepeatCommand(new InstantCommand(() -> climber.up())));
+    j.oY.whileTrue(new RepeatCommand(new climberUp(climber)));
     j.oY.whileTrue(new InstantCommand(() -> angler.goVertical()));
-    j.oA.whileTrue(new InstantCommand(() -> climber.down()));
+    j.oA.whileTrue(new RepeatCommand(new InstantCommand(() -> climber.down())));
     j.oY.whileFalse(new InstantCommand(() -> climber.stop()));
     j.oA.whileFalse(new InstantCommand(() -> climber.stop()));
+    j.oL3.whileTrue(new InstantCommand(() -> climber.zeroClimber()));
     
     
 
@@ -196,12 +207,18 @@ public class RobotContainer {
     j.oRB.whileTrue(new InstantCommand(() -> trapper.trapPosition()));
     j.oRB.whileTrue(new InstantCommand(() -> trapper.intake()));
     j.oLB.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
-    j.oUp.whileFalse(new InstantCommand(() -> trapper.sendTrapperHome()));
+    j.oUp.whileFalse(new InstantCommand(() -> trapper.stopTrapper())); //send trapper home
     j.oDown.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     // j.oRB.whileFalse(new sendTrapperHome(trapper));
     j.oLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
+
+    //trapper in endgame
+    j.oLeft.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
+    j.oLeft.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+
+    
   }
 
   private final intake intakecommand = new intake(intake);
@@ -210,12 +227,12 @@ public class RobotContainer {
     // NamedCommands.registerCommands(map);
     NamedCommands.registerCommand("Intake", new intake(intake).until(() -> Constants.IntakeSubsystem.irNine.get() == false));
     NamedCommands.registerCommand("Watch Intake", new watchIntake(intake));
-    NamedCommands.registerCommand("ZeroGyro", new zeroGyro());
+    NamedCommands.registerCommand("ZeroGyro", new zeroGyro().withTimeout(0.1));
 
     NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
     NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, 2.8));
-    NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 0.725));
+    NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 0.885)); // og 0.725 //then 0.785
     NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, 4));
     NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.6));
 
@@ -246,6 +263,7 @@ public class RobotContainer {
     tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());
     tab.addBoolean("AutoAim", () -> Constants.ShooterSubsystem.autoAim);
     tab.addBoolean("Auto Intake", () -> !Constants.IntakeSubsystem.manualIntake);
+    tab.addBoolean("End Game", () -> Constants.ClimberSubsystem.endGame);
 
 
     gyro.close();
@@ -312,6 +330,7 @@ public class RobotContainer {
     // Command goForward = drivetrain.getAutoPath("Forward");
     // return goForward;
     return autos.sendAutos();
+    // return new PathPlannerAuto("GoFar");
     // return new PathPlannerAuto("CenterLine");
   }
 

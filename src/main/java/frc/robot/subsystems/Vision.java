@@ -6,6 +6,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
+import frc.robot.CommandSwerveDrivetrain;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants.Swerve;
@@ -56,25 +57,10 @@ public class Vision extends SubsystemBase {
   public static double xshot, zshot, shotdist;
   public static double x2, y2, z2, area2, target2;
 
-  static Pigeon2 gyro = new Pigeon2(50);
+  private final CommandSwerveDrivetrain m_drivetrain;
 
-  static SwerveModule fl = new SwerveModule(TunerConstants.FrontLeft, "");
-  static SwerveModule fr = new SwerveModule(TunerConstants.FrontRight, "");
-  static SwerveModule rl = new SwerveModule(TunerConstants.BackLeft, "");
-  static SwerveModule rr = new SwerveModule(TunerConstants.BackRight, "");
-
-  public static final SwerveDrivePoseEstimator estimator = 
-    new SwerveDrivePoseEstimator(
-        Constants.Swerve.kinematics, 
-        gyro.getRotation2d(), 
-        new SwerveModulePosition[] {fl.getPosition(true), fr.getPosition(true), rl.getPosition(true), rr.getPosition(true)}, 
-        new Pose2d(),
-          VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-          VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
-    );
-
-  public Vision() {
-
+  public Vision(CommandSwerveDrivetrain drivetrain) {
+    m_drivetrain = drivetrain;
   }
 
   public void align(){
@@ -93,7 +79,7 @@ public class Vision extends SubsystemBase {
     //post to smart dashboard periodically
     // SmartDashboard.putNumber("LimelightX", x);
     // SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightShooterDistance", shotdist); // if we want to update shotDist in shuffleboard uncomment this
+    // SmartDashboard.putNumber("LimelightShooterDistance", shotdist); // if we want to update shotDist in shuffleboard uncomment this
     // SmartDashboard.putNumber("LimelightArea", area);
     // SmartDashboard.putNumber("Target Exists", target);
     SmartDashboard.putNumber("AprilTag ID", shooterID);
@@ -130,7 +116,7 @@ public class Vision extends SubsystemBase {
     //read values periodically
     dashboard();
 
-    Constants.Swerve.m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());
+    Constants.Swerve.m_field.setRobotPose(m_drivetrain.getState().Pose);
 
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
@@ -138,22 +124,19 @@ public class Vision extends SubsystemBase {
     target = tv.getDouble(0.0);
     shooterID = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tid").getDouble(0);
 
-    xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
-    // xshot = 1;
-    zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
-    // zshot = 1;
-    shotdist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
+    // xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+    xshot = 1;
+    // zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+    zshot = 1;
+    // shotdist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
 
     x2 = tx2.getDouble(0.0);
     y2 = ty2.getDouble(0.0);
     area2 = ta2.getDouble(0.0);
     target2 = tv2.getDouble(0.0);
 
-        
-    estimator.updateWithTime(timer.getFPGATimestamp(), gyro.getRotation2d(), new SwerveModulePosition[] {fl.getPosition(true), fr.getPosition(true), rl.getPosition(true), rr.getPosition(true)});
-
     if(target == 1){
-      estimator.addVisionMeasurement(LimelightHelpers.getBotPose2d(""), timer.getFPGATimestamp());
+      m_drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d(""), timer.getFPGATimestamp());
     }
 
   }

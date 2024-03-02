@@ -21,6 +21,7 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Angler;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.Trapper;
 import frc.robot.subsystems.Vision;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
@@ -28,51 +29,59 @@ import frc.robot.subsystems.Vision;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class shootConditional extends SequentialCommandGroup {
   /** Creates a new shoot. */
-  public shootConditional(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision) {
+  public shootConditional(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision, Trapper trapper) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     double z = vision.zshot;
     Constants.ShooterSubsystem.isShooting = true;
-    if(Constants.ShooterSubsystem.autoAim){
-      addCommands(        
-        new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
-        new stop().withTimeout(0.1),
-        new ParallelDeadlineGroup(
-          new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
-          new runWheel(shooter).withTimeout(0.1),
-          new brake().withTimeout(0.2)
-        ).withTimeout(0.8),
-        //new stopShooter(shooter),
-        // new stopAngler(angler),
-        //new WaitCommand(0.5),
-        new ParallelCommandGroup(
-          new runWheel(shooter),
-          new brake()
-        ).withTimeout(0.2),
-        new runIndexer(intake),
-        new WaitCommand(0.1),
-        new stopIndexer(intake)
-      );
+
+    if(!Constants.ClimberSubsystem.endGame){
+      if(Constants.ShooterSubsystem.autoAim){
+        addCommands(
+          new ParallelDeadlineGroup(        
+            new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),
+            new runWheel(shooter).withTimeout(0.1)
+          ),
+          new stop().withTimeout(0.05),
+          new ParallelDeadlineGroup(
+            new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
+            new brake().withTimeout(0.2)
+          ).withTimeout(0.4),
+          //new stopShooter(shooter),
+          // new stopAngler(angler),
+          //new WaitCommand(0.5),
+          // new ParallelCommandGroup(
+          //   new runWheel(shooter),
+          //   new brake()
+          // ).withTimeout(0.2),
+          new runIndexer(intake),
+          new WaitCommand(0.1),
+          new stopIndexer(intake)
+        );
+      }
+      else if(!Constants.ShooterSubsystem.autoAim){
+        addCommands(        
+          new ParallelDeadlineGroup(
+            new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
+            new runWheel(shooter).withTimeout(0.1),
+            new brake().withTimeout(0.2)
+          ).withTimeout(0.8),
+          //new stopShooter(shooter),
+          // new stopAngler(angler),
+          //new WaitCommand(0.5),
+          new ParallelCommandGroup(
+            new runWheel(shooter),
+            new brake()
+          ).withTimeout(0.2),
+          new runIndexer(intake),
+          new WaitCommand(0.1),
+          new stopIndexer(intake)
+        );
+      }
+      Constants.ShooterSubsystem.isShooting = false;
     }
-    else if(!Constants.ShooterSubsystem.autoAim){
-      addCommands(        
-        new ParallelDeadlineGroup(
-          new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
-          new runWheel(shooter).withTimeout(0.1),
-          new brake().withTimeout(0.2)
-        ).withTimeout(0.8),
-        //new stopShooter(shooter),
-        // new stopAngler(angler),
-        //new WaitCommand(0.5),
-        new ParallelCommandGroup(
-          new runWheel(shooter),
-          new brake()
-        ).withTimeout(0.2),
-        new runIndexer(intake),
-        new WaitCommand(0.1),
-        new stopIndexer(intake)
-      );
+    else if(Constants.ClimberSubsystem.endGame){
+      trapper.intake();
     }
-    Constants.ShooterSubsystem.isShooting = false;
   }
 }

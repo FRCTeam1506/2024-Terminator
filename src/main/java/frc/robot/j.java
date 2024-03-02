@@ -24,6 +24,8 @@ public class j {
     public static JoystickButton dShare = new JoystickButton(driver, PS4Controller.Button.kShare.value);
     public static JoystickButton dOptions = new JoystickButton(driver, PS4Controller.Button.kOptions.value);
     public static JoystickButton dPS = new JoystickButton(driver, PS4Controller.Button.kPS.value);
+    public static JoystickButton dL3 = new JoystickButton(driver, PS4Controller.Button.kL3.value);
+    public static JoystickButton dR3 = new JoystickButton(driver, PS4Controller.Button.kR3.value);
 
     public static JoystickButton oA = new JoystickButton(operator, PS4Controller.Button.kCross.value);
     public static JoystickButton oB = new JoystickButton(operator, PS4Controller.Button.kCircle.value);
@@ -33,6 +35,8 @@ public class j {
     public static JoystickButton oShare = new JoystickButton(operator, PS4Controller.Button.kShare.value);
     public static JoystickButton oOptions = new JoystickButton(operator, PS4Controller.Button.kOptions.value);
     public static JoystickButton oPS = new JoystickButton(operator, PS4Controller.Button.kPS.value);
+    public static JoystickButton oL3 = new JoystickButton(operator, PS4Controller.Button.kL3.value);
+    public static JoystickButton oR3 = new JoystickButton(operator, PS4Controller.Button.kR3.value);
 
 
     //triggers

@@ -3,10 +3,11 @@
   "robotLength": 0.96,
   "holonomicMode": true,
   "pathFolders": [
-    "GetThree",
     "CenterLine",
     "Central",
+    "GetThree",
     "GoFar",
+    "MiddleNote",
     "TeleOp Paths"
   ],
   "autoFolders": [

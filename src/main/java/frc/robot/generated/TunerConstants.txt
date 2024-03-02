@@ -1,3 +1,4 @@
+/*
 package frc.robot.generated;
 
 import com.ctre.phoenix6.configs.Slot0Configs;
@@ -134,3 +135,4 @@ public class TunerConstants {
     public static final CommandSwerveDrivetrain DriveTrain = new CommandSwerveDrivetrain(DrivetrainConstants, FrontLeft,
             FrontRight, BackLeft, BackRight);
 }
+*/

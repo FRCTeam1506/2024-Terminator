@@ -25,7 +25,6 @@ public class vision2 extends Command {
   double farAngularSpeed = Math.PI / 6;
   boolean finished = false;
   double threshold = 4;
-  Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
 
   double initialX, initialArea, initialYaw, gyroGoal;
 
@@ -41,7 +40,7 @@ public class vision2 extends Command {
   public void initialize() {
     initialX = Vision.x;
     initialArea = Vision.area;
-    initialYaw = gyro.getYaw().getValueAsDouble();
+    initialYaw = TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble();
     gyroGoal = initialYaw - initialX;
   }
 
@@ -60,7 +59,7 @@ public class vision2 extends Command {
     SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
 
     
-    if(gyro.getYaw().getValueAsDouble() < gyroGoal + threshold && gyro.getYaw().getValueAsDouble() > gyroGoal-threshold){
+    if(TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() < gyroGoal + threshold && TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() > gyroGoal-threshold){
       TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));
       finished = true;
     }
@@ -69,7 +68,7 @@ public class vision2 extends Command {
     }
 
     //Aligning the robot with the speaker apriltag
-    if(gyro.getYaw().getValueAsDouble() > gyroGoal + threshold){
+    if(TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() > gyroGoal + threshold){
       if(Vision.zshot < 3.5){
         System.out.println("Too far left");
         TunerConstants.DriveTrain.setControl(request.withSpeeds(speedsRight));
@@ -83,7 +82,7 @@ public class vision2 extends Command {
     }
 
     //Aligning the robot with the speaker apriltag
-    else if(gyro.getYaw().getValueAsDouble() < gyroGoal - threshold){
+    else if(TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() < gyroGoal - threshold){
       if(Vision.zshot < 3.5){
         System.out.println("Too far right");
         TunerConstants.DriveTrain.setControl(request.withSpeeds(speedsLeft));
@@ -129,7 +128,6 @@ public class vision2 extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    gyro.close();
     ChassisSpeeds stop = new ChassisSpeeds(0,0, 0);
     SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
     TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));

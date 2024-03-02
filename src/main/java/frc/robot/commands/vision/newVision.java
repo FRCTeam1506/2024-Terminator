@@ -29,7 +29,6 @@ public class newVision extends Command {
   double angularSpeed = Math.PI / 2;
   boolean finished = false;
   double threshold = 5;
-  Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
 
   double initialX, initialYaw, gyroGoal;
 
@@ -44,7 +43,7 @@ public class newVision extends Command {
   @Override
   public void initialize() {
     initialX = Vision.x;
-    initialYaw = gyro.getYaw().getValueAsDouble();
+    initialYaw = TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble();
     gyroGoal = initialYaw - initialX;
   }
 
@@ -53,19 +52,19 @@ public class newVision extends Command {
   public void execute() {
     SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle();
 
-    if(gyro.getYaw().getValueAsDouble() < gyroGoal + threshold && gyro.getYaw().getValueAsDouble() > gyroGoal-threshold){
+    if(TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() < gyroGoal + threshold && TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() > gyroGoal-threshold){
       finished = true;
     }
     else{
       finished = false; // otherwise the true carries over from the last alignment
     }
 
-    if(gyro.getYaw().getValueAsDouble() > gyroGoal + threshold){
+    if(TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() > gyroGoal + threshold){
       System.out.println("Too far left");
       TunerConstants.DriveTrain.setControl(request.withTargetDirection(new Rotation2d(gyroGoal * Math.PI / 180)));
     }
 
-    else if(gyro.getYaw().getValueAsDouble() < gyroGoal - threshold){
+    else if(TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() < gyroGoal - threshold){
       System.out.println("Too far right");
       TunerConstants.DriveTrain.setControl(request.withTargetDirection(new Rotation2d(gyroGoal * Math.PI / 180)));
     }
@@ -102,7 +101,7 @@ public class newVision extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    gyro.close();
+
   }
 
   // Returns true when the command should end.

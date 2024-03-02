@@ -23,9 +23,7 @@ public class align extends Command {
   SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
   double x,y,theta;
   boolean finished = false;
-  double threshold = 3;
-  Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
-  
+  double threshold = 3;  
 
   double initialX, initialArea, initialYaw, gyroGoal;
 
@@ -40,14 +38,14 @@ public class align extends Command {
   @Override
   public void initialize() {
     initialX = Vision.x;
-    initialYaw = gyro.getYaw().getValueAsDouble();
+    initialYaw = TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble();
     gyroGoal = initialYaw - initialX;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(gyro.getYaw().getValueAsDouble() < gyroGoal + threshold && gyro.getYaw().getValueAsDouble() > gyroGoal-threshold){
+    if(TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() < gyroGoal + threshold && TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() > gyroGoal-threshold){
       finished = true;
     }
     else{
@@ -59,7 +57,7 @@ public class align extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    gyro.close();
+    TunerConstants.DriveTrain.getPigeon2().close();
     ChassisSpeeds stop = new ChassisSpeeds(0,0, 0);
     SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
     TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));

@@ -254,19 +254,15 @@ public class RobotContainer {
   }
 
   public void dashboardStuff(){
-    Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
     ShuffleboardTab tab = Shuffleboard.getTab("Robot");
-    tab.addNumber("Pitch: ", () -> gyro.getPitch().getValueAsDouble() );
-    tab.addNumber("Yaw: ", () -> gyro.getYaw().getValueAsDouble());
-    tab.addNumber("Roll: ", () -> gyro.getRoll().getValueAsDouble());
+    tab.addNumber("Pitch: ", () -> TunerConstants.DriveTrain.getPigeon2().getPitch().getValueAsDouble() );
+    tab.addNumber("Yaw: ", () -> TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble());
+    tab.addNumber("Roll: ", () -> TunerConstants.DriveTrain.getPigeon2().getRoll().getValueAsDouble());
     // tab.addNumber("Necessary Angle", () -> Math.toDegrees(Math.atan(66/(Vision.z * 39.37)))/5.14);
     tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());
     tab.addBoolean("AutoAim", () -> Constants.ShooterSubsystem.autoAim);
     tab.addBoolean("Auto Intake", () -> !Constants.IntakeSubsystem.manualIntake);
     tab.addBoolean("End Game", () -> Constants.ClimberSubsystem.endGame);
-
-
-    gyro.close();
   }
 
   public void runCurrentLimits(){

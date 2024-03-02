@@ -39,7 +39,6 @@ public class OnTheFly extends Command {
   double x,y,theta;
   double angularSpeed = Math.PI / 2;
   boolean finished = false;
-  Pigeon2 gyro = TunerConstants.DriveTrain.getPigeon2();
 
   double initialX, initialYaw, gyroGoal;
 
@@ -65,7 +64,7 @@ public class OnTheFly extends Command {
     // }
     
     initialX = Vision.x;
-    initialYaw = gyro.getYaw().getValueAsDouble();
+    initialYaw = TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble();
     gyroGoal = initialYaw - initialX;
 
 

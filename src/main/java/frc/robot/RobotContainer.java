@@ -95,7 +95,7 @@ public class RobotContainer {
   /* Path follower */
 
   // private final Telemetry logger = new Telemetry(MaxSpeed);
-  // private final Field2d m_field = Constants.Swerve.m_field;
+  private final Field2d m_field = Constants.Swerve.m_field;
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
@@ -345,11 +345,11 @@ public class RobotContainer {
 
   public void periodic(){
     // Do this in either robot or subsystem init
-    // SmartDashboard.putData("Field", m_field);
+     SmartDashboard.putData("Field", m_field);
 
     // Do this in either robot periodic or subsystem periodic ---- odometry
-    // m_field.setRobotPose(drivetrain.getOdometry().getPoseMeters()); ////say TunerConstants.DriveTrain.getState().Pose or something like that
-    // m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());
+    m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that
+    //m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());
 
 
   }

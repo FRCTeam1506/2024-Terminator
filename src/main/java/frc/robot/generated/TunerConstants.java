@@ -34,7 +34,7 @@ public class TunerConstants {
 
     // The stator current at which the wheels start to slip;
     // This needs to be tuned to your individual robot
-    private static final double kSlipCurrentA = 70.0;
+    private static final double kSlipCurrentA = 60.0;
 
     // Theoretical free speed (m/s) at 12v applied output;
     // This needs to be tuned to your individual robot
@@ -44,7 +44,7 @@ public class TunerConstants {
     // This may need to be tuned to your individual robot
     private static final double kCoupleRatio = 3.5;
 
-    private static final double kDriveGearRatio = 5.75; //6.75
+    private static final double kDriveGearRatio = 4; //6.75 //5.75
     private static final double kSteerGearRatio = 13.371428571428572;
     private static final double kWheelRadiusInches = 2;
 

@@ -15,6 +15,7 @@ import frc.robot.commands.autos.BackAndShoot;
 import frc.robot.commands.autos.CenterLine;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.shoot;
+import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Angler;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -29,7 +30,7 @@ public class Autos {
     ShooterSubsystem shooter;
     Vision vision;
     Angler angler;
-    enum autos { Nothing, CenterLine, GetThree, Central, GoFar, MiddleNote }
+    enum autos { Nothing, TwoMeters, GetThree, Central, GoFar, MiddleNote }
 
 
     public Autos(IntakeSubsystem intake, ShooterSubsystem shooter, Angler angler, Vision vision){
@@ -49,11 +50,11 @@ public class Autos {
     public void getAutos(){
 
         autoChooser.setDefaultOption("Nothing", autos.Nothing);
-        autoChooser.addOption("CenterLine", autos.CenterLine);
+        autoChooser.addOption("TwoMeters", autos.TwoMeters);
         autoChooser.addOption("Shoot and Back", autos.GetThree);
         autoChooser.addOption("Central", autos.Central);
         autoChooser.addOption("Go far", autos.GoFar);
-        autoChooser.addOption("Middle Note (one+ piece)", autos.MiddleNote);
+        autoChooser.addOption("Middle Note (+)", autos.MiddleNote);
         SmartDashboard.putData(autoChooser);
     }
 
@@ -63,9 +64,10 @@ public class Autos {
             case Nothing:
                 return new WaitCommand(15.0);
             
-            case CenterLine:
+            case TwoMeters:
                 // return new PathPlannerAuto("CenterLine");
-                return new PathPlannerAuto("CenterLine");
+                // return new PathPlannerAuto("CenterLine");
+                return new PathPlannerAuto("Calibration");
 
             case GetThree:
                 // return new PathPlannerAuto("CenterLine");
@@ -78,7 +80,8 @@ public class Autos {
                 return new PathPlannerAuto("MiddleNote");
 
             case GoFar:
-                return new PathPlannerAuto("GoFar");
+                // return new PathPlannerAuto("GoFar");
+                return new PathPlannerAuto("GoFarDos");
             
             default:
                 return new WaitCommand(15.0);

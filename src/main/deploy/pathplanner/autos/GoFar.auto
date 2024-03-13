@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3023087957730821,
-      "y": 2.8
+      "x": 0.7636103146671328,
+      "y": 4.414985377759629
     },
-    "rotation": -67.0
+    "rotation": -59.534455080540084
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootBlackLine"
+            "name": "ShootBase"
           }
         },
         {
@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GoFar1"
+                  "pathName": "GoFarOne"
                 }
               },
               {
@@ -49,7 +49,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GoFar2"
+                  "pathName": "GoFarTwo"
                 }
               },
               {
@@ -74,7 +74,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GoFar3"
+                  "pathName": "GoFarThree"
                 }
               },
               {
@@ -93,7 +93,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GoFar4"
+                  "pathName": "GoFarFour"
                 }
               },
               {
@@ -114,6 +114,6 @@
       ]
     }
   },
-  "folder": null,
+  "folder": "K1",
   "choreoAuto": false
 }

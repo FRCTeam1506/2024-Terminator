@@ -4,13 +4,18 @@
 
 package frc.robot.subsystems;
 
+import java.util.Map;
+
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -20,6 +25,12 @@ public class Angler extends SubsystemBase {
   /** Creates a new Angler. */
   TalonFX motor = new TalonFX(Constants.ShooterSubsystem.AnglerID);
   final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
+
+  public GenericEntry dashangler = Shuffleboard.getTab("Robot").add("setangler", 6)
+    .withWidget(BuiltInWidgets.kNumberSlider)
+    .withProperties(Map.of("min", 0, "max", 6))
+    .getEntry();
+
 
   public Angler() {
     // robot init
@@ -49,7 +60,6 @@ public class Angler extends SubsystemBase {
     motor.setPosition(0);
 
     // SmartDashboard.putNumber("angler set", getVisionPosition());
-
   }
 
   public void setPosition(){
@@ -75,14 +85,21 @@ public class Angler extends SubsystemBase {
         motor.setControl(m_motmag.withPosition(pos));
       }
       */
-      double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0
+      //double pos = 0.3271*Math.pow(dist, 2) - 3.73081*dist + 11.2833; //for week 0 and kettering week 1
+/*
+      // KETTERING WEEK ONE
+      double pos = 0.228874*Math.pow(dist, 2) - 2.72467*dist + 8.70407; //desmos eq, check screenshots 2/21/2024 +++
 
       if(DriverStation.getAlliance().get() == Alliance.Blue){
-        motor.setControl(m_motmag.withPosition(pos + 0.05)); //we are shooting low on blue alliance //0.2 too high
+        motor.setControl(m_motmag.withPosition(pos + 0.05)); //we are shooting low on blue alliance //0.2 too high //+0.05 for k1
       }
       else{
-        motor.setControl(m_motmag.withPosition(pos + 0.07)); //shooting high on red
+        motor.setControl(m_motmag.withPosition(pos + 0.07)); //shooting high on red //+0.07 for k1
       }
+*/      
+
+       double pos = 0.272199*Math.pow(dist, 2) - 2.74293*dist + 8.213; //desmos eq, check screenshots 2/21/2024 +++
+       motor.setControl(m_motmag.withPosition(pos));
     }
   }
 
@@ -132,6 +149,10 @@ public class Angler extends SubsystemBase {
     // double number = Vision.z;
     return 0;
     
+  }
+
+  public double getShuffleboardInput(){
+    return dashangler.getDouble(0);
   }
 
   @Override

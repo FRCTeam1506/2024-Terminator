@@ -24,7 +24,9 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -56,6 +58,7 @@ import frc.robot.commands.shooter.shootAuto;
 import frc.robot.commands.shooter.shootConditional;
 import frc.robot.commands.shooter.shootIdle;
 import frc.robot.commands.shooter.shootPower;
+import frc.robot.commands.shooter.shootShufflebaord;
 import frc.robot.commands.shooter.toggleAim;
 import frc.robot.commands.trapper.sendTrapperHome;
 import frc.robot.commands.vision.*;
@@ -164,6 +167,8 @@ public class RobotContainer {
     j.oRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     j.oRight.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
 
+    // j.dRight.whileTrue(new shootShufflebaord(shooter, intake, angler, vision)); //for testing regression
+
     j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
@@ -180,7 +185,7 @@ public class RobotContainer {
     j.dR3.whileTrue(new toggleEndGame());
 
     //manual shooting
-    j.oX.whileTrue(new shootPower(shooter, intake, angler, vision, 3.15));//2.6 og //2.9 for blue
+    j.oX.whileTrue(new shootPower(shooter, intake, angler, vision, 1.25)); //dashangler.getDouble(6))original angler setpoint 3.15 //2.6 og //2.9 for blue
     j.oX.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
@@ -276,6 +281,8 @@ public class RobotContainer {
     tab.addBoolean("AutoAim", () -> Constants.ShooterSubsystem.autoAim);
     tab.addBoolean("Auto Intake", () -> !Constants.IntakeSubsystem.manualIntake);
     tab.addBoolean("End Game", () -> Constants.ClimberSubsystem.endGame);
+    //shuffleboard for the angler position with a slider
+    
   }
 
   public void runCurrentLimits(){
@@ -350,7 +357,9 @@ public class RobotContainer {
     // Do this in either robot periodic or subsystem periodic ---- odometry
     m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that
     //m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());
-
-
+    if(drivetrain.getPigeon2().getStickyFaultField().getValue() > 0){
+      drivetrain.getPigeon2().clearStickyFaults();
+      // drivetrain.getPigeon2().clear
+    }
   }
 }

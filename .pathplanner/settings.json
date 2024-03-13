@@ -3,6 +3,7 @@
   "robotLength": 0.96,
   "holonomicMode": true,
   "pathFolders": [
+    "Calibration",
     "CenterLine",
     "Central",
     "GetThree",
@@ -11,6 +12,7 @@
     "TeleOp Paths"
   ],
   "autoFolders": [
+    "K1",
     "TeleOp"
   ],
   "defaultMaxVel": 2.0,

@@ -12,6 +12,7 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -30,6 +31,8 @@ public class Angler extends SubsystemBase {
     .withWidget(BuiltInWidgets.kNumberSlider)
     .withProperties(Map.of("min", 0, "max", 6))
     .getEntry();
+
+  DigitalInput input = new DigitalInput(Constants.ShooterSubsystem.LimitSwitchDIO);
 
 
   public Angler() {
@@ -141,6 +144,12 @@ public class Angler extends SubsystemBase {
     motor.setPosition(0);
   }
 
+  public void testSwitch(){
+    if(!input.get()){
+      motor.setPosition(0);
+    }
+  }
+
   public double getPos(){
     return motor.getPosition().getValueAsDouble();
   }
@@ -158,6 +167,7 @@ public class Angler extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.putNumber("angler set", getVisionPosition());
+    // SmartDashboard.putNumber("angler set", getVisionPosition());
+    testSwitch();
   }
 }

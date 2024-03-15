@@ -59,13 +59,6 @@ public final class Constants {
         public static final double shooterThreshold = 3;
     }
 
-    public static final class ArmSubsystem {
-        public static final int SolenoidId1 = 2;
-        public static final int SolenoidId2 = 4;
-        public static final int SolenoidId3 = 0;
-        public static final int SolenoidId4 = 1;
-
-    }
 
     public static final class IntakeSubsystem{
         public static final int MOTOR_ID = 51;
@@ -104,6 +97,8 @@ public final class Constants {
         public static final int TopID = 62;
         public static final int BottomID = 61;
         public static final int AnglerID = 60;
+
+        public static final int LimitSwitchDIO = 1;
 
         public static final double anglerDefaultSpeed = 0.075; //david -- 0.05
 

@@ -357,9 +357,9 @@ public class RobotContainer {
     // Do this in either robot periodic or subsystem periodic ---- odometry
     m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that
     //m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());
-    if(drivetrain.getPigeon2().getStickyFaultField().getValue() > 0){
-      drivetrain.getPigeon2().clearStickyFaults();
-      // drivetrain.getPigeon2().clear
-    }
+    // if(drivetrain.getPigeon2().getStickyFaultField().getValue() > 0){
+    //   drivetrain.getPigeon2().clearStickyFaults();
+    //   // drivetrain.getPigeon2().clear
+    // }
   }
 }

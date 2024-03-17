@@ -20,6 +20,7 @@ import com.pathplanner.lib.path.GoalEndState;
 import com.pathplanner.lib.path.PathConstraints;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.databind.util.Named;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -249,6 +250,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
+    NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, 2.5));
     NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, 2.8));
     NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 0.885)); // og 0.725 //then 0.785
     NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, 4));

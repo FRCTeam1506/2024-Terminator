@@ -32,7 +32,7 @@ public class Angler extends SubsystemBase {
     .withProperties(Map.of("min", 0, "max", 6))
     .getEntry();
 
-  DigitalInput input = new DigitalInput(Constants.ShooterSubsystem.LimitSwitchDIO);
+  DigitalInput input = Constants.ShooterSubsystem.LimitSwitchDIO;
 
 
   public Angler() {

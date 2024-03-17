@@ -30,7 +30,7 @@ public class Autos {
     ShooterSubsystem shooter;
     Vision vision;
     Angler angler;
-    enum autos { Nothing, TwoMeters, GetThree, Central, GoFar, MiddleNote }
+    enum autos { Nothing, TwoMeters, GetThree, Central, GoFar, GoFarDos, MiddleNote, CenterThree }
 
 
     public Autos(IntakeSubsystem intake, ShooterSubsystem shooter, Angler angler, Vision vision){
@@ -55,6 +55,8 @@ public class Autos {
         autoChooser.addOption("Central", autos.Central);
         autoChooser.addOption("Go far", autos.GoFar);
         autoChooser.addOption("Middle Note (+)", autos.MiddleNote);
+        autoChooser.addOption("Go far Dos", autos.GoFarDos);
+        autoChooser.addOption("Center Three", autos.CenterThree);
         SmartDashboard.putData(autoChooser);
     }
 
@@ -65,12 +67,9 @@ public class Autos {
                 return new WaitCommand(15.0);
             
             case TwoMeters:
-                // return new PathPlannerAuto("CenterLine");
-                // return new PathPlannerAuto("CenterLine");
                 return new PathPlannerAuto("Calibration");
 
             case GetThree:
-                // return new PathPlannerAuto("CenterLine");
                 return new PathPlannerAuto("GetThree");
 
             case Central:
@@ -80,9 +79,14 @@ public class Autos {
                 return new PathPlannerAuto("MiddleNote");
 
             case GoFar:
-                // return new PathPlannerAuto("GoFar");
-                return new PathPlannerAuto("GoFarDos");
+                return new PathPlannerAuto("GoFar");
             
+            case GoFarDos:
+                return new PathPlannerAuto("GoFarDos");
+
+            case CenterThree:
+            return new PathPlannerAuto("CenterThree");
+                
             default:
                 return new WaitCommand(15.0);
         }

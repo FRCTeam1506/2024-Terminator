@@ -140,9 +140,9 @@ public class Vision extends SubsystemBase {
     area2 = ta2.getDouble(0.0);
     target2 = tv2.getDouble(0.0);
 
-    if(target == 1){
-      m_drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d(""), timer.getFPGATimestamp());
-    }
+    // if(target == 1){
+    //   m_drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d(""), timer.getFPGATimestamp());
+    // }
 
   }
 }

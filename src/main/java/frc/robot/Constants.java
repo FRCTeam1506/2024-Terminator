@@ -98,7 +98,7 @@ public final class Constants {
         public static final int BottomID = 61;
         public static final int AnglerID = 60;
 
-        public static final int LimitSwitchDIO = 1;
+        public static final DigitalInput LimitSwitchDIO = new DigitalInput(3) ;
 
         public static final double anglerDefaultSpeed = 0.075; //david -- 0.05
 

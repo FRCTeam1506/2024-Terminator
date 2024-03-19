@@ -51,6 +51,11 @@ public class ShooterSubsystem extends SubsystemBase {
     motor2.set(0.05*1.2);
   }
 
+  public void shootToDeliverUSPS(){
+    motor1.set(0.5);
+    motor2.set(0.5);
+  }
+
   public void shootRPM(){
     VelocityDutyCycle request = new VelocityDutyCycle(3000);
     motor1.setControl(request);

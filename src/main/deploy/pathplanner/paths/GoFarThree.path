@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.88,
-        "y": 2.15
+        "x": 3.0003800949114017,
+        "y": 2.8925766268080317
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.70558333698693,
-        "y": 0.9719994332998654
+        "x": 4.825963431898332,
+        "y": 1.7145760601078972
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GoFarTwoEnd"
     },
     {
       "anchor": {
-        "x": 8.305389050150424,
-        "y": 2.4241431649767726
+        "x": 8.31,
+        "y": 2.72
       },
       "prevControl": {
-        "x": 7.661293040132442,
-        "y": 1.8034688280503517
+        "x": 7.665903989982018,
+        "y": 2.0993256630735795
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GoFarThreeEnd"
     }
   ],
   "rotationTargets": [
@@ -38,20 +38,20 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 40.6012946450043,
+    "rotation": 40.6,
     "rotateFast": false
   },
   "reversed": false,
   "folder": "GoFar",
   "previewStartingState": {
-    "rotation": -39.15118266164229,
+    "rotation": -39.0,
     "velocity": 0
   },
   "useDefaultConstraints": true

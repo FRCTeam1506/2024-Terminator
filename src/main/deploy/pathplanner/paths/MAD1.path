@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.913825345482359,
-        "y": 1.616095443317848
+        "x": 4.124620403306426,
+        "y": 2.1079505782406716
       },
       "isLocked": false,
       "linkedName": "GoFarOneStart"
     },
     {
       "anchor": {
-        "x": 8.293678213604645,
-        "y": 1.0
+        "x": 8.574738290703399,
+        "y": 0.8314693947504864
       },
       "prevControl": {
-        "x": 4.358837134222058,
-        "y": 1.4684334618312607
+        "x": 7.801823078681821,
+        "y": 1.0188427794829926
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "GoFarOneEnd"
+      "linkedName": "MAD1End"
     }
   ],
   "rotationTargets": [],
@@ -39,11 +39,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 4.513988458001264,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "GoFar",
+  "folder": "MAD",
   "previewStartingState": {
     "rotation": -68.0,
     "velocity": 0

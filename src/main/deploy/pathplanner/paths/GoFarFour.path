@@ -4,28 +4,28 @@
     {
       "anchor": {
         "x": 8.31,
-        "y": 2.42
+        "y": 2.72
       },
       "prevControl": null,
       "nextControl": {
         "x": 6.478498549008509,
-        "y": 1.2296378373070591
+        "y": 1.5296378373070594
       },
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GoFarThreeEnd"
     },
     {
       "anchor": {
-        "x": 3.88,
-        "y": 2.15
+        "x": 3.0003800949114017,
+        "y": 2.8925766268080317
       },
       "prevControl": {
-        "x": 5.178595692426762,
-        "y": 1.042264452574553
+        "x": 4.298975787338163,
+        "y": 1.7848410793825848
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "GoFarTwoEnd"
     }
   ],
   "rotationTargets": [
@@ -38,14 +38,14 @@
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -39.008780382519205,
+    "rotation": -49.0,
     "rotateFast": false
   },
   "reversed": false,

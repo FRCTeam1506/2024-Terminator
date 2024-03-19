@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 0.7636103146671328,
-      "y": 4.414985377759629
+      "x": 1.3,
+      "y": 2.93
     },
-    "rotation": -59.534455080540084
+    "rotation": -68.0
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootBase"
+            "name": "ShootBlackLine"
           }
         },
         {

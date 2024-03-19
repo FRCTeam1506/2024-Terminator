@@ -41,6 +41,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Trapper;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.angler.stopAngler;
 import frc.robot.commands.autos.toggleGSA;
 import frc.robot.commands.climber.climberUp;
 import frc.robot.commands.climber.individualControl;
@@ -48,9 +49,12 @@ import frc.robot.commands.climber.toggleEndGame;
 import frc.robot.commands.drivetrain.zeroGyro;
 import frc.robot.commands.intake.indexToShoot;
 import frc.robot.commands.intake.intake;
+import frc.robot.commands.intake.justIntake;
+import frc.robot.commands.intake.stopIntake;
 import frc.robot.commands.intake.toggleManualIntake;
 import frc.robot.commands.intake.watchIntake;
 import frc.robot.commands.shooter.angle;
+import frc.robot.commands.shooter.deliverAuto;
 import frc.robot.commands.shooter.mailNotes;
 import frc.robot.commands.shooter.runWheel;
 import frc.robot.commands.shooter.shoot;
@@ -60,6 +64,7 @@ import frc.robot.commands.shooter.shootConditional;
 import frc.robot.commands.shooter.shootIdle;
 import frc.robot.commands.shooter.shootPower;
 import frc.robot.commands.shooter.shootShufflebaord;
+import frc.robot.commands.shooter.stopShooter;
 import frc.robot.commands.shooter.toggleAim;
 import frc.robot.commands.trapper.sendTrapperHome;
 import frc.robot.commands.vision.*;
@@ -245,6 +250,8 @@ public class RobotContainer {
   public RobotContainer() {
     // NamedCommands.registerCommands(map);
     NamedCommands.registerCommand("Intake", new intake(intake).until(() -> Constants.IntakeSubsystem.irNine.get() == false));
+    NamedCommands.registerCommand("StartIntake", new justIntake(intake));
+    NamedCommands.registerCommand("StopIntake", new stopIntake(intake));
     NamedCommands.registerCommand("Watch Intake", new watchIntake(intake));
     NamedCommands.registerCommand("ZeroGyro", new zeroGyro().withTimeout(0.1));
 
@@ -252,8 +259,9 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
     NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, 2.5));
     NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, 2.8));
-    NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 0.885)); // og 0.725 //then 0.785
+    NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 1.6)); // og 0.725 //then 0.785 //then 0.885
     NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, 4));
+    NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler).andThen(new stopAngler(angler).withTimeout(0.05), new stopShooter(shooter).withTimeout(0.05)));
     NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.6));
 
 

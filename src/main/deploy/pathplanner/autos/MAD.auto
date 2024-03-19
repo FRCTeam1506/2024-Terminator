@@ -1,0 +1,68 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.3,
+      "y": 2.93
+    },
+    "rotation": -68.0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "ZeroGyro"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "ShootBlackLine"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StartIntake"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MAD1"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "DeliverAuto"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopIntake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "MAD2"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "K1",
+  "choreoAuto": false
+}

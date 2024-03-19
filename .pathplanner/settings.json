@@ -5,19 +5,20 @@
   "pathFolders": [
     "Calibration",
     "CenterLine",
+    "CenterThree",
     "Central",
     "GetThree",
     "GoFar",
     "MiddleNote",
-    "CenterThree",
+    "MAD",
     "TeleOp Paths"
   ],
   "autoFolders": [
     "K1",
     "TeleOp"
   ],
-  "defaultMaxVel": 2.0,
-  "defaultMaxAccel": 2.0,
+  "defaultMaxVel": 3.5,
+  "defaultMaxAccel": 4.0,
   "defaultMaxAngVel": 540.0,
   "defaultMaxAngAccel": 720.0,
   "maxModuleSpeed": 6.0

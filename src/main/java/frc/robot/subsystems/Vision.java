@@ -19,7 +19,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
@@ -58,19 +57,6 @@ public class Vision extends SubsystemBase {
   public static double x, y, area, target;
   public static double xshot, zshot, shotdist;
   public static double x2, y2, z2, area2, target2;
-
-  public static final SwerveDrivePoseEstimator estimator = 
-  new SwerveDrivePoseEstimator(
-      Constants.Swerve.kinematics, 
-      TunerConstants.DriveTrain.getPigeon2().getRotation2d(), 
-      new SwerveModulePosition[] {TunerConstants.DriveTrain.getModule(0).getPosition(true), TunerConstants.DriveTrain.getModule(1).getPosition(true), TunerConstants.DriveTrain.getModule(2).getPosition(true), TunerConstants.DriveTrain.getModule(3).getPosition(true)}, 
-      TunerConstants.DriveTrain.getState().Pose,
-        VecBuilder.fill(Constants.Limelight.kPositionStdDevX, Constants.Limelight.kPositionStdDevY, Constants.Limelight.kPositionStdDevTheta),
-        VecBuilder.fill(Constants.Limelight.kVisionStdDevX, Constants.Limelight.kVisionStdDevY, Constants.Limelight.kVisionStdDevTheta)
-  );
-
-  
-
 
   public Vision(CommandSwerveDrivetrain drivetrain) {
 
@@ -152,31 +138,9 @@ public class Vision extends SubsystemBase {
     area2 = ta2.getDouble(0.0);
     target2 = tv2.getDouble(0.0);
 
-    
-    //UPDATE POSE ESTIMATOR
-    estimator.updateWithTime(
-      Timer.getFPGATimestamp(),
-      TunerConstants.DriveTrain.getPigeon2().getRotation2d(), 
-      new SwerveModulePosition[] {
-        TunerConstants.DriveTrain.getModule(0).getPosition(true), 
-        TunerConstants.DriveTrain.getModule(1).getPosition(true), 
-        TunerConstants.DriveTrain.getModule(2).getPosition(true), 
-        TunerConstants.DriveTrain.getModule(3).getPosition(true)
-      }
-    );
-
-    // add to estimator
-    if(target > 0){
-      if(shotdist > 3){
-        estimator.setVisionMeasurementStdDevs(VecBuilder.fill(Constants.Limelight.kVisionStdDevX * 2, Constants.Limelight.kVisionStdDevY * 2, Constants.Limelight.kVisionStdDevTheta * 1.5));
-      }
-      else{
-        estimator.setVisionMeasurementStdDevs(VecBuilder.fill(Constants.Limelight.kVisionStdDevX, Constants.Limelight.kVisionStdDevY, Constants.Limelight.kVisionStdDevTheta));
-      }
-
-      estimator.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), timer.getFPGATimestamp());
-    }
-
+    // if(target > 0){
+    //   TunerConstants.DriveTrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), timer.getFPGATimestamp());
+    // }
 
   }
 }

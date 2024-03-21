@@ -28,7 +28,7 @@ public class angle extends Command {
   @Override
   public void execute() {
     angler.setPosition();
-    //angler.setPositionByPose();
+    angler.setPositionByPose();
   }
 
   // Called once the command ends or is interrupted.

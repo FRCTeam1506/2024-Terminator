@@ -107,8 +107,11 @@ public class Angler extends SubsystemBase {
     }
   }
 
+  /**
+   * Uses pose from Pose Estimator in vision.java, not a part of Tuner drivetrain to shoot, may not always be accurate -- JGT
+   */
   public void setPositionByPose(){
-    double distanceToTarget = TunerConstants.DriveTrain.getState().Pose.minus(Constants.Field.getAllianceSpeakerPose2d()).getTranslation().getNorm();
+    double distanceToTarget = Vision.estimator.getEstimatedPosition().minus(Constants.Field.getAllianceSpeakerPose2d()).getTranslation().getNorm();
     double pos = Constants.ShooterSubsystem.a*Math.pow(distanceToTarget, 2) - Constants.ShooterSubsystem.b*distanceToTarget + Constants.ShooterSubsystem.c;
     if(pos > 7){
       pos = 7;

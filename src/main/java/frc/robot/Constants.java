@@ -63,6 +63,21 @@ public final class Constants {
         public static final Double LIMIT = 0.4;
 
         public static final double shooterThreshold = 3;
+
+        //Some standard deviation code for calculating pose -- courtesy of Team Spectrum 3847
+        //https://www.chiefdelphi.com/t/swerve-drive-pose-estimator-and-add-vision-measurement-using-limelight-is-very-jittery/453306/5
+        //https://docs.wpilib.org/en/stable/docs/software/advanced-controls/state-space/state-space-pose-estimators.html 
+        
+        // Increase these numbers to trust your model's state estimates less.
+        public static final double kPositionStdDevX = 0.1;
+        public static final double kPositionStdDevY = 0.1;
+        public static final double kPositionStdDevTheta = Math.toRadians(2.5); //10; //10 is what 3847 //first example had 5
+
+        // Increase these numbers to trust global measurements from vision less.
+        public static final double kVisionStdDevX = 5;
+        public static final double kVisionStdDevY = 5;
+        public static final double kVisionStdDevTheta = Math.toRadians(30); //500;
+
     }
 
 
@@ -130,7 +145,7 @@ public final class Constants {
     }
 
 
-    //THANK YOU BRAZILIAN TEAM 1741 -- https://github.com/RAR1741/RA24_RobotCode/blob/columbus/src/main/java/frc/robot/Constants.java 
+    //CLASS FROM BRAZILIAN TEAM 1741 (ty) -- https://github.com/RAR1741/RA24_RobotCode/blob/columbus/src/main/java/frc/robot/Constants.java 
     public static class Field {
         public static final double k_width = Units.feetToMeters(54.0);
         public static final double k_length = Units.feetToMeters(27.0);
@@ -159,6 +174,8 @@ public final class Constants {
             }
         }
     }
+
+    
 
 
     public static final Mode currentMode = Mode.REAL;

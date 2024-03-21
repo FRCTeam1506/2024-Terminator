@@ -8,10 +8,16 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 
 import frc.robot.generated.TunerConstants;
-
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 
 public final class Constants {
@@ -110,6 +116,11 @@ public final class Constants {
         public static boolean isShooting = false;
         public static boolean autoAim = true;
 
+        //Shooting regression --- ax^2 + bx + c
+        public static double a = 0.272199;
+        public static double b = 2.74293;
+        public static double c = 8.213;
+
     }
 
     public static final class TrapperSubsystem{
@@ -117,6 +128,38 @@ public final class Constants {
         public static final int TRAPPER_SHOOTER_ID = 58;
 
     }
+
+
+    //THANK YOU BRAZILIAN TEAM 1741 -- https://github.com/RAR1741/RA24_RobotCode/blob/columbus/src/main/java/frc/robot/Constants.java 
+    public static class Field {
+        public static final double k_width = Units.feetToMeters(54.0);
+        public static final double k_length = Units.feetToMeters(27.0);
+
+        public static final double k_ampBottom = 26;
+        public static final double k_ampTop = 44;
+
+        public static final double k_speakerBottom = 78;
+        public static final double k_speakerTop = 82.875;
+        public static final double k_speakerAngle = 14.0;
+
+        // TODO: Maybe get these from AprilTags?
+        private static final double speakerHeight = 2.032; // Meters
+        public static final Pose3d k_redSpeakerPose = new Pose3d(16.579342, 5.547868, speakerHeight, new Rotation3d());
+        public static final Pose3d k_blueSpeakerPose = new Pose3d(-0.0381, 5.547868, speakerHeight, new Rotation3d());
+
+        public static final Pose2d k_redPassPose = new Pose2d(14.71, 6.0, new Rotation2d());
+        public static final Pose2d k_bluePassPose = new Pose2d(1.75, 6.0, new Rotation2d());
+
+        public static Pose2d getAllianceSpeakerPose2d(){
+            if(DriverStation.getAlliance().get() == Alliance.Red){
+                return k_redSpeakerPose.toPose2d();
+            }
+            else{
+                return k_blueSpeakerPose.toPose2d();
+            }
+        }
+    }
+
 
     public static final Mode currentMode = Mode.REAL;
 

@@ -2,39 +2,44 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Constants.ShooterSubsystem;
+import frc.robot.subsystems.Angler;
 
-public class indexToShoot extends Command {
-  /** Creates a new runWheel. */
-  IntakeSubsystem intake;
-  public indexToShoot(IntakeSubsystem intake) {
+public class angleForMovingShot extends Command {
+  /** Creates a new moveAngler. */
+  Angler angler;
+  boolean finished = false;
+
+  public angleForMovingShot(Angler angler) {
     // Use addRequirements() here to declare subsystem dependencies.
-    this.intake = intake;
+    this.angler = angler;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {    
+    
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.runIndexerShoot();
+    angler.anglePurposefullyLow();
+    //angler.setPositionByPose();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.stopIndexer();
-    intake.stopIntake();
+    angler.stopAngler();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return finished;
   }
 }

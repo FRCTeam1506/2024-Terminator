@@ -34,6 +34,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import frc.robot.subsystems.Angler;
 import frc.robot.subsystems.Candle;
@@ -50,12 +51,14 @@ import frc.robot.commands.drivetrain.zeroGyro;
 import frc.robot.commands.intake.indexToShoot;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.intake.justIntake;
+import frc.robot.commands.intake.stopIndexer;
 import frc.robot.commands.intake.stopIntake;
 import frc.robot.commands.intake.toggleManualIntake;
 import frc.robot.commands.intake.watchIntake;
 import frc.robot.commands.shooter.angle;
 import frc.robot.commands.shooter.deliverAuto;
 import frc.robot.commands.shooter.mailNotes;
+import frc.robot.commands.shooter.prepareToShoot;
 import frc.robot.commands.shooter.runWheel;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
@@ -64,6 +67,7 @@ import frc.robot.commands.shooter.shootConditional;
 import frc.robot.commands.shooter.shootIdle;
 import frc.robot.commands.shooter.shootPower;
 import frc.robot.commands.shooter.shootShufflebaord;
+import frc.robot.commands.shooter.ShootWhileMoving;
 import frc.robot.commands.shooter.stopShooter;
 import frc.robot.commands.shooter.toggleAim;
 import frc.robot.commands.trapper.sendTrapperHome;
@@ -256,12 +260,17 @@ public class RobotContainer {
     NamedCommands.registerCommand("ZeroGyro", new zeroGyro().withTimeout(0.1));
 
     NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
+    NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.3));//1.2
+    NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, 1.5));//1.2
+    NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05)));//1.2
+
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
     NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, 2.5));
     NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, 2.8));
     NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 1.6)); // og 0.725 //then 0.785 //then 0.885
     NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, 4));
-    NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler).andThen(new stopAngler(angler).withTimeout(0.05), new stopShooter(shooter).withTimeout(0.05)));
+    NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler));
+    NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
     NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.6));
 
 

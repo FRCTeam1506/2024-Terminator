@@ -23,6 +23,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -57,10 +58,8 @@ public class Vision extends SubsystemBase {
   public static double xshot, zshot, shotdist;
   public static double x2, y2, z2, area2, target2;
 
-  private final CommandSwerveDrivetrain m_drivetrain;
-
   public Vision(CommandSwerveDrivetrain drivetrain) {
-    m_drivetrain = drivetrain;
+
   }
 
   public void align(){
@@ -114,9 +113,8 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     //read values periodically
-    dashboard();
 
-    Constants.Swerve.m_field.setRobotPose(m_drivetrain.getState().Pose);
+    dashboard();
 
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
@@ -140,8 +138,8 @@ public class Vision extends SubsystemBase {
     area2 = ta2.getDouble(0.0);
     target2 = tv2.getDouble(0.0);
 
-    // if(target == 1){
-    //   m_drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d(""), timer.getFPGATimestamp());
+    // if(target > 0){
+    //   TunerConstants.DriveTrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), timer.getFPGATimestamp());
     // }
 
   }

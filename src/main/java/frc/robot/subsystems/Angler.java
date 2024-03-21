@@ -21,6 +21,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.generated.TunerConstants;
 
 public class Angler extends SubsystemBase {
   /** Creates a new Angler. */
@@ -101,10 +102,34 @@ public class Angler extends SubsystemBase {
       }
 */      
 
-       double pos = 0.272199*Math.pow(dist, 2) - 2.74293*dist + 8.213; //desmos eq, check screenshots 2/21/2024 +++
+       double pos = Constants.ShooterSubsystem.a*Math.pow(dist, 2) - Constants.ShooterSubsystem.b*dist + Constants.ShooterSubsystem.c; //desmos eq, check screenshots 2/21/2024 +++
        motor.setControl(m_motmag.withPosition(pos));
     }
   }
+
+  public void setPositionByPose(){
+    double distanceToTarget = TunerConstants.DriveTrain.getState().Pose.minus(Constants.Field.getAllianceSpeakerPose2d()).getTranslation().getNorm();
+    double pos = Constants.ShooterSubsystem.a*Math.pow(distanceToTarget, 2) - Constants.ShooterSubsystem.b*distanceToTarget + Constants.ShooterSubsystem.c;
+    if(pos > 7){
+      pos = 7;
+    }
+    motor.setControl(m_motmag.withPosition(pos));
+  }
+
+  public void anglePurposefullyLow(){
+    m_motmag.Slot = 0;
+    double reduce = 0.85;
+
+    double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+    double zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+    double dist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
+
+    if(Vision.target != 0){
+       double pos = Constants.ShooterSubsystem.a*Math.pow(dist, 2) - Constants.ShooterSubsystem.b*dist + Constants.ShooterSubsystem.c; //desmos eq, check screenshots 2/21/2024 +++
+       motor.setControl(m_motmag.withPosition(pos - reduce));
+    }
+  }
+
 
   public void setPositionManual(double position){
     m_motmag.Slot = 0;

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.574738290703399,
-        "y": 0.8314693947504864
+        "x": 8.071172319234796,
+        "y": 0.5972526638348568
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.574738290703399,
-        "y": 2.121469394750487
+        "x": 8.071172319234796,
+        "y": 1.887252663834857
       },
       "isLocked": false,
       "linkedName": "MAD1End"
@@ -30,24 +30,19 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.1,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
+      "waypointRelativePos": 0.2,
+      "rotationDegrees": 0.0,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 0.3,
+      "rotationDegrees": -90.0,
+      "rotateFast": true
     },
     {
       "waypointRelativePos": 0.5,
-      "rotationDegrees": 0.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.6,
-      "rotationDegrees": 40.0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.25,
-      "rotationDegrees": 180.0,
-      "rotateFast": false
+      "rotationDegrees": -90.0,
+      "rotateFast": true
     }
   ],
   "constraintZones": [],

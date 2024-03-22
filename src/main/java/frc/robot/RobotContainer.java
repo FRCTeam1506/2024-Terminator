@@ -262,6 +262,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
     NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.3));//1.2
     NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, 1.5));//1.2
+    NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, 1.36));//1.2
     NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05)));//1.2
 
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));

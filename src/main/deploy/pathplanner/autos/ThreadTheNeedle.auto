@@ -136,6 +136,31 @@
               }
             ]
           }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "TTN6"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrepareToShootUnderStage"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IndexToShoot"
+          }
         }
       ]
     }

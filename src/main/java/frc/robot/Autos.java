@@ -85,7 +85,7 @@ public class Autos {
                 return new PathPlannerAuto("GoFar");
             
             case GoFarDos:
-                return new PathPlannerAuto("GoFarDos");
+                // return new PathPlannerAuto("GoFarDos");
 
             case CenterThree:
             return new PathPlannerAuto("CenterThree");

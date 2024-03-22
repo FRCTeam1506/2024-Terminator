@@ -55,9 +55,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "MAD2"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "MAD2"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
           }
         }
       ]

@@ -30,7 +30,7 @@ public class Autos {
     ShooterSubsystem shooter;
     Vision vision;
     Angler angler;
-    enum autos { Nothing, TwoMeters, GetThree, Central, GoFar, GoFarDos, MiddleNote, CenterThree, MAD, ThreadTheNeedle }
+    enum autos { Nothing, TwoMeters, GetThree, Central, GoFar, GoFarDos, MiddleNote, CenterThree, CenterThreeFast,MAD, ThreadTheNeedle }
 
 
     public Autos(IntakeSubsystem intake, ShooterSubsystem shooter, Angler angler, Vision vision){
@@ -57,6 +57,7 @@ public class Autos {
         autoChooser.addOption("Middle Note (+)", autos.MiddleNote);
         autoChooser.addOption("Go far Dos", autos.GoFarDos);
         autoChooser.addOption("Center Three", autos.CenterThree); 
+        autoChooser.addOption("Center Three Fast", autos.CenterThreeFast); 
         autoChooser.addOption("Mutual Asset Denial", autos.MAD);
         autoChooser.addOption("Thread The Needle", autos.ThreadTheNeedle);
 
@@ -89,6 +90,9 @@ public class Autos {
 
             case CenterThree:
             return new PathPlannerAuto("CenterThree");
+
+            case CenterThreeFast:
+            return new PathPlannerAuto("CenterThreeBeta");
 
             case MAD:
             return new PathPlannerAuto("MAD");

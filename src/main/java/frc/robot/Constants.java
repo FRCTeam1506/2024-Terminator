@@ -70,7 +70,7 @@ public final class Constants {
         public static final int MOTOR_ID = 51;
         public static final int INDEXER_ID = 52;
         public static final int DIO_PORT = 0;
-        public static final double DEFAULT_INTAKE_SPEED = 0.5; //0.3
+        public static final double DEFAULT_INTAKE_SPEED = 0.5; //0.3 //0.5
         public static final double DEFAULT_INDEXER_SPEED = 0.2;
 
         public static final DigitalInput irNine = new DigitalInput(7);

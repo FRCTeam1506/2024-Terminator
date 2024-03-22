@@ -160,6 +160,12 @@ public class Angler extends SubsystemBase {
     motor.setControl(m_motmag.withPosition(4.8));
   }
 
+  public void trapPosition(){
+    m_motmag.Slot = 0;
+    motor.setControl(m_motmag.withPosition(5.25));
+  }
+
+
   public void stopAngler(){
     motor.set(0);
     motor.stopMotor();

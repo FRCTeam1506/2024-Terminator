@@ -11,6 +11,12 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.commands.PathfindingCommand;
+
+// import com.pathplanner.lib.commands.PathfindingCommand;
+// import com.pathplanner.lib.auto.*;
+// import com.pathplanner.lib.pathfinding.*;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
@@ -64,6 +70,9 @@ public class Robot extends LoggedRobot {
     m_robotContainer = new RobotContainer();
 
     m_robotContainer.drivetrain.getDaqThread().setThreadPriority(99);
+
+    //speed up autonomous init
+    PathfindingCommand.warmupCommand().schedule();
     
   }
   @Override
@@ -102,7 +111,9 @@ public class Robot extends LoggedRobot {
   public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {}
+  public void autonomousExit() {
+    m_robotContainer.stopEverything();
+  }
 
   @Override
   public void teleopInit() {

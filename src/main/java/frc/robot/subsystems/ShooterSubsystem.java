@@ -51,6 +51,11 @@ public class ShooterSubsystem extends SubsystemBase {
     motor2.set(0.05*1.2);
   }
 
+  public void trapPower(){
+    motor1.set(0.87/1.1); //og 0.4
+    motor2.set(0.45/1.1-0.18);
+  }
+
   public void shootToDeliverUSPS(){
     motor1.set(0.5);
     motor2.set(0.5);

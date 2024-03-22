@@ -69,6 +69,15 @@ public class Vision extends SubsystemBase {
     TunerConstants.DriveTrain.applyRequest(() -> forwardStraight.withVelocityX(1).withVelocityY(1).withRotationalRate(1));
   }
 
+  public void stagePipeline(){
+    LimelightHelpers.setPipelineIndex("limelight", 1);
+  }
+
+  public void defaultPipeline(){
+    LimelightHelpers.setPipelineIndex("limelight", 0);
+  }
+
+
 
   public void dashboard(){
     // Field2d m_field = new Field2d();

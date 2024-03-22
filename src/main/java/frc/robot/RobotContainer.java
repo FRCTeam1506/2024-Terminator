@@ -67,6 +67,7 @@ import frc.robot.commands.shooter.shootConditional;
 import frc.robot.commands.shooter.shootIdle;
 import frc.robot.commands.shooter.shootPower;
 import frc.robot.commands.shooter.shootShufflebaord;
+import frc.robot.commands.shooter.shootTrap;
 import frc.robot.commands.shooter.ShootWhileMoving;
 import frc.robot.commands.shooter.stopShooter;
 import frc.robot.commands.shooter.toggleAim;
@@ -242,6 +243,15 @@ public class RobotContainer {
     j.oLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
 
+    j.dRB.whileTrue(new shootTrap(angler, shooter, intake, vision));
+    // j.dX.whileTrue(new RepeatCommand(new forwardTest(vision)));
+    j.dX.whileTrue(new forwardTest(vision));
+
+    j.dX.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    j.dX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    j.dX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+
     //trapper in endgame
     j.oLeft.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
     j.oLeft.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
@@ -263,7 +273,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.3));//1.2
     NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, 1.5));//1.2
     NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, 1.36));//1.2
-    NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05)));//1.2
+    NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.05));//1.2
 
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
     NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, 2.5));
@@ -273,6 +283,11 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler));
     NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
     NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.6));
+
+    NamedCommands.registerCommand("AutoNotePost_PTS", new prepareToShoot(angler, shooter, intake, 2.9));
+    NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new prepareToShoot(angler, shooter, intake, 2.43));
+    // NamedCommands.registerCommand("AutoNoteCenter_PTS", new prepareToShoot(angler, shooter, intake, 2.43));
+
 
 
     configureBindings();
@@ -347,6 +362,8 @@ public class RobotContainer {
 
 
     // autos.registerCommands();
+
+    /*
     List<Translation2d> bezierPoints = PathPlannerPath.bezierFromPoses(
         new Pose2d(0.0, 0.0, Rotation2d.fromDegrees(0)),
         new Pose2d(20.0, 20.0, Rotation2d.fromDegrees(0))
@@ -358,7 +375,7 @@ public class RobotContainer {
             new PathConstraints(5.0, 5.0, 2 * Math.PI, 4 * Math.PI), // The constraints for this path. If using a differential drivetrain, the angular constraints have no effect.
             new GoalEndState(3.0, Rotation2d.fromDegrees(-90)) // Goal end state. You can set a holonomic rotation here. If using a differential drivetrain, the rotation will have no effect.
     );
-
+    */
 
     /* First put the drivetrain into auto run mode, then run the auto */
     // return drivetrain.followPathCommand(path);
@@ -367,8 +384,12 @@ public class RobotContainer {
     // return goForward;
     return autos.sendAutos();
     // return new PathPlannerAuto("GoFar");
-    // return new PathPlannerAuto("CenterLine");
+    // return new PathPlannerAuto("ThreadTheNeedle");
   }
+
+  public Command stopEverything(){
+    return new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1);
+  } 
 
   public void periodic(){
     // Do this in either robot or subsystem init

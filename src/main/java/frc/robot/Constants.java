@@ -121,6 +121,18 @@ public final class Constants {
         public static double b = 2.74293;
         public static double c = 8.213;
 
+        //TRAP VALUES
+        // static double x = 0.73;
+        // public static double topSpeed = 0.4*x;
+        // public static double bottomSpeed = .79*x;
+
+        static double x = 0.77;
+        public static double topSpeed = 0.3*x;
+        public static double bottomSpeed = .8*x+0.1;
+
+        
+        public static double anglerSet = 5.1;//75 //5.13
+
     }
 
     public static final class TrapperSubsystem{

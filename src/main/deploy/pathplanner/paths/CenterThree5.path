@@ -1,0 +1,52 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 8.106304828872139,
+        "y": 7.448092043117039
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 6.513631058645855,
+        "y": 6.733731013824367
+      },
+      "isLocked": false,
+      "linkedName": "CenterThree4End"
+    },
+    {
+      "anchor": {
+        "x": 4.429102153496745,
+        "y": 6.265297551993107
+      },
+      "prevControl": {
+        "x": 5.7524266831700555,
+        "y": 6.476092609817173
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "TTN2_End"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 2.5,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 10.5,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": "CenterThree",
+  "previewStartingState": {
+    "rotation": 30.0,
+    "velocity": 0
+  },
+  "useDefaultConstraints": false
+}

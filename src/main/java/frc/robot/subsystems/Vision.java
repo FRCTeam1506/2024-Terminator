@@ -59,7 +59,7 @@ public class Vision extends SubsystemBase {
   public static double x2, y2, z2, area2, target2;
 
   public Vision(CommandSwerveDrivetrain drivetrain) {
-
+    defaultPipeline();
   }
 
   public void align(){

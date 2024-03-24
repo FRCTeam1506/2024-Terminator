@@ -27,6 +27,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -42,6 +43,7 @@ import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Trapper;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.angler.setPosition;
 import frc.robot.commands.angler.stopAngler;
 import frc.robot.commands.autos.toggleGSA;
 import frc.robot.commands.climber.climberUp;
@@ -50,6 +52,7 @@ import frc.robot.commands.climber.toggleEndGame;
 import frc.robot.commands.drivetrain.zeroGyro;
 import frc.robot.commands.intake.indexToShoot;
 import frc.robot.commands.intake.intake;
+import frc.robot.commands.intake.justIndex;
 import frc.robot.commands.intake.justIntake;
 import frc.robot.commands.intake.stopIndexer;
 import frc.robot.commands.intake.stopIntake;
@@ -137,7 +140,10 @@ public class RobotContainer {
     // j.dDown.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
     
     // j.dLeft.whileTrue(new align(vision)); //shooter alignment
-    j.dLeft.whileTrue(new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold)); //shooter alignment
+    // j.dLeft.whileTrue(new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold)); //shooter alignment
+
+    j.dLeft.whileTrue(new anglePIDHolonomicBeta((vision.x), true)); //shooter alignment
+    // j.dLeft.whileTrue(new align(vision));
     // j.dRight.whileTrue(new kevin2(vision)); //intake alignment
 
     //ACTUAL CONTROLS!!!
@@ -233,7 +239,7 @@ public class RobotContainer {
     //trapper
     j.oUp.whileTrue(new InstantCommand(() -> trapper.up()));
     j.oDown.whileTrue(new InstantCommand(() -> trapper.down()));
-    j.oRB.whileTrue(new InstantCommand(() -> trapper.trapPosition()));
+    // j.oRB.whileTrue(new InstantCommand(() -> trapper.trapPosition())); //no jogging for new trapper design
     j.oRB.whileTrue(new InstantCommand(() -> trapper.intake()));
     j.oLB.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
     j.oUp.whileFalse(new InstantCommand(() -> trapper.stopTrapper())); //send trapper home
@@ -243,9 +249,10 @@ public class RobotContainer {
     j.oLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
 
-    j.dRB.whileTrue(new shootTrap(angler, shooter, intake, vision));
+    //potential trap shooting code line 1 and 3
+    // j.dRB.whileTrue(new shootTrap(angler, shooter, intake, vision));
     // j.dX.whileTrue(new RepeatCommand(new forwardTest(vision)));
-    j.dX.whileTrue(new forwardTest(vision));
+    // j.dX.whileTrue(new forwardTest(vision));
 
     j.dX.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
@@ -274,18 +281,20 @@ public class RobotContainer {
     NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, 1.5));//1.2
     NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, 1.36));//1.2
     NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.05));//1.2
+    NamedCommands.registerCommand("JustIndexAndShoot", new justIndex(intake).alongWith(new runWheel(shooter), new justIntake(intake)));
 
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
     NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, 2.5));
     NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, 2.8));
     NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 1.6)); // og 0.725 //then 0.785 //then 0.885
     NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, 4));
-    NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler));
+    NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler, 0.5));
+    NamedCommands.registerCommand("DeliverAutoSoftly", new deliverAuto(shooter, intake, angler,0.15));
     NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
     NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.6));
 
-    NamedCommands.registerCommand("AutoNotePost_PTS", new prepareToShoot(angler, shooter, intake, 2.9));
-    NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new prepareToShoot(angler, shooter, intake, 2.43));
+    NamedCommands.registerCommand("AutoNotePost_PTS", new setPosition(angler, 2.4));
+    NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new setPosition(angler, 2.43));
     // NamedCommands.registerCommand("AutoNoteCenter_PTS", new prepareToShoot(angler, shooter, intake, 2.43));
 
 
@@ -394,7 +403,7 @@ public class RobotContainer {
   public void periodic(){
     // Do this in either robot or subsystem init
      SmartDashboard.putData("Field", m_field);
-
+    j.operator.setRumble(RumbleType.kBothRumble, 0);
     // Do this in either robot periodic or subsystem periodic ---- odometry
     m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that
     //m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());

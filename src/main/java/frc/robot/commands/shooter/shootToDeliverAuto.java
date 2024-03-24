@@ -10,22 +10,24 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class shootToDeliverAuto extends Command {
   /** Creates a new runWheel. */
   ShooterSubsystem shooter;
+  double speed;
   boolean finished = false;
-  public shootToDeliverAuto(ShooterSubsystem shooter) {
+  public shootToDeliverAuto(ShooterSubsystem shooter, double speed) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
+    this.speed = speed;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    shooter.shootToDeliverUSPS();
+    shooter.shootToDeliverUSPS(speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shootToDeliverUSPS();
+    shooter.shootToDeliverUSPS(speed);
     finished = true;
   }
 

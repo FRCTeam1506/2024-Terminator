@@ -33,6 +33,7 @@ public class shoot extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     double z = vision.zshot;
     Constants.ShooterSubsystem.isShooting = true;
+    vision.defaultPipeline();
     addCommands(
       new runWheel(shooter).withTimeout(0.05),
       new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold),

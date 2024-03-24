@@ -27,14 +27,14 @@ import frc.robot.subsystems.Vision;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class deliverAuto extends SequentialCommandGroup {
   /** Creates a new shoot. */
-  public deliverAuto(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler) {
+  public deliverAuto(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, double speed) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       new ParallelCommandGroup(
         new justIntake(intake),
         new setPosition(angler, 2),//.until(() -> angler.getPos() > angler.getVisionPosition()),
-        new shootToDeliverAuto(shooter).withTimeout(0.1)
+        new shootToDeliverAuto(shooter, speed).withTimeout(0.1)
         // new angle(angler, Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14).until(() -> angler.getPos() > Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14)
       ).withTimeout(0.6),
       //new stopShooter(shooter),

@@ -30,7 +30,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CenterThree1"
+                  "pathName": "CenterThree1Beta"
                 }
               },
               {
@@ -42,16 +42,35 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "JustIndexAndShoot"
                 }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
-            "commands": []
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 0.5
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "JustIndexAndShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoNotePost_PTS"
+                }
+              }
+            ]
           }
         },
         {
@@ -69,24 +88,36 @@
                 "data": {
                   "name": "AutoNoteCenterNAmp_PTS"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "JustIndexAndShoot"
+                }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "Intake"
+                  "waitTime": 0.5
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IndexToShoot"
+                  "name": "JustIndexAndShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoNoteCenterNAmp_PTS"
                 }
               }
             ]
@@ -107,24 +138,61 @@
                 "data": {
                   "name": "AutoNoteCenterNAmp_PTS"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "JustIndexAndShoot"
+                }
               }
             ]
           }
         },
         {
-          "type": "parallel",
+          "type": "deadline",
           "data": {
             "commands": [
               {
-                "type": "named",
+                "type": "wait",
                 "data": {
-                  "name": "Intake"
+                  "waitTime": 0.5
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "IndexToShoot"
+                  "name": "JustIndexAndShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "AutoNoteCenterNAmp_PTS"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "StopEverything"
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CenterThree4Fast"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
                 }
               }
             ]
@@ -137,7 +205,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "CenterThree4"
+                  "pathName": "CenterThree5"
                 }
               },
               {
@@ -145,8 +213,20 @@
                 "data": {
                   "name": "Intake"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrepareToShoot"
+                }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "JustIndexAndShoot"
           }
         }
       ]

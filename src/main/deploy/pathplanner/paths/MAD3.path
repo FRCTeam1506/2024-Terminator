@@ -3,53 +3,43 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.071172319234796,
-        "y": 0.5972526638348568
+        "x": 8.340521559787769,
+        "y": 5.644623215066687
       },
       "prevControl": null,
       "nextControl": {
-        "x": 8.071172319234796,
-        "y": 1.887252663834857
+        "x": 6.94693201083977,
+        "y": 6.581490138729208
       },
       "isLocked": false,
-      "linkedName": "MAD1End"
+      "linkedName": "MAD2BetaEnd"
     },
     {
       "anchor": {
-        "x": 8.352232396333552,
-        "y": 7.3544053507507865
+        "x": 4.429102153496745,
+        "y": 6.265297551993107
       },
       "prevControl": {
-        "x": 8.352232396333552,
-        "y": 6.014405350750787
+        "x": 5.4830774426170805,
+        "y": 6.651755158003897
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MAD2End"
+      "linkedName": "TTN2_End"
     }
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.2,
-      "rotationDegrees": -90.0,
-      "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 180.0,
-      "rotateFast": true
-    },
-    {
-      "waypointRelativePos": 0.65,
+      "waypointRelativePos": 0.45,
       "rotationDegrees": 0.0,
-      "rotateFast": true
+      "rotateFast": false
     }
   ],
   "constraintZones": [
     {
       "name": "New Constraints Zone",
-      "minWaypointRelativePos": 0.7,
-      "maxWaypointRelativePos": 0.95,
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.0,
       "constraints": {
         "maxVelocity": 1.5,
         "maxAcceleration": 2.0,
@@ -67,13 +57,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 100.33838921437471,
+    "rotation": 10.5,
     "rotateFast": true
   },
   "reversed": false,
   "folder": "MAD",
   "previewStartingState": {
-    "rotation": -35.90999999999997,
+    "rotation": 100.34,
     "velocity": 0
   },
   "useDefaultConstraints": false

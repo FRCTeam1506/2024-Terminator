@@ -8,6 +8,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SwerveControlRequestPar
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -40,24 +41,23 @@ public class align extends Command {
     initialX = Vision.x;
     initialYaw = TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble();
     gyroGoal = initialYaw - initialX;
+
+    Pose2d targetPose2d = new Pose2d(0,0,Rotation2d.fromDegrees(gyroGoal));
+    System.out.println(targetPose2d.getRotation());
+    System.out.println(TunerConstants.DriveTrain.getPigeon2().getAngle() + " gyro angle");
+    System.out.println(Vision.zshot);
+
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() < gyroGoal + threshold && TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble() > gyroGoal-threshold){
-      finished = true;
-    }
-    else{
-      finished = false; // otherwise the true carries over from the last alignment
-      TunerConstants.DriveTrain.setControl(request.withTargetDirection(new Rotation2d(Math.toRadians(gyroGoal))));
-    }
+    TunerConstants.DriveTrain.setControl(request.withTargetDirection(Rotation2d.fromDegrees(gyroGoal)));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    TunerConstants.DriveTrain.getPigeon2().close();
     ChassisSpeeds stop = new ChassisSpeeds(0,0, 0);
     SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
     TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));
@@ -66,6 +66,6 @@ public class align extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return Math.abs(Vision.zshot) < 3;
   }
 }

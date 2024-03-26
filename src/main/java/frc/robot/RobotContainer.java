@@ -347,7 +347,7 @@ public class RobotContainer {
     //Stator Limiting Not Being Used
     CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs();
     currentConfig.StatorCurrentLimitEnable = true;
-    currentConfig.StatorCurrentLimit = 120;
+    currentConfig.StatorCurrentLimit = 70;
 
     // currentConfig.SupplyCurrentLimitEnable = true;
     // currentConfig.SupplyCurrentLimit = 38;

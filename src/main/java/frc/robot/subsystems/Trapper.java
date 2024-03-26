@@ -6,6 +6,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -28,6 +30,9 @@ public class Trapper extends SubsystemBase {
     var talonFXConfigs = new TalonFXConfiguration();
 
     talonFXConfigs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    //talonFXConfigs.CurrentLimits.StatorCurrentLimitEnable = true;
+    //talonFXConfigs.CurrentLimits.StatorCurrentLimit = 60;
+
 
     // set slot 0 gains
     var slot0Configs = talonFXConfigs.Slot0;

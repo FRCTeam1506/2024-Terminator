@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.7310308543584263,
-        "y": 4.391563704668065
+        "x": 2.65,
+        "y": 4.251033666118688
       },
       "prevControl": {
-        "x": 2.086934844340443,
-        "y": 4.813153820316198
+        "x": 2.005903989982017,
+        "y": 4.672623781766821
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "CenterThree1End"
     }
   ],
   "rotationTargets": [

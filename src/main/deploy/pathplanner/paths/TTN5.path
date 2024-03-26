@@ -9,37 +9,31 @@
       "prevControl": null,
       "nextControl": {
         "x": 3.105777623823435,
-        "y": 3.115082521177881
+        "y": 4.1690578102982165
       },
       "isLocked": false,
       "linkedName": "TTN2_End"
     },
     {
       "anchor": {
-        "x": 7.286546270667433,
-        "y": 4.087081954477746
+        "x": 7.85,
+        "y": 4.1
       },
       "prevControl": {
-        "x": 5.354249744742562,
-        "y": 4.28608369856666
+        "x": 5.917703474075129,
+        "y": 4.299001744088914
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "TTN5_End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.15,
-      "rotationDegrees": 10.5,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -51,8 +45,8 @@
   "reversed": false,
   "folder": "ThreadTheNeedle",
   "previewStartingState": {
-    "rotation": 10.5,
+    "rotation": 7.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

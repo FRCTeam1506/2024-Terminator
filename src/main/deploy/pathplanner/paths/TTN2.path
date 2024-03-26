@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.53,
-        "y": 7.4
+        "x": 7.9,
+        "y": 7.45
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.691398662312303,
-        "y": 6.8495906823482695
+        "x": 6.061398662312303,
+        "y": 6.899590682348269
       },
       "isLocked": false,
       "linkedName": "TTN1_End"
@@ -28,24 +28,18 @@
       "linkedName": "TTN2_End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.25,
-      "rotationDegrees": 0,
-      "rotateFast": true
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": 10.5,
+    "velocity": 0.0,
+    "rotation": 7.0,
     "rotateFast": false
   },
   "reversed": false,
@@ -54,5 +48,5 @@
     "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

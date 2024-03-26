@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 8.094593992326358,
-        "y": 7.68230877403267
+        "x": 8.106304828872139,
+        "y": 7.448092043117039
       },
       "prevControl": {
-        "x": 6.853245318473519,
-        "y": 7.729152120215796
+        "x": 6.8649561550193,
+        "y": 7.4949353893001645
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "CenterThree4End"
     }
   ],
   "rotationTargets": [],

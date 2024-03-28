@@ -3,12 +3,12 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 4.429102153496745,
+        "x": 4.0,
         "y": 6.265297551993107
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.17401679881819,
+        "x": 5.744914645321445,
         "y": 6.897682725465309
       },
       "isLocked": false,
@@ -17,11 +17,11 @@
     {
       "anchor": {
         "x": 8.0,
-        "y": 5.796864090161846
+        "y": 5.7
       },
       "prevControl": {
-        "x": 6.560474404828979,
-        "y": 5.949104965257007
+        "x": 6.619028587557887,
+        "y": 5.547759124904841
       },
       "nextControl": null,
       "isLocked": false,
@@ -44,7 +44,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -56,7 +56,7 @@
   "reversed": false,
   "folder": "ThreadTheNeedle",
   "previewStartingState": {
-    "rotation": 7.0,
+    "rotation": 10.0,
     "velocity": 0
   },
   "useDefaultConstraints": false

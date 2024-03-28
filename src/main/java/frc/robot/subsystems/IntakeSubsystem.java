@@ -86,7 +86,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void intakeByCurrent(){
-    if(indexer.getTorqueCurrent().getValueAsDouble() > 23 || Constants.IntakeSubsystem.ring){
+    if(indexer.getTorqueCurrent().getValueAsDouble() > 30 || Constants.IntakeSubsystem.ring){
       Constants.IntakeSubsystem.ring = true;
       // Timer.delay(.1);
       stopIntake();

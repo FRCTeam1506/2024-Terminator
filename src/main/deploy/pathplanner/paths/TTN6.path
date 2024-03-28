@@ -8,24 +8,24 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.531254363935261,
-        "y": 3.842361595992807
+        "x": 5.862232530652761,
+        "y": 3.879136947850307
       },
       "isLocked": false,
       "linkedName": "TTN5_End"
     },
     {
       "anchor": {
-        "x": 4.534499682408779,
-        "y": 4.789732147224637
+        "x": 4.0,
+        "y": 4.85
       },
       "prevControl": {
-        "x": 4.9443789615111315,
-        "y": 4.180768646843998
+        "x": 4.8155597595075355,
+        "y": 4.286166175756032
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "TTN6_End"
     }
   ],
   "rotationTargets": [],
@@ -33,13 +33,13 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0.0,
+    "rotation": -8.0,
     "rotateFast": false
   },
   "reversed": false,

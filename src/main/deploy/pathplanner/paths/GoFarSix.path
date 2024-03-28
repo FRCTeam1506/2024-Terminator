@@ -3,50 +3,50 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.85,
-        "y": 6.95
+        "x": 8.281967377058862,
+        "y": 4.11050362756931
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.206596259126896,
-        "y": 7.190453639109847
+        "x": 6.607317751012106,
+        "y": 4.098792791023527
       },
       "isLocked": false,
-      "linkedName": "EndOf3"
+      "linkedName": "GoFarFiveEnd"
     },
     {
       "anchor": {
-        "x": 8.106304828872139,
-        "y": 7.55
+        "x": 4.0,
+        "y": 4.85
       },
       "prevControl": {
-        "x": 6.8649561550193,
-        "y": 7.5968433461831255
+        "x": 5.100818635303462,
+        "y": 3.7023380185134123
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "CenterThree4End"
+      "linkedName": "TTN6_End"
     }
   ],
   "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": -5.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "CenterThree",
+  "folder": "GoFar",
   "previewStartingState": {
-    "rotation": 30.0,
+    "rotation": 0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

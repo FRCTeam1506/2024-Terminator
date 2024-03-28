@@ -110,6 +110,50 @@
           "data": {
             "name": "ShootMidStage"
           }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GoFarFive"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "GoFarSix"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrepareToShootUnderStage"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IndexToShoot"
+          }
         }
       ]
     }

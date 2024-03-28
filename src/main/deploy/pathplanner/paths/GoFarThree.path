@@ -8,38 +8,32 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.825963431898332,
-        "y": 1.7145760601078972
+        "x": 5.3425474040677035,
+        "y": 1.428722058585343
       },
       "isLocked": false,
       "linkedName": "GoFarTwoEnd"
     },
     {
       "anchor": {
-        "x": 8.31,
-        "y": 2.72
+        "x": 8.25,
+        "y": 2.8
       },
       "prevControl": {
-        "x": 7.665903989982018,
-        "y": 2.0993256630735795
+        "x": 7.605903989982018,
+        "y": 2.179325663073579
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "GoFarThreeEnd"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.45,
-      "rotationDegrees": 10.0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.5,
-    "maxAcceleration": 4.0,
+    "maxAcceleration": 2.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
@@ -54,5 +48,5 @@
     "rotation": -39.0,
     "velocity": 0
   },
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

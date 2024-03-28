@@ -155,6 +155,31 @@
               }
             ]
           }
+        },
+        {
+          "type": "deadline",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "CenterThree5"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrepareToShoot"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "JustIndexAndShoot"
+          }
         }
       ]
     }

@@ -202,12 +202,12 @@ public class RobotContainer {
     j.dR3.whileTrue(new toggleEndGame());
 
     //manual shooting
-    j.oX.whileTrue(new shootPower(shooter, intake, angler, vision, 1.25)); //dashangler.getDouble(6))original angler setpoint 3.15 //2.6 og //2.9 for blue
+    j.oX.whileTrue(new shootPower(shooter, intake, angler, vision, 3)); //dashangler.getDouble(6))original angler setpoint 3.15 //2.6 og //2.9 for blue
     j.oX.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-    j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision));
+    j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision, 3.5));
     j.oR3.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oR3.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oR3.whileFalse(new InstantCommand(() -> angler.stopAngler()));
@@ -245,11 +245,14 @@ public class RobotContainer {
     j.oLB.whileTrue(new InstantCommand(() -> intake.outtake()));
     j.oLB.whileFalse(new InstantCommand(() -> intake.stopIntake()));
     j.oB.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
+    j.dRB.whileTrue(new InstantCommand(() -> trapper.intake()));
   
+
     j.oUp.whileFalse(new InstantCommand(() -> trapper.stopTrapper())); //send trapper home
     j.oDown.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     // j.oRB.whileFalse(new sendTrapperHome(trapper));
+    j.dRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
@@ -347,7 +350,7 @@ public class RobotContainer {
     //Stator Limiting Not Being Used
     CurrentLimitsConfigs currentConfig = new CurrentLimitsConfigs();
     currentConfig.StatorCurrentLimitEnable = true;
-    currentConfig.StatorCurrentLimit = 70;
+    currentConfig.StatorCurrentLimit = 100;
 
     // currentConfig.SupplyCurrentLimitEnable = true;
     // currentConfig.SupplyCurrentLimit = 38;

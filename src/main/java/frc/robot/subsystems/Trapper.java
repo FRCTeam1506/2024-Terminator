@@ -64,7 +64,7 @@ public class Trapper extends SubsystemBase {
   }
 
   public void intake(){
-    shooter.set(.8);//0.3
+    shooter.set(1);//0.3
   }
 
   public void trapPosition(){

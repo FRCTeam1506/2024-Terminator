@@ -17,15 +17,15 @@
     {
       "anchor": {
         "x": 8.106304828872139,
-        "y": 7.448092043117039
+        "y": 7.55
       },
       "prevControl": {
         "x": 6.8649561550193,
-        "y": 7.4949353893001645
+        "y": 7.5968433461831255
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": null
+      "linkedName": "CenterThree4End"
     }
   ],
   "rotationTargets": [

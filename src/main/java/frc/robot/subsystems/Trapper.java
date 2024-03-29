@@ -97,8 +97,17 @@ public class Trapper extends SubsystemBase {
     vertical.stopMotor();
   }
 
+  public void stopIntake(){
+    shooter.set(0);
+    shooter.stopMotor();
+  }
+
   public void verticalZero(){
     vertical.setPosition(0);
+  }
+
+  public void setAmpPosition(){
+    setPosition(Constants.TrapperSubsystem.AmpPosition);
   }
 
   public double getPos(){

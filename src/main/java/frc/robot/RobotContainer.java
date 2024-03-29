@@ -75,6 +75,7 @@ import frc.robot.commands.shooter.ShootWhileMoving;
 import frc.robot.commands.shooter.stopShooter;
 import frc.robot.commands.shooter.toggleAim;
 import frc.robot.commands.trapper.sendTrapperHome;
+import frc.robot.commands.trapper.trampTheAmp;
 import frc.robot.commands.vision.*;
 import frc.robot.generated.TunerConstants;
 
@@ -255,7 +256,13 @@ public class RobotContainer {
     j.dRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
-    j.oPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
+
+
+    //trapper amp command
+    // j.oPS.whileTrue(new InstantCommand(() -> trapper.setAmpPosition()));
+    j.oPS.whileTrue(new trampTheAmp(trapper, shooter, intake));
+    j.oPS.whileFalse(new InstantCommand(() -> trapper.sendTrapperHome()));
+    j.oPS.whileFalse(new InstantCommand(() -> trapper.stopIntake()));
 
     //potential trap shooting code line 1 and 3
     // j.dRB.whileTrue(new shootTrap(angler, shooter, intake, vision));
@@ -339,7 +346,7 @@ public class RobotContainer {
 
   public void runCurrentLimits(){
     int[] swerveMotors = {11,12,21,22,31,32,41,42};
-    int[] otherMotors = {51,57,58,52,60,61,62,55,56};
+    int[] otherMotors = {51,57,52,60,61,62,55,56}; //does not include 58
 
     CurrentLimitsConfigs swerveConfig = new CurrentLimitsConfigs();
     swerveConfig.SupplyCurrentLimitEnable = true;
@@ -371,6 +378,10 @@ public class RobotContainer {
       // motor.optimizeBusUtilization();
       motor.close();
     }
+
+    TalonFX motor = new TalonFX(58);
+    motor.getConfigurator().apply(currentConfig.withStatorCurrentLimit(130));
+    motor.close();
 
   }
 

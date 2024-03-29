@@ -6,9 +6,11 @@ package frc.robot.subsystems;
 
 import java.util.Map;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -35,6 +37,9 @@ public class Angler extends SubsystemBase {
 
   DigitalInput input = Constants.ShooterSubsystem.LimitSwitchDIO;
 
+  boolean hasBeenClickedYet = false;
+
+
 
   public Angler() {
     // robot init
@@ -53,6 +58,7 @@ public class Angler extends SubsystemBase {
     slot0Configs.kP = 4.8;
     slot0Configs.kI = 0;
     slot0Configs.kD = 0.1;
+    
 
     // set Motion Magic settings
     var motionMagicConfigs = talonFXConfigs.MotionMagic;
@@ -102,8 +108,13 @@ public class Angler extends SubsystemBase {
       }
 */      
 
-       double pos = Constants.ShooterSubsystem.a*Math.pow(dist, 2) - Constants.ShooterSubsystem.b*dist + Constants.ShooterSubsystem.c; //desmos eq, check screenshots 2/21/2024 +++
-       motor.setControl(m_motmag.withPosition(pos));
+      if(DriverStation.getAlliance().get() == Alliance.Red){
+        dist -= 0.15;
+      }
+      
+      double pos = Constants.ShooterSubsystem.a*Math.pow(dist, 2) - Constants.ShooterSubsystem.b*dist + Constants.ShooterSubsystem.c; //desmos eq, check screenshots 2/21/2024 +++
+      motor.setControl(m_motmag.withPosition(pos));
+
     }
   }
 
@@ -178,6 +189,7 @@ public class Angler extends SubsystemBase {
   public void testSwitch(){
     if(!input.get()){
       motor.setPosition(0);
+      hasBeenClickedYet = true;
     }
   }
 
@@ -195,10 +207,19 @@ public class Angler extends SubsystemBase {
     return dashangler.getDouble(0);
   }
 
+  public void coastDownward(){
+    m_motmag.Slot = 0;
+    motor.setControl(m_motmag.withPosition(0.3).withFeedForward(0.7));//5
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("angler set", getVisionPosition());
     testSwitch();
+
+    // if(!Constants.ShooterSubsystem.isShooting && getPos() > 2 && hasBeenClickedYet){
+    //   coastDownward();
+    // }
   }
 }

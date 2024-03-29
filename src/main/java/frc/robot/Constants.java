@@ -138,6 +138,8 @@ public final class Constants {
     public static final class TrapperSubsystem{
         public static final int TRAPPER_VERTICAL_ID = 57;
         public static final int TRAPPER_SHOOTER_ID = 58;
+        
+        public static final double AmpPosition = 6.5;
 
     }
 

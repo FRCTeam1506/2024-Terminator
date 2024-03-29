@@ -174,7 +174,7 @@ public class RobotContainer {
     //manual angler
     j.dUp.whileTrue(new InstantCommand(() -> angler.anglerUp()));
     j.dDown.whileTrue(new InstantCommand(() -> angler.anglerDown()));
-    j.dPS.whileTrue(new InstantCommand(() -> angler.anglerZero()));
+    // j.dPS.whileTrue(new InstantCommand(() -> angler.anglerZero())); //limit switch replcaed this functionality
     j.dUp.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     j.dDown.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     
@@ -278,7 +278,7 @@ public class RobotContainer {
     j.oLeft.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
     j.oLeft.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
 
-    
+    j.dPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
   }
 
   private final intake intakecommand = new intake(intake);
@@ -295,6 +295,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.3));//1.2
     NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, 1.5));//1.2
     NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, 1.36));//1.2
+    NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, 1.6));//for use in GoFar auto
     NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));//1.2
     NamedCommands.registerCommand("JustIndexAndShoot", new justIndex(intake).alongWith(new runWheel(shooter), new justIntake(intake)));
 
@@ -306,7 +307,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler, 0.5));
     NamedCommands.registerCommand("DeliverAutoSoftly", new deliverAuto(shooter, intake, angler,0.15));
     NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
-    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.6));
+    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.85)); //5.6 //5.75
 
     NamedCommands.registerCommand("AutoNotePost_PTS", new setPosition(angler, 2.4));
     NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new setPosition(angler, 2.43));
@@ -380,7 +381,7 @@ public class RobotContainer {
     }
 
     TalonFX motor = new TalonFX(58);
-    motor.getConfigurator().apply(currentConfig.withStatorCurrentLimit(130));
+    motor.getConfigurator().apply(currentConfig.withStatorCurrentLimit(120));
     motor.close();
 
   }

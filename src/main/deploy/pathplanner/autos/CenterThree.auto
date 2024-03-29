@@ -169,7 +169,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PrepareToShoot"
+                  "name": "PrepareToShootMidStage"
                 }
               }
             ]
@@ -178,7 +178,7 @@
         {
           "type": "named",
           "data": {
-            "name": "JustIndexAndShoot"
+            "name": "IndexToShoot"
           }
         }
       ]

@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.ControlRequest;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.GravityTypeValue;
@@ -109,7 +110,7 @@ public class Angler extends SubsystemBase {
 */      
 
       if(DriverStation.getAlliance().get() == Alliance.Red){
-        dist -= 0.15;
+        dist -= 0.14; //need to shoot higher on red
       }
       
       double pos = Constants.ShooterSubsystem.a*Math.pow(dist, 2) - Constants.ShooterSubsystem.b*dist + Constants.ShooterSubsystem.c; //desmos eq, check screenshots 2/21/2024 +++
@@ -207,9 +208,16 @@ public class Angler extends SubsystemBase {
     return dashangler.getDouble(0);
   }
 
+
+  /**
+   * Method to make the angler motor coast downward to zero (so that it hits the limit switch) when not in use.
+   * This is so that it will zero the position when it hits the limit switch.
+   */
   public void coastDownward(){
-    m_motmag.Slot = 0;
-    motor.setControl(m_motmag.withPosition(0.3).withFeedForward(0.7));//5
+    if(getPos() > 1 && !Constants.ShooterSubsystem.isShooting){
+      m_motmag.Slot = 0;
+      motor.setControl(m_motmag.withPosition(0.3).withFeedForward(0.7));//5
+    }
   }
 
   @Override

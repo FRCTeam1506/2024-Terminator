@@ -207,7 +207,7 @@ public class RobotContainer {
     j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-    j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision, 3.5));
+    j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision, 4.5));
     j.oR3.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.oR3.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oR3.whileFalse(new InstantCommand(() -> angler.stopAngler()));

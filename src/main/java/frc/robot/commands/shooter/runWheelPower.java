@@ -7,28 +7,24 @@ package frc.robot.commands.shooter;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class shootToDeliverAuto extends Command {
+public class runWheelPower extends Command {
   /** Creates a new runWheel. */
   ShooterSubsystem shooter;
-  double speed;
-  boolean finished = false;
-  public shootToDeliverAuto(ShooterSubsystem shooter, double speed) {
+  double power;
+  public runWheelPower(ShooterSubsystem shooter, double power) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooter = shooter;
-    this.speed = speed;
+    this.power = power;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    shooter.shootSpeed(speed);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    shooter.shootSpeed(speed);
-    finished = true;
+    shooter.shootSpeed(power);
   }
 
   // Called once the command ends or is interrupted.
@@ -38,6 +34,6 @@ public class shootToDeliverAuto extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return finished;
+    return false;
   }
 }

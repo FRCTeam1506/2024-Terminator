@@ -11,6 +11,8 @@ import org.littletonrobotics.junction.networktables.NT4Publisher;
 import org.littletonrobotics.junction.wpilog.WPILOGReader;
 import org.littletonrobotics.junction.wpilog.WPILOGWriter;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.commands.PathfindingCommand;
 
 // import com.pathplanner.lib.commands.PathfindingCommand;
@@ -90,7 +92,10 @@ public class Robot extends LoggedRobot {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    Command autonInitCommand = new PathPlannerAuto("Forward").ignoringDisable(true);
+    autonInitCommand.schedule();
+  }
 
   @Override
   public void disabledPeriodic() {}

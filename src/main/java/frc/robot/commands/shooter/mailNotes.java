@@ -35,7 +35,7 @@ public class mailNotes extends SequentialCommandGroup {
     Constants.ShooterSubsystem.isShooting = true;
     addCommands(
       new setPosition(angler, anglerSetpoint).withTimeout(0.2),
-      new runWheel(shooter).withTimeout(0.2),
+      new runWheelPower(shooter, 0.67).withTimeout(0.2),
       //new stopShooter(shooter),
       // new stopAngler(angler),
       //new WaitCommand(0.5),

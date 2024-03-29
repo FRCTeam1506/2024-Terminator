@@ -56,7 +56,7 @@ public class ShooterSubsystem extends SubsystemBase {
     motor2.set(Constants.ShooterSubsystem.topSpeed);//.45
   }
 
-  public void shootToDeliverUSPS(double speed){
+  public void shootSpeed(double speed){
     motor1.set(speed);
     motor2.set(speed);
   }

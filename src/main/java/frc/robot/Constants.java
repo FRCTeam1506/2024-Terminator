@@ -121,6 +121,9 @@ public final class Constants {
         public static double b = 2.74293;
         public static double c = 8.213;
 
+        //this offset should be a negative number if you are shooting too low on red, vice versa
+        public static double redOffset = -0.14; 
+
         //TRAP VALUES
         // static double x = 0.73;
         // public static double topSpeed = 0.4*x;

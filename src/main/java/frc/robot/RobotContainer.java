@@ -143,7 +143,7 @@ public class RobotContainer {
     // j.dLeft.whileTrue(new align(vision)); //shooter alignment
     // j.dLeft.whileTrue(new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold)); //shooter alignment
 
-    j.dLeft.whileTrue(new anglePIDHolonomicBeta((vision.x), true)); //shooter alignment
+    j.dLeft.whileTrue(new align(vision)); //shooter alignment
     // j.dLeft.whileTrue(new align(vision));
     // j.dRight.whileTrue(new kevin2(vision)); //intake alignment
 

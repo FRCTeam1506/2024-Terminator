@@ -69,7 +69,7 @@ public class Trapper extends SubsystemBase {
 
   public void trapPosition(){
     m_motmag.Slot = 0;
-    vertical.setControl(m_motmag.withPosition(4.6)); //5.1 too high //4.85 too high
+    vertical.setControl(m_motmag.withPosition(18)); //5.1 too high //4.85 too high, 4.6
   }
 
   public void sendTrapperHome(){

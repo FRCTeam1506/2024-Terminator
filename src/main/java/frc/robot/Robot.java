@@ -93,8 +93,10 @@ public class Robot extends LoggedRobot {
 
   @Override
   public void disabledInit() {
-    Command autonInitCommand = new PathPlannerAuto("Forward").ignoringDisable(true);
+    Command autonInitCommand = new PathPlannerAuto("Forward").ignoringDisable(false);
     autonInitCommand.schedule();
+
+    PathfindingCommand.warmupCommand().schedule();
   }
 
   @Override

@@ -24,7 +24,8 @@ public class trampTheAmp extends SequentialCommandGroup {
       new trapperAmpPosition(trapper).withTimeout(0.3), 
       new ParallelDeadlineGroup(
         new WaitCommand(1),
-        new trapperAmpPosition(trapper), 
+        new trapperAmpPosition(trapper),
+        new WaitCommand(.5),
         new InstantCommand(() -> trapper.intake())),
       new WaitCommand(3)
     );

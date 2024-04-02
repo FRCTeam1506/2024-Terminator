@@ -295,24 +295,24 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
     NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.3));//1.2
-    NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, 1.5));//1.2
-    NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, 1.36));//1.2
-    NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, 1.6));//for use in GoFar auto
+    NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.17)));//1.2
+    NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.36)));//1.2
+    NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4)));//for use in GoFar auto
     NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));//1.2
     NamedCommands.registerCommand("JustIndexAndShoot", new justIndex(intake).alongWith(new runWheel(shooter), new justIntake(intake)));
 
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
-    NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, 2.5));
-    NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, 2.8));
-    NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, 1.6)); // og 0.725 //then 0.785 //then 0.885
-    NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, 4));
+    NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(2.94)));
+    NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(2.69)));
+    NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(4))); // og 0.725 //then 0.785 //then 0.885
+    NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(1.89)));
     NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler, 0.5));
     NamedCommands.registerCommand("DeliverAutoSoftly", new deliverAuto(shooter, intake, angler,0.15));
     NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
-    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, 5.85)); //5.6 //5.75
+    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(0.95))); //5.6 //5.75
 
-    NamedCommands.registerCommand("AutoNotePost_PTS", new setPosition(angler, 2.4));
-    NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new setPosition(angler, 2.43));
+    NamedCommands.registerCommand("AutoNotePost_PTS", new setPosition(angler, getAutoSetpoint(3.03)));
+    NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new setPosition(angler, getAutoSetpoint(3)));
     // NamedCommands.registerCommand("AutoNoteCenter_PTS", new prepareToShoot(angler, shooter, intake, 2.43));
 
 
@@ -419,13 +419,13 @@ public class RobotContainer {
   }
 
   public double getAutoSetpoint(double distance){
-    if(DriverStation.getAlliance().get() == Alliance.Red){
-      double d = distance + Constants.ShooterSubsystem.redOffset;
-      return angler.getEquationResult(d);
+    if(DriverStation.getAlliance().isPresent()){
+      if(DriverStation.getAlliance().get() == Alliance.Red){
+        double d = distance + Constants.ShooterSubsystem.redOffset;
+        return angler.getEquationResult(d);
+      }
     }
-    else{
-      return angler.getEquationResult(distance);
-    }
+    return angler.getEquationResult(distance);
   }
 
   public Command stopEverything(){
@@ -435,7 +435,7 @@ public class RobotContainer {
   public void periodic(){
     // Do this in either robot or subsystem init
      SmartDashboard.putData("Field", m_field);
-    j.operator.setRumble(RumbleType.kBothRumble, 0);
+    j.operator.setRumble(RumbleType.kBothRumble, 1);
     // Do this in either robot periodic or subsystem periodic ---- odometry
     m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that
     //m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());

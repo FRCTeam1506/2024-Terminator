@@ -43,7 +43,8 @@ public class align extends Command {
   public void initialize() {
     // initialX = Vision.x;
     initialX = LimelightHelpers.getTX("limelight");
-    initialYaw = TunerConstants.DriveTrain.getPigeon2().getAngle();
+    // initialYaw = TunerConstants.DriveTrain.getPigeon2().getAngle();
+    initialYaw = TunerConstants.DriveTrain.getState().Pose.getRotation().getDegrees();
     gyroGoal = initialYaw + initialX;
 
     System.out.println(initialX);
@@ -64,10 +65,10 @@ public class align extends Command {
   public void execute() {
     SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle();
 
-    // request.HeadingController.setPID(0.8, 0.0025, 0.0);
-    request.HeadingController.setPID(Constants.Swerve.driveP, Constants.Swerve.driveI, Constants.Swerve.driveD);
+    request.HeadingController.setPID(0.8, 0.0025, 0.0);
+    // request.HeadingController.setPID(Constants.Swerve.driveP, Constants.Swerve.driveI, Constants.Swerve.driveD);
     request.Deadband = 3;
-    TunerConstants.DriveTrain.setControl(request.withTargetDirection(Rotation2d.fromDegrees(initialX)));
+    TunerConstants.DriveTrain.setControl(request.withTargetDirection(Rotation2d.fromDegrees(gyroGoal % 360)));
     // TunerConstants.DriveTrain.setControl(request);
   }
 
@@ -84,6 +85,11 @@ public class align extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(Vision.x) < 3;
+    if(LimelightHelpers.getTV("limelight")){
+      if(Math.abs(LimelightHelpers.getTX("limelight")) < 3){
+        return true;
+      }
+    }
+    return false;//Math.abs(Vision.x) < 3;
   }
 }

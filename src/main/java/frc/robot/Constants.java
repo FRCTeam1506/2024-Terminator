@@ -116,7 +116,7 @@ public final class Constants {
         public static boolean isShooting = false;
         public static boolean autoAim = true;
 
-        //Shooting regression --- ax^2 + bx + c
+        //Shooting regression --- ax^2 - bx + c
         public static double a = 0.272199;
         public static double b = 2.74293;
         public static double c = 8.213;

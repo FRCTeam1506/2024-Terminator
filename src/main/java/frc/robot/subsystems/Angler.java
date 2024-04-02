@@ -110,13 +110,17 @@ public class Angler extends SubsystemBase {
 */      
 
       if(DriverStation.getAlliance().get() == Alliance.Red){
-        dist -= 0.14; //need to shoot higher on red
+        dist += Constants.ShooterSubsystem.redOffset; //need to shoot higher on red
       }
       
       double pos = Constants.ShooterSubsystem.a*Math.pow(dist, 2) - Constants.ShooterSubsystem.b*dist + Constants.ShooterSubsystem.c; //desmos eq, check screenshots 2/21/2024 +++
       motor.setControl(m_motmag.withPosition(pos));
 
     }
+  }
+
+  public double getEquationResult(double x){
+    return Constants.ShooterSubsystem.a * Math.pow(x, 2) - Constants.ShooterSubsystem.b*x + Constants.ShooterSubsystem.c;
   }
 
   public void setPositionByPose(){

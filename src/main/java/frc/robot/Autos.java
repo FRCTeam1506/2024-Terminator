@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.commands.autos.BackAndShoot;
 import frc.robot.commands.autos.CenterLine;
+import frc.robot.commands.autos.ConditionalAutoTest;
 import frc.robot.commands.intake.intake;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.generated.TunerConstants;
@@ -30,7 +31,7 @@ public class Autos {
     ShooterSubsystem shooter;
     Vision vision;
     Angler angler;
-    enum autos { Nothing, TwoMeters, GetThree, Central, GoFar, GoFarDos, MiddleNote, CenterThree, CenterThreeFast,MAD, ThreadTheNeedle }
+    enum autos { Nothing, TwoMeters, GetThree, Central, GoFar, GoFarDos, MiddleNote, CenterThree, CenterThreeFast,MAD, ThreadTheNeedle, test }
 
 
     public Autos(IntakeSubsystem intake, ShooterSubsystem shooter, Angler angler, Vision vision){
@@ -60,6 +61,8 @@ public class Autos {
         autoChooser.addOption("Center Three Fast", autos.CenterThreeFast); 
         autoChooser.addOption("Mutual Asset Denial", autos.MAD);
         autoChooser.addOption("Thread The Needle", autos.ThreadTheNeedle);
+
+        autoChooser.addOption("test", autos.test);
 
         SmartDashboard.putData(autoChooser);
     }
@@ -99,6 +102,9 @@ public class Autos {
 
             case ThreadTheNeedle:
             return new PathPlannerAuto("ThreadTheNeedle");
+
+            case test:
+            return new ConditionalAutoTest(shooter, intake, angler, vision, "GoFarOne", null, null, null);
                 
             default:
                 return new WaitCommand(15.0);

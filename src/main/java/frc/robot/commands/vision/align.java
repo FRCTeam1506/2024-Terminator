@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.CommandSwerveDrivetrain;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 import frc.robot.Constants.Swerve;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Vision;
@@ -40,13 +41,15 @@ public class align extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    initialX = Vision.x;
+    // initialX = Vision.x;
+    initialX = LimelightHelpers.getTX("limelight");
     initialYaw = TunerConstants.DriveTrain.getPigeon2().getAngle();
     gyroGoal = initialYaw + initialX;
 
     System.out.println(initialX);
     System.out.println(initialYaw);
     System.out.println(gyroGoal);
+    System.out.println(gyroGoal % 360);
 
     
     // Pose2d targetPose2d = new Pose2d(0,0,Rotation2d.fromDegrees(gyroGoal));
@@ -61,10 +64,10 @@ public class align extends Command {
   public void execute() {
     SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle();
 
-    request.HeadingController.setPID(0.8, 0.0025, 0.0);
-    // request.HeadingController.setPID(Constants.Swerve.driveP, Constants.Swerve.driveI, Constants.Swerve.driveD);
+    // request.HeadingController.setPID(0.8, 0.0025, 0.0);
+    request.HeadingController.setPID(Constants.Swerve.driveP, Constants.Swerve.driveI, Constants.Swerve.driveD);
     request.Deadband = 3;
-    TunerConstants.DriveTrain.setControl(request.withTargetDirection(Rotation2d.fromDegrees(gyroGoal)));
+    TunerConstants.DriveTrain.setControl(request.withTargetDirection(Rotation2d.fromDegrees(initialX)));
     // TunerConstants.DriveTrain.setControl(request);
   }
 

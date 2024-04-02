@@ -334,7 +334,7 @@ public class RobotContainer {
   public void dashboardStuff(){
     ShuffleboardTab tab = Shuffleboard.getTab("Robot");
     tab.addNumber("Pitch: ", () -> TunerConstants.DriveTrain.getPigeon2().getPitch().getValueAsDouble() );
-    tab.addNumber("Yaw: ", () -> TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble());
+    tab.addNumber("Yaw: ", () -> TunerConstants.DriveTrain.getPigeon2().getRotation2d().getDegrees());
     tab.addNumber("Roll: ", () -> TunerConstants.DriveTrain.getPigeon2().getRoll().getValueAsDouble());
     // tab.addNumber("Necessary Angle", () -> Math.toDegrees(Math.atan(66/(Vision.z * 39.37)))/5.14);
     tab.addNumber("Intake Torque Current", () -> intake.getTorqueCurrent());

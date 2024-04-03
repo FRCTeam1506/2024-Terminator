@@ -6,17 +6,14 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.TalonFXFeedbackDevice;
-import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
 
 public class Trapper extends SubsystemBase {
   /** Creates a new Angler. */
@@ -24,6 +21,8 @@ public class Trapper extends SubsystemBase {
   TalonFX shooter = new TalonFX(Constants.TrapperSubsystem.TRAPPER_SHOOTER_ID);
 
   final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
+
+  DigitalInput input = Constants.ShooterSubsystem.AnglerLimitSwitchDIO;
 
   public Trapper() {
     // robot init
@@ -74,7 +73,7 @@ public class Trapper extends SubsystemBase {
 
   public void sendTrapperHome(){
     m_motmag.Slot = 0;
-    vertical.setControl(m_motmag.withPosition(5.1));
+    vertical.setControl(m_motmag.withPosition(0));  //idk why this was at 5.1???
   }
 
 
@@ -114,8 +113,16 @@ public class Trapper extends SubsystemBase {
     return vertical.getPosition().getValueAsDouble();
   }
 
+  public void testSwitch(){
+    if(!input.get()){
+      vertical.setPosition(0);
+    }
+  }
+
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    testSwitch();
   }
 }

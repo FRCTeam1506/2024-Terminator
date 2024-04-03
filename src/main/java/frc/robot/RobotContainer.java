@@ -263,7 +263,7 @@ public class RobotContainer {
     //trapper amp command
     // j.oPS.whileTrue(new InstantCommand(() -> trapper.setAmpPosition()));
     j.oPS.whileTrue(new trampTheAmp(trapper, shooter, intake));
-    j.oPS.whileFalse(new InstantCommand(() -> trapper.sendTrapperHome()));
+    j.oPS.whileFalse(new sendTrapperHome(trapper).andThen(new InstantCommand(() -> trapper.stopTrapper())));
     j.oPS.whileFalse(new InstantCommand(() -> trapper.stopIntake()));
 
     //potential trap shooting code line 1 and 3

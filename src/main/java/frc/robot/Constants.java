@@ -104,7 +104,7 @@ public final class Constants {
         public static final int BottomID = 61;
         public static final int AnglerID = 60;
 
-        public static final DigitalInput LimitSwitchDIO = new DigitalInput(3) ;
+        public static final DigitalInput AnglerLimitSwitchDIO = new DigitalInput(3);
 
         public static final double anglerDefaultSpeed = 0.075; //david -- 0.05
 
@@ -139,6 +139,9 @@ public final class Constants {
     }
 
     public static final class TrapperSubsystem{
+
+        public static final DigitalInput LimitSwitchDIO = new DigitalInput(5); //change channel
+
         public static final int TRAPPER_VERTICAL_ID = 57;
         public static final int TRAPPER_SHOOTER_ID = 58;
         

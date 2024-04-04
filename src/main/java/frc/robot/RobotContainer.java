@@ -48,6 +48,7 @@ import frc.robot.subsystems.Vision;
 import frc.robot.commands.angler.setPosition;
 import frc.robot.commands.angler.stopAngler;
 import frc.robot.commands.autos.toggleGSA;
+import frc.robot.commands.autos.autoShooting.stopAnglerIntakeIndexerShooter;
 import frc.robot.commands.climber.climberUp;
 import frc.robot.commands.climber.individualControl;
 import frc.robot.commands.climber.toggleEndGame;
@@ -70,6 +71,7 @@ import frc.robot.commands.shooter.shootAmp;
 import frc.robot.commands.shooter.shootAuto;
 import frc.robot.commands.shooter.shootConditional;
 import frc.robot.commands.shooter.shootIdle;
+import frc.robot.commands.shooter.shootOLD;
 import frc.robot.commands.shooter.shootPower;
 import frc.robot.commands.shooter.shootShufflebaord;
 import frc.robot.commands.shooter.shootTrap;
@@ -189,7 +191,7 @@ public class RobotContainer {
 
     // j.dRight.whileTrue(new shootShufflebaord(shooter, intake, angler, vision)); //for testing regression
 
-    j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
+    j.dRight.whileTrue(new shoot(shooter, intake, angler, vision));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
@@ -275,7 +277,7 @@ public class RobotContainer {
     j.dX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-
+  
     //trapper in endgame
     j.oLeft.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
     j.oLeft.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
@@ -293,13 +295,14 @@ public class RobotContainer {
     NamedCommands.registerCommand("Watch Intake", new watchIntake(intake));
     NamedCommands.registerCommand("ZeroGyro", new zeroGyro().withTimeout(0.1));
 
-    NamedCommands.registerCommand("Shoot", new shoot(shooter, intake, angler, vision));
+    NamedCommands.registerCommand("Shoot", new shootOLD(shooter, intake, angler, vision));
     NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.3));//1.2
     NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.17)));//1.2
     NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.36)));//1.2
     NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4)));//for use in GoFar auto
-    NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));//1.2
+    NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).alongWith(new runWheel(shooter).withTimeout(0.05)).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));//1.2
     NamedCommands.registerCommand("JustIndexAndShoot", new justIndex(intake).alongWith(new runWheel(shooter), new justIntake(intake)));
+    NamedCommands.registerCommand("RunShooter", new runWheel(shooter).withTimeout(0.05));
 
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
     NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(2.94)));
@@ -313,6 +316,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("AutoNotePost_PTS", new setPosition(angler, getAutoSetpoint(3.03)));
     NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new setPosition(angler, getAutoSetpoint(3)));
+    NamedCommands.registerCommand("AmpAuto_PTS", new setPosition(angler, getAutoSetpoint(3.8)).alongWith(new intake(intake), new runWheel(shooter)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
     // NamedCommands.registerCommand("AutoNoteCenter_PTS", new prepareToShoot(angler, shooter, intake, 2.43));
 
 

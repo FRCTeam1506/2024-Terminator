@@ -42,10 +42,16 @@ public class align extends Command {
   @Override
   public void initialize() {
     // initialX = Vision.x;
+    finished = false;
+
     initialX = LimelightHelpers.getTX("limelight");
     // initialYaw = TunerConstants.DriveTrain.getPigeon2().getAngle();
     initialYaw = TunerConstants.DriveTrain.getState().Pose.getRotation().getDegrees();
-    gyroGoal = initialYaw + initialX;
+    gyroGoal = initialYaw - initialX;
+
+    if((Math.abs(TunerConstants.DriveTrain.getState().Pose.getRotation().getDegrees() - gyroGoal) < 2)){
+      finished = true;
+    }
 
     System.out.println(initialX);
     System.out.println(initialYaw);
@@ -65,10 +71,12 @@ public class align extends Command {
   public void execute() {
     SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle();
 
-    request.HeadingController.setPID(0.8, 0.0025, 0.0);
-    // request.HeadingController.setPID(Constants.Swerve.driveP, Constants.Swerve.driveI, Constants.Swerve.driveD);
+    // request.HeadingController.setPID(0.8, 0.0025, 0.0);
+    request.HeadingController.setPID(Constants.Swerve.driveP, Constants.Swerve.driveI, Constants.Swerve.driveD);
     request.Deadband = 3;
+    request.RotationalDeadband = 2;
     TunerConstants.DriveTrain.setControl(request.withTargetDirection(Rotation2d.fromDegrees(gyroGoal % 360)));
+    // finished = true;
     // TunerConstants.DriveTrain.setControl(request);
   }
 
@@ -85,11 +93,17 @@ public class align extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(LimelightHelpers.getTV("limelight")){
-      if(Math.abs(LimelightHelpers.getTX("limelight")) < 3){
-        return true;
-      }
-    }
-    return false;//Math.abs(Vision.x) < 3;
+    // if(LimelightHelpers.getTV("limelight")){
+    //   if(Math.abs(LimelightHelpers.getTX("limelight")) < 3){
+    //     return true;
+    //   }
+    // }
+    // return finished;//Math.abs(Vision.x) < 3;
+
+    // if(Math.abs(TunerConstants.DriveTrain.getState().Pose.getRotation().getDegrees() - gyroGoal) < 2){
+    //   return true;
+    // }
+    // return false;
+    return (Math.abs(TunerConstants.DriveTrain.getState().speeds.omegaRadiansPerSecond) < 0.2 && (Math.abs(TunerConstants.DriveTrain.getState().Pose.getRotation().getDegrees() - gyroGoal) < 2)) || finished;
   }
 }

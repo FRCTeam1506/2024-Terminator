@@ -4,6 +4,7 @@
   "holonomicMode": true,
   "pathFolders": [
     "Calibration",
+    "AmpSide",
     "CenterLine",
     "CenterThree",
     "Central",
@@ -11,8 +12,8 @@
     "GoFar",
     "MAD",
     "MiddleNote",
-    "ThreadTheNeedle",
-    "TeleOp Paths"
+    "TeleOp Paths",
+    "ThreadTheNeedle"
   ],
   "autoFolders": [
     "K1",

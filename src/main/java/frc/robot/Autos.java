@@ -104,7 +104,8 @@ public class Autos {
             return new PathPlannerAuto("ThreadTheNeedle");
 
             case test:
-            return new ConditionalAutoTest(shooter, intake, angler, vision, "GoFarOne", null, null, null);
+            // return new ConditionalAutoTest(shooter, intake, angler, vision, "GoFarOne", null, null, null);
+            return new PathPlannerAuto("AmpSide");
                 
             default:
                 return new WaitCommand(15.0);

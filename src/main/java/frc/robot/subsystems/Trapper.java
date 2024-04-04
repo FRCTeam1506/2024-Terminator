@@ -13,6 +13,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -22,6 +23,8 @@ public class Trapper extends SubsystemBase {
   /** Creates a new Angler. */
   TalonFX vertical = new TalonFX(Constants.TrapperSubsystem.TRAPPER_VERTICAL_ID);
   TalonFX shooter = new TalonFX(Constants.TrapperSubsystem.TRAPPER_SHOOTER_ID);
+  DigitalInput input = Constants.TrapperSubsystem.LimitSwitchDIO;
+  boolean hasBeenClickedYet = false;
 
   final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
 
@@ -97,6 +100,13 @@ public class Trapper extends SubsystemBase {
     vertical.stopMotor();
   }
 
+  public void testSwitch(){
+    if(!input.get()){
+      vertical.setPosition(0);
+      hasBeenClickedYet = true;
+    }
+  }
+
   public void stopIntake(){
     shooter.set(0);
     shooter.stopMotor();
@@ -117,5 +127,6 @@ public class Trapper extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    testSwitch();
   }
 }

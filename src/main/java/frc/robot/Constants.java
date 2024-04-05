@@ -122,7 +122,7 @@ public final class Constants {
         public static double c = 8.213;
 
         //this offset should be a negative number if you are shooting too low on red, vice versa
-        public static double redOffset = -0.14; 
+        public static double redOffset = -0.14; //-.14
 
         //TRAP VALUES
         // static double x = 0.73;
@@ -135,6 +135,7 @@ public final class Constants {
 
         
         public static double anglerSet = 5.1;//75 //5.13
+        public static double mailNotesPosition = 4.5;
 
     }
 

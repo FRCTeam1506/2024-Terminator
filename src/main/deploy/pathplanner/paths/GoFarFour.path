@@ -4,12 +4,12 @@
     {
       "anchor": {
         "x": 8.25,
-        "y": 2.8
+        "y": 2.48
       },
       "prevControl": null,
       "nextControl": {
         "x": 7.286546270667433,
-        "y": 1.7097821356840999
+        "y": 1.3897821356841
       },
       "isLocked": false,
       "linkedName": "GoFarThreeEnd"

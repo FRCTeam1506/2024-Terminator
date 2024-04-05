@@ -56,7 +56,7 @@ public class Autos {
         autoChooser.addOption("Central", autos.Central);
         autoChooser.addOption("Go far", autos.GoFar);
         autoChooser.addOption("Middle Note (+)", autos.MiddleNote);
-        autoChooser.addOption("Go far Dos", autos.GoFarDos);
+        // autoChooser.addOption("Go far Dos", autos.GoFarDos);
         autoChooser.addOption("Center Three", autos.CenterThree); 
         autoChooser.addOption("Center Three Fast", autos.CenterThreeFast); 
         autoChooser.addOption("Mutual Asset Denial", autos.MAD);

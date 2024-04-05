@@ -38,8 +38,8 @@ public class shoot extends SequentialCommandGroup {
     addCommands(
       new runWheel(shooter).withTimeout(0.05),
       new stop().withTimeout(0.05),
-      new ParallelCommandGroup(
-        new align(vision).withTimeout(2).andThen(new stop()),
+      new ParallelDeadlineGroup(
+        new align(vision).withTimeout(2),
         new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
         new runWheel(shooter).withTimeout(0.6)
       ).withTimeout(1.5),

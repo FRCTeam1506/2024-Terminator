@@ -75,6 +75,7 @@ import frc.robot.commands.shooter.shootOLD;
 import frc.robot.commands.shooter.shootPower;
 import frc.robot.commands.shooter.shootShufflebaord;
 import frc.robot.commands.shooter.shootTrap;
+import frc.robot.commands.shooter.PREmailNotes;
 import frc.robot.commands.shooter.ShootWhileMoving;
 import frc.robot.commands.shooter.stopShooter;
 import frc.robot.commands.shooter.toggleAim;
@@ -191,10 +192,17 @@ public class RobotContainer {
 
     // j.dRight.whileTrue(new shootShufflebaord(shooter, intake, angler, vision)); //for testing regression
 
-    j.dRight.whileTrue(new shoot(shooter, intake, angler, vision));
+    // j.dRight.whileTrue(new shoot(shooter, intake, angler, vision));
+    // j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    // j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    // j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+
+    j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    j.dRight.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+
 
     j.oTouchpad.whileTrue(new shootAmp(angler, shooter, intake));
     j.oTouchpad.whileFalse(new InstantCommand(() -> shooter.shootStop()));
@@ -212,15 +220,13 @@ public class RobotContainer {
     j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-    j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision, 4.5));
-    j.oR3.whileFalse(new InstantCommand(() -> shooter.shootStop()));
-    j.oR3.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
-    j.oR3.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    j.oR3.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
+    j.oR3.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
 
-    // j.oB.whileTrue(new mailNotes(shooter, intake, angler, vision));
-    // j.oB.whileFalse(new InstantCommand(() -> shooter.shootStop()));
-    // j.oB.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
-    // j.oB.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    // j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
+    // j.oR3.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    // j.oR3.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    // j.oR3.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
 
 
@@ -312,7 +318,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler, 0.5));
     NamedCommands.registerCommand("DeliverAutoSoftly", new deliverAuto(shooter, intake, angler,0.15));
     NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
-    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(0.95))); //5.6 //5.75
+    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(0.88))); //5.6 //5.75 //0.95 b4 states
 
     NamedCommands.registerCommand("AutoNotePost_PTS", new setPosition(angler, getAutoSetpoint(3.03)));
     NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new setPosition(angler, getAutoSetpoint(3)));
@@ -439,7 +445,7 @@ public class RobotContainer {
   public void periodic(){
     // Do this in either robot or subsystem init
      SmartDashboard.putData("Field", m_field);
-    j.operator.setRumble(RumbleType.kBothRumble, 1);
+    j.operator.setRumble(RumbleType.kRightRumble, 1);
     // Do this in either robot periodic or subsystem periodic ---- odometry
     m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that
     //m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());

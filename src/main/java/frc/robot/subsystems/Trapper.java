@@ -14,6 +14,8 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -25,6 +27,7 @@ public class Trapper extends SubsystemBase {
   TalonFX shooter = new TalonFX(Constants.TrapperSubsystem.TRAPPER_SHOOTER_ID);
   DigitalInput input = Constants.TrapperSubsystem.LimitSwitchDIO;
   boolean hasBeenClickedYet = false;
+  public boolean isClicked = false;
 
   final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
 
@@ -77,7 +80,7 @@ public class Trapper extends SubsystemBase {
 
   public void sendTrapperHome(){
     m_motmag.Slot = 0;
-    vertical.setControl(m_motmag.withPosition(5.1));
+    vertical.setControl(m_motmag.withPosition(0)); //5.1
   }
 
 
@@ -103,7 +106,11 @@ public class Trapper extends SubsystemBase {
   public void testSwitch(){
     if(!input.get()){
       vertical.setPosition(0);
+      isClicked = true;
       hasBeenClickedYet = true;
+    }
+    else{
+      isClicked = false;
     }
   }
 
@@ -117,7 +124,7 @@ public class Trapper extends SubsystemBase {
   }
 
   public void setAmpPosition(){
-    setPosition(Constants.TrapperSubsystem.AmpPosition);
+    setPosition(9 + 1/3); //used to be 8.3 b4 we fixed limit switch
   }
 
   public double getPos(){

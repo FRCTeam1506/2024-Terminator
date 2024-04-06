@@ -62,6 +62,7 @@ public class Candle extends SubsystemBase {
   public void strobeRed(){
     stopGSA();
     StrobeAnimation strobe = new StrobeAnimation(red[0], red[1], red[2]);
+    strobe.setSpeed(1);
     candle.animate(strobe);
   }
 

@@ -73,11 +73,11 @@ public class Climber extends SubsystemBase {
 
   public void down(){
     double avgPos = (left.getPosition().getValueAsDouble() + right.getPosition().getValueAsDouble())/2;
-    if(avgPos > 25){
+    if(avgPos > 7){ //old position 25
       left.set(-Constants.ClimberSubsystem.NEW_DEFAULT_SPEED);
       right.set(-Constants.ClimberSubsystem.NEW_DEFAULT_SPEED);
     }
-    else if(avgPos < 25){
+    else if(avgPos < 7){
       left.set(-Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
       right.set(-Constants.ClimberSubsystem.SLOW_DEFAULT_SPEED);
     }

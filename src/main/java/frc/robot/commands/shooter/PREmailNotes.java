@@ -36,7 +36,7 @@ public class PREmailNotes extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new setPosition(angler, anglerSetpoint),
-        new runWheelPower(shooter, 0.75)
+        new runWheelPower(shooter, 0.65)
       ).withTimeout(0.5)
     );
     Constants.ShooterSubsystem.isShooting = false;

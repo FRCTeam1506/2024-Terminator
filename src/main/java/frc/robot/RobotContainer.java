@@ -28,6 +28,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
@@ -92,6 +93,7 @@ public class RobotContainer {
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final PS4Controller driver = new PS4Controller(0); // My joystick
   private final PS4Controller operator = new PS4Controller(1); // My joystick
+  // private final XboxController operatorRumble = new XboxController(2);
 
   //Subsystems!!!!
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
@@ -353,6 +355,7 @@ public class RobotContainer {
     tab.addBoolean("AutoAim", () -> Constants.ShooterSubsystem.autoAim);
     tab.addBoolean("Auto Intake", () -> !Constants.IntakeSubsystem.manualIntake);
     tab.addBoolean("End Game", () -> Constants.ClimberSubsystem.endGame);
+    tab.addBoolean("Tramper Limit Switch", () -> trapper.isClicked);
     //shuffleboard for the angler position with a slider
     
   }
@@ -445,7 +448,7 @@ public class RobotContainer {
   public void periodic(){
     // Do this in either robot or subsystem init
      SmartDashboard.putData("Field", m_field);
-    j.operator.setRumble(RumbleType.kRightRumble, 1);
+    // operatorRumble.setRumble(RumbleType.kRightRumble, 1);
     // Do this in either robot periodic or subsystem periodic ---- odometry
     m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that
     //m_field.setRobotPose(Vision.estimator.getEstimatedPosition().getX(), Vision.estimator.getEstimatedPosition().getY(), Vision.estimator.getEstimatedPosition().getRotation());

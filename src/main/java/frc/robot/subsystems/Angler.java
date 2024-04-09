@@ -230,6 +230,20 @@ public class Angler extends SubsystemBase {
     // SmartDashboard.putNumber("angler set", getVisionPosition());
     testSwitch();
 
+    if(Vision.target > 0){
+      double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+      double zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+      double dist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
+
+      if(getEquationResult(dist) < 7 && getEquationResult(dist) > 0){
+        setPositionManual(getEquationResult(dist));
+      }
+    }      
+    else{
+      setPositionManual(0);
+    }
+
+
     // if(!Constants.ShooterSubsystem.isShooting && getPos() > 2 && hasBeenClickedYet){
     //   coastDownward();
     // }

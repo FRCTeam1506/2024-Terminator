@@ -150,8 +150,8 @@ public class RobotContainer {
     // j.dLeft.whileTrue(new align(vision)); //shooter alignment
     // j.dLeft.whileTrue(new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold)); //shooter alignment
 
-    j.dLeft.whileTrue(new align(vision)); //shooter alignment
-    // j.dLeft.whileTrue(new align(vision));
+    // j.dLeft.whileTrue(new align(vision)); //shooter alignment
+    j.dLeft.whileTrue(new vision2(vision));
     // j.dRight.whileTrue(new kevin2(vision)); //intake alignment
 
     //ACTUAL CONTROLS!!!
@@ -194,16 +194,16 @@ public class RobotContainer {
 
     // j.dRight.whileTrue(new shootShufflebaord(shooter, intake, angler, vision)); //for testing regression
 
-    // j.dRight.whileTrue(new shoot(shooter, intake, angler, vision));
-    // j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
-    // j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
-    // j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
-
-    j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
+    j.dRight.whileTrue(new shoot(shooter, intake, angler, vision));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
-    j.dRight.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+
+    // j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
+    // j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
+    // j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
+    // j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
+    // j.dRight.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
 
 
     j.oTouchpad.whileTrue(new shootAmp(angler, shooter, intake));

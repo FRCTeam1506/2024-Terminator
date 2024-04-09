@@ -8,13 +8,11 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest.SwerveControlRequestPar
 import com.ctre.phoenix6.hardware.Pigeon2;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PIDSubsystem;
 import frc.robot.CommandSwerveDrivetrain;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
@@ -22,7 +20,7 @@ import frc.robot.Constants.Swerve;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.Vision;
 
-public class align extends Command {
+public class alignPID_ONLY extends Command {
   /** Creates a new vision2. */
   Vision vision;
   // SwerveRequest.FieldCentricFacingAngle request = new SwerveRequest.FieldCentricFacingAngle();
@@ -33,11 +31,9 @@ public class align extends Command {
   double initialX, initialArea, initialYaw, gyroGoal;
 
   SwerveRequest.ApplyChassisSpeeds request2 = new SwerveRequest.ApplyChassisSpeeds();
-  PIDController controller = new PIDController(Constants.Swerve.driveP, Constants.Swerve.driveI, Constants.Swerve.driveD);
-  // PIDSubsystem
 
 
-  public align(Vision vision) {
+  public alignPID_ONLY(Vision vision) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.vision = vision;
   }

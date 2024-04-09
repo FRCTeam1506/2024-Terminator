@@ -7,8 +7,10 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
+import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.StrobeAnimation;
@@ -61,9 +63,11 @@ public class Candle extends SubsystemBase {
 
   public void strobeRed(){
     stopGSA();
-    StrobeAnimation strobe = new StrobeAnimation(red[0], red[1], red[2]);
-    strobe.setSpeed(1);
-    candle.animate(strobe);
+    // StrobeAnimation strobe = new StrobeAnimation(red[0], red[1], red[2]);
+    // strobe.setSpeed(1);
+    ColorFlowAnimation flow = new ColorFlowAnimation(red[0], red[1], red[2]);
+    flow.setSpeed(5);
+    candle.animate(flow);
   }
 
   public void gsa(){

@@ -25,6 +25,7 @@ import com.fasterxml.jackson.databind.util.Named;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.PS4Controller;
@@ -71,6 +72,7 @@ import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
 import frc.robot.commands.shooter.shootAuto;
 import frc.robot.commands.shooter.shootConditional;
+import frc.robot.commands.shooter.shootFast;
 import frc.robot.commands.shooter.shootIdle;
 import frc.robot.commands.shooter.shootOLD;
 import frc.robot.commands.shooter.shootPower;
@@ -150,8 +152,9 @@ public class RobotContainer {
     // j.dLeft.whileTrue(new align(vision)); //shooter alignment
     // j.dLeft.whileTrue(new vision2(vision).until(() -> vision.x > -Constants.Limelight.shooterThreshold && vision.x < Constants.Limelight.shooterThreshold)); //shooter alignment
 
-    // j.dLeft.whileTrue(new align(vision)); //shooter alignment
-    j.dLeft.whileTrue(new vision2(vision));
+    j.dLeft.whileTrue(new alignPID(vision)); //shooter alignment
+    j.dLeft.whileTrue(new RepeatCommand(new alignjj(vision)));
+    // j.dLeft.whileTrue(new RepeatCommand(new InstantCommand(() -> TunerConstants.DriveTrain.setControl(new SwerveRequest.ApplyChassisSpeeds().withSpeeds(new ChassisSpeeds(0, 0, 1))))));
     // j.dRight.whileTrue(new kevin2(vision)); //intake alignment
 
     //ACTUAL CONTROLS!!!
@@ -184,7 +187,7 @@ public class RobotContainer {
     // j.dPS.whileTrue(new InstantCommand(() -> angler.anglerZero())); //limit switch replcaed this functionality
     j.dUp.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     j.dDown.whileFalse(new InstantCommand(() -> angler.stopAngler()));
-    
+
     //auto shooting
     j.oRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
     j.oRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
@@ -194,7 +197,7 @@ public class RobotContainer {
 
     // j.dRight.whileTrue(new shootShufflebaord(shooter, intake, angler, vision)); //for testing regression
 
-    j.dRight.whileTrue(new shoot(shooter, intake, angler, vision));
+    j.dRight.whileTrue(new shootFast(shooter, intake, angler, vision));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
@@ -356,7 +359,13 @@ public class RobotContainer {
     tab.addBoolean("Auto Intake", () -> !Constants.IntakeSubsystem.manualIntake);
     tab.addBoolean("End Game", () -> Constants.ClimberSubsystem.endGame);
     tab.addBoolean("Tramper Limit Switch", () -> trapper.isClicked);
+    tab.addBoolean("Angler within setpoint", () -> angler.anglerReadyToShoot());
     //shuffleboard for the angler position with a slider
+
+    tab.addString("Angler Motor Control Mode", () -> angler.getAnglerMotorControlValue());
+    tab.addDouble("PID based angling", () -> pid_command_test.speedOutput);
+    tab.addDouble("Angler motor slot", () -> angler.getAnglerSlot());
+
     
   }
 

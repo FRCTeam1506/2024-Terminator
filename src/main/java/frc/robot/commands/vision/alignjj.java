@@ -20,8 +20,9 @@ public class alignjj extends Command {
   /** Creates a new alignjj. */
   Vision vision;
   double angle;
+  double initialX, initialYaw, gyroGoal;
 
-  SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
+  SwerveRequest.ApplyChassisSpeeds request;
 
   private static final SplineInterpolator SPLINE_INTERPOLATOR = new SplineInterpolator();
 
@@ -39,38 +40,40 @@ public class alignjj extends Command {
  * 
  */
 
-  public alignjj(Vision vision, double angle) {
+  public alignjj(Vision vision) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.vision = vision;
-    this.angle = angle;
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    request = new SwerveRequest.ApplyChassisSpeeds();
 
+    initialX = Vision.x;
+    initialYaw = TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble();
+    gyroGoal = initialYaw - initialX;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double currentAngle = TunerConstants.DriveTrain.getPigeon2().getAngle();
-    double rotateOutput = m_rotatePIDController.calculate(currentAngle, currentAngle + angle);
+    double currentAngle = TunerConstants.DriveTrain.getPigeon2().getYaw().getValueAsDouble();
+    double rotateOutput = m_rotatePIDController.calculate(currentAngle, gyroGoal);
     System.out.println(rotateOutput);
 
-    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, 3);
+    ChassisSpeeds speeds = new ChassisSpeeds(0, 0, rotateOutput);
     
-    // TunerConstants.DriveTrain.applyRequest(() -> request.withSpeeds(speeds));
-    // TunerConstants.DriveTrain.runVelocity(speeds);
+    TunerConstants.DriveTrain.applyRequest(() -> request.withSpeeds(speeds));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
 
-    // ChassisSpeeds stop = new ChassisSpeeds(0,0, 0);
-    // SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
-    // TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));
+    ChassisSpeeds stop = new ChassisSpeeds(0,0, 0);
+    SwerveRequest.ApplyChassisSpeeds request = new SwerveRequest.ApplyChassisSpeeds();
+    TunerConstants.DriveTrain.setControl(request.withSpeeds(stop));
 
   }
 

@@ -12,6 +12,7 @@ import com.ctre.phoenix.led.CANdle;
 import com.ctre.phoenix.led.CANdleConfiguration;
 import com.ctre.phoenix.led.ColorFlowAnimation;
 import com.ctre.phoenix.led.RainbowAnimation;
+import com.ctre.phoenix.led.SingleFadeAnimation;
 import com.ctre.phoenix.led.CANdle.LEDStripType;
 import com.ctre.phoenix.led.StrobeAnimation;
 
@@ -70,6 +71,10 @@ public class Candle extends SubsystemBase {
     candle.animate(flow);
   }
 
+  public void greenBlinkAnimation(){
+    candle.animate(new SingleFadeAnimation(1, 50, 10));
+  }
+
   public void gsa(){
     RainbowAnimation rainbowAnim = new RainbowAnimation(1, 0.5, 64);
     candle.animate(rainbowAnim);
@@ -89,9 +94,14 @@ public class Candle extends SubsystemBase {
     else{
       if(!Constants.IntakeSubsystem.irNine.get()){
         if(Vision.shooterID == 4 || Vision.shooterID == 7){
-          green();
+          if(Math.abs(Vision.x) < 3.5){
+            greenBlinkAnimation();
+          }
+          else{
+            green();
+          }
         }else{
-          orange();
+          orange();//blue
         }
       }
       else{

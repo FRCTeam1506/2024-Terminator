@@ -9,8 +9,10 @@ import java.util.Map;
 import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.ControlRequest;
+import com.ctre.phoenix6.controls.MotionMagicDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.ControlModeValue;
 import com.ctre.phoenix6.signals.GravityTypeValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -30,6 +32,7 @@ public class Angler extends SubsystemBase {
   /** Creates a new Angler. */
   TalonFX motor = new TalonFX(Constants.ShooterSubsystem.AnglerID);
   final MotionMagicVoltage m_motmag = new MotionMagicVoltage(0);
+  final MotionMagicDutyCycle m_motmag_2 = new MotionMagicDutyCycle(0);
 
   public GenericEntry dashangler = Shuffleboard.getTab("Robot").add("setangler", 6)
     .withWidget(BuiltInWidgets.kNumberSlider)
@@ -39,6 +42,8 @@ public class Angler extends SubsystemBase {
   DigitalInput input = Constants.ShooterSubsystem.LimitSwitchDIO;
 
   boolean hasBeenClickedYet = false;
+
+  public static boolean anglerInUse = false;
 
 
 
@@ -59,6 +64,16 @@ public class Angler extends SubsystemBase {
     slot0Configs.kP = 4.8;
     slot0Configs.kI = 0;
     slot0Configs.kD = 0.1;
+
+    // set slot 1 gains to same as slot 0
+    var slot1Configs = talonFXConfigs.Slot1;
+    slot1Configs.kS = 0.24; // add 0.24 V to overcome friction
+    slot1Configs.kV = 0.2; // apply 12 V for a target velocity of 100 rps  //originally 0.12
+    // PID runs on position
+    slot1Configs.kP = 4.8;
+    slot1Configs.kI = 0;
+    slot1Configs.kD = 0.1;
+
     
 
     // set Motion Magic settings
@@ -74,6 +89,7 @@ public class Angler extends SubsystemBase {
   }
 
   public void setPosition(){
+    anglerInUse = true;
     m_motmag.Slot = 0;
 
     double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
@@ -117,6 +133,7 @@ public class Angler extends SubsystemBase {
       motor.setControl(m_motmag.withPosition(pos));
 
     }
+    anglerInUse = false;
   }
 
   public double getEquationResult(double x){
@@ -132,6 +149,9 @@ public class Angler extends SubsystemBase {
     motor.setControl(m_motmag.withPosition(pos));
   }
 
+  /**
+   * Angler function only used in auto to shoot while moving in TTN auto
+   */
   public void anglePurposefullyLow(){
     m_motmag.Slot = 0;
     double reduce = 0.85;
@@ -148,41 +168,63 @@ public class Angler extends SubsystemBase {
 
 
   public void setPositionManual(double position){
+    anglerInUse = true;
     m_motmag.Slot = 0;
+    motor.setControl(m_motmag.withPosition(position));
+    anglerInUse = false;
+  }
+
+  public void setPositionManualBETA(double position){
+    m_motmag.Slot = 1;
     motor.setControl(m_motmag.withPosition(position));
   }
 
+  /**
+   * Put the anlger in vertical position when climbing
+   */
   public void goVertical(){
+    anglerInUse = true;
     m_motmag.Slot = 0;
     double vertPos = 12.5;
     motor.setControl(m_motmag.withPosition(vertPos));
+    anglerInUse = false;
   }
 
+  /**
+   * Not in use
+   */
   public void setPositionIncrement(){
     m_motmag.Slot = 0;
     motor.setControl(m_motmag.withPosition(new ShooterSubsystem().getIncrement()));
   }
 
   public void anglerUp(){
+    anglerInUse = true;
     motor.set(0.3);
   }
 
   public void anglerDown(){
+    anglerInUse = true;
     motor.set(-0.3);
   }
 
   public void ampPosition(){
+    anglerInUse = true;
     m_motmag.Slot = 0;
-    motor.setControl(m_motmag.withPosition(4.8));
+    motor.setControl(m_motmag.withPosition(5.05)); //4.8
+    anglerInUse = false;
   }
 
   public void trapPosition(){
+    anglerInUse = true;
     m_motmag.Slot = 0;
     motor.setControl(m_motmag.withPosition(Constants.ShooterSubsystem.anglerSet));//5
+    anglerInUse = false;
   }
 
 
   public void stopAngler(){
+    anglerInUse = false;
     motor.set(0);
     motor.stopMotor();
   }
@@ -215,7 +257,7 @@ public class Angler extends SubsystemBase {
 
   /**
    * Method to make the angler motor coast downward to zero (so that it hits the limit switch) when not in use.
-   * This is so that it will zero the position when it hits the limit switch.
+   * This is so that it will zero the position when it hits the limit switch. ---- CURRENTLY UNUSED
    */
   public void coastDownward(){
     if(getPos() > 1 && !Constants.ShooterSubsystem.isShooting){
@@ -224,26 +266,61 @@ public class Angler extends SubsystemBase {
     }
   }
 
+  public String getAnglerMotorControlValue(){
+    return motor.getControlMode().toString();
+  }
+
+  public double getAnglerSlot(){
+    return motor.getClosedLoopSlot().getValue();
+  }
+
+  /**
+   * Note that this does not return the variable of the same name
+   * @return boolean of whether the angler is being used by shooting/something else that is not the autotarget function
+   */
+  public boolean isAnglerBeingUsed(){
+    return !motor.getControlMode().toString().equals("NeutralOut ");
+  }
+
+  public boolean anglerReadyToShoot(){
+    double position = motor.getPosition().getValueAsDouble();
+
+    double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+    double zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+    double dist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
+    double setpoint = getEquationResult(dist);
+
+    double difference = Math.abs(position - setpoint) / ((position + setpoint) / 2);
+
+    return Math.abs(difference) < 0.05; //plus/minus 3 percent threshold
+
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     // SmartDashboard.putNumber("angler set", getVisionPosition());
     testSwitch();
 
-    if(Vision.target > 0){
-      double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
-      double zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
-      double dist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
+    /*
 
-      if(getEquationResult(dist) < 7 && getEquationResult(dist) > 0){
-        setPositionManual(getEquationResult(dist));
+    if((isAnglerBeingUsed() && getAnglerSlot() == 1) || !isAnglerBeingUsed()){
+
+      if(Vision.target > 0){
+        double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+        double zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+        double dist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
+
+        if(getEquationResult(dist) < 7 && getEquationResult(dist) > 0){
+          setPositionManualBETA(getEquationResult(dist));
+        }
+      }      
+      else{
+        setPositionManualBETA(0);
       }
-    }      
-    else{
-      setPositionManual(0);
+
     }
-
-
+    */
     // if(!Constants.ShooterSubsystem.isShooting && getPos() > 2 && hasBeenClickedYet){
     //   coastDownward();
     // }

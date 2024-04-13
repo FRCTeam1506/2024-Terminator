@@ -101,7 +101,7 @@ public class RobotContainer {
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
   public final Vision vision = new Vision(drivetrain);
   public final frc.robot.subsystems.IntakeSubsystem intake = new frc.robot.subsystems.IntakeSubsystem();
-  public final frc.robot.subsystems.ShooterSubsystem shooter = new frc.robot.subsystems.ShooterSubsystem();
+  public final frc.robot.subsystems.ShooterSubsystem shooter = Constants.TheShooterSubsystem;
   public final Angler angler = new Angler();
   public final Autos autos = new Autos(intake, shooter, angler, vision);
   public final Climber climber = new Climber();

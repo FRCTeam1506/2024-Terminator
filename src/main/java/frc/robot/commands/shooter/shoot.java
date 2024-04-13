@@ -41,7 +41,7 @@ public class shoot extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new align(vision).withTimeout(2).andThen(new stop()),
         new angle(angler),//.until(() -> angler.getPos() > angler.getVisionPosition()),
-        new runWheel(shooter).withTimeout(0.6)
+        new runWheel(shooter).until(() -> shooter.shooterUpToSpeed()).withTimeout(0.6)
       ).withTimeout(1.5),
       // new stop().withTimeout(0.1),
       // new runWheelConditional(shooter).withTimeout(2),
@@ -52,7 +52,7 @@ public class shoot extends SequentialCommandGroup {
       new ParallelCommandGroup(
         new stopIndexer(intake),
         new stopShooter(shooter)
-      ).withTimeout(0.1)
+      ).withTimeout(0.05)
     );
     Constants.ShooterSubsystem.isShooting = false;
   }

@@ -95,6 +95,10 @@ public class ShooterSubsystem extends SubsystemBase {
     return (motor1.getVelocity().getValueAsDouble() + motor2.getVelocity().getValueAsDouble())/2;
   }
 
+  public boolean shooterUpToSpeed(){
+    return getAvgShooterSpeed() > 0.8;
+  }
+
 
   @Override
   public void periodic() {

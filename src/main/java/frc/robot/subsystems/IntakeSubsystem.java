@@ -71,8 +71,9 @@ public class IntakeSubsystem extends SubsystemBase {
     if(!Constants.IntakeSubsystem.manualIntake){
 
       if(!irNine.get()){
-            Constants.IntakeSubsystem.ring = true;
-            stopIntake();
+        Constants.IntakeSubsystem.ring = true;
+        stopIntake();
+        Constants.TheShooterSubsystem.shootMax();
       }
       else{
         motor.set(Constants.IntakeSubsystem.DEFAULT_INTAKE_SPEED);

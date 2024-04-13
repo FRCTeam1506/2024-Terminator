@@ -61,13 +61,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MAD2beta"
+                  "pathName": "NewMAD2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "DeliverAutoSoftlyWithoutTimeout"
                 }
               }
             ]
@@ -80,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "MAD3"
+                  "pathName": "NewMAD3"
                 }
               },
               {

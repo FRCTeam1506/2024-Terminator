@@ -64,6 +64,7 @@ import frc.robot.commands.intake.toggleManualIntake;
 import frc.robot.commands.intake.watchIntake;
 import frc.robot.commands.shooter.angle;
 import frc.robot.commands.shooter.deliverAuto;
+import frc.robot.commands.shooter.deliverAutoWithoutTimeout;
 import frc.robot.commands.shooter.mailNotes;
 import frc.robot.commands.shooter.prepareToShoot;
 import frc.robot.commands.shooter.runWheel;
@@ -319,6 +320,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(1.89)));
     NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler, 0.5));
     NamedCommands.registerCommand("DeliverAutoSoftly", new deliverAuto(shooter, intake, angler,0.15));
+    NamedCommands.registerCommand("DeliverAutoSoftlyWithoutTimeout", new deliverAutoWithoutTimeout(shooter, intake, angler,0.15));
     NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
     NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(0.88))); //5.6 //5.75 //0.95 b4 states
 

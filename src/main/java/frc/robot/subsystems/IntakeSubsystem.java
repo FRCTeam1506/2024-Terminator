@@ -59,6 +59,15 @@ public class IntakeSubsystem extends SubsystemBase {
 
   }
 
+  public void justIntakeFast(){
+    motor.set(Constants.IntakeSubsystem.DEFAULT_INTAKE_SPEED);
+    indexer.set(0.6);
+    // indexer.set(maxVelocity);
+    System.out.println("Intake FAST");
+
+  }
+
+
   public void intake() {
 
     //by motor torque

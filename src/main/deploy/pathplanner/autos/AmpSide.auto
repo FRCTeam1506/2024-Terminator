@@ -130,7 +130,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "TTN5"
+                  "pathName": "AmpSide4"
                 }
               },
               {
@@ -149,7 +149,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "TTN6"
+                  "pathName": "AmpSide5"
                 }
               },
               {

@@ -124,7 +124,7 @@ public class Trapper extends SubsystemBase {
   }
 
   public void setAmpPosition(){
-    setPosition(9 + 1/3); //used to be 8.3 b4 we fixed limit switch
+    setPosition(11); //used to be 8.3 b4 we fixed limit switch //9.33 too low
   }
 
   public double getPos(){

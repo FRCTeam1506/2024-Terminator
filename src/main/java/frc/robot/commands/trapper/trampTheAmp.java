@@ -5,6 +5,7 @@
 package frc.robot.commands.trapper;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -21,13 +22,10 @@ public class trampTheAmp extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      new trapperAmpPosition(trapper).withTimeout(0.3), 
-      new ParallelDeadlineGroup(
-        new WaitCommand(1),
+      new trapperAmpPosition(trapper).withTimeout(0.6), 
+      new ParallelCommandGroup(
         new trapperAmpPosition(trapper),
-        new WaitCommand(.5),
-        new InstantCommand(() -> trapper.intake())),
-      new WaitCommand(3)
+        new InstantCommand(() -> trapper.intake()))
     );
   }
 }

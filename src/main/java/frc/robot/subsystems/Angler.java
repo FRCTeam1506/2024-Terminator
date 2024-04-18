@@ -212,6 +212,21 @@ public class Angler extends SubsystemBase {
     return dashangler.getDouble(0);
   }
 
+  public boolean anglerReadyToShoot(){
+    double position = motor.getPosition().getValueAsDouble();
+
+    double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
+    double zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
+    double dist = Math.sqrt(Math.pow(Math.abs(xshot), 2) + Math.pow(Math.abs(zshot), 2)); //pythagorean theorem
+    double setpoint = getEquationResult(dist);
+
+    double difference = Math.abs(position - setpoint) / ((position + setpoint) / 2);
+
+    return Math.abs(difference) < 0.05; //plus/minus 3 percent threshold
+
+  }
+
+
 
   /**
    * Method to make the angler motor coast downward to zero (so that it hits the limit switch) when not in use.
@@ -233,5 +248,12 @@ public class Angler extends SubsystemBase {
     // if(!Constants.ShooterSubsystem.isShooting && getPos() > 2 && hasBeenClickedYet){
     //   coastDownward();
     // }
+
+    if(DriverStation.isDisabled()){
+      motor.setNeutralMode(NeutralModeValue.Coast);
+    }
+    else{
+      motor.setNeutralMode(NeutralModeValue.Brake);
+    }
   }
 }

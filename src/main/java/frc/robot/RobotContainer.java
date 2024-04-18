@@ -72,6 +72,7 @@ import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
 import frc.robot.commands.shooter.shootAuto;
 import frc.robot.commands.shooter.shootConditional;
+import frc.robot.commands.shooter.shootFast;
 import frc.robot.commands.shooter.shootIdle;
 import frc.robot.commands.shooter.shootOLD;
 import frc.robot.commands.shooter.shootPower;
@@ -200,7 +201,7 @@ public class RobotContainer {
     // j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     // j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-    j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
+    j.dRight.whileTrue(new shootFast(shooter, intake, angler, vision));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));

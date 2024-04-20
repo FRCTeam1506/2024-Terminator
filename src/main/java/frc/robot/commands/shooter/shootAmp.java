@@ -28,9 +28,9 @@ public class shootAmp extends SequentialCommandGroup {
         new ampPosition(angler),
         new shootAmpPower(shooter)
       ).withTimeout(0.45),
-      new indexToShoot(intake).withTimeout(0.2),
-      new stopShooter(shooter).withTimeout(0.04),
-      new stopIndexer(intake).withTimeout(0.04)
+      new indexToShoot(intake).withTimeout(0.2)
+      //new stopShooter(shooter).withTimeout(0.04),
+      //new stopIndexer(intake).withTimeout(0.04)
     );
   }
 }

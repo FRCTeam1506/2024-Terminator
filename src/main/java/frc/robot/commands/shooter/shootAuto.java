@@ -33,15 +33,15 @@ public class shootAuto extends SequentialCommandGroup {
         new setPosition(angler, setpoint),//.until(() -> angler.getPos() > angler.getVisionPosition()),
         new runWheel(shooter).withTimeout(0.1)
         // new angle(angler, Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14).until(() -> angler.getPos() > Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14)
-      ).withTimeout(0.6),
+      ).withTimeout(0.5),
       //new stopShooter(shooter),
-      new stopAngler(angler).withTimeout(0.1),
+      new stopAngler(angler).withTimeout(0.04),
       //new WaitCommand(0.5),
       new runIndexer(intake).withTimeout(0.3),
       new ParallelCommandGroup(
         new stopIndexer(intake),
         new stopShooter(shooter)
-      ).withTimeout(0.1)
+      ).withTimeout(0.04)
     );
   }
 }

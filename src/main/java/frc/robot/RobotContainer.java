@@ -68,6 +68,7 @@ import frc.robot.commands.shooter.deliverAutoWithoutTimeout;
 import frc.robot.commands.shooter.mailNotes;
 import frc.robot.commands.shooter.prepareToShoot;
 import frc.robot.commands.shooter.runWheel;
+import frc.robot.commands.shooter.runWheelPower;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
 import frc.robot.commands.shooter.shootAuto;
@@ -164,6 +165,14 @@ public class RobotContainer {
     j.oLT.whileTrue(new InstantCommand(() -> intake.outtake()));
     j.oLT.whileFalse(new InstantCommand(() -> intake.stopIntake()));
 
+
+    //intake via shooter
+    j.oLT.whileTrue(new runWheelPower(shooter, -0.25));
+    j.oLT.whileFalse(new stopShooter(shooter));
+    j.dLT.whileTrue(new runWheelPower(shooter, -0.25));
+    j.dLT.whileFalse(new stopShooter(shooter));
+
+
     //just in case
     j.oShare.whileTrue(new toggleManualIntake());
 
@@ -201,7 +210,7 @@ public class RobotContainer {
     // j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     // j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-    j.dRight.whileTrue(new shootFast(shooter, intake, angler, vision));
+    j.dRight.whileTrue(new shootConditional(shooter, intake, angler, vision, trapper));
     j.dRight.whileFalse(new InstantCommand(() -> shooter.shootStop()));
     j.dRight.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.dRight.whileFalse(new InstantCommand(() -> angler.stopAngler()));
@@ -224,8 +233,11 @@ public class RobotContainer {
     j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
-    j.oR3.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
-    j.oR3.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
+    j.oLeft.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
+    j.oLeft.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
+
+    j.dRB.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
+    j.dRB.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
 
     // j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
     // j.oR3.whileFalse(new InstantCommand(() -> shooter.shootStop()));
@@ -238,6 +250,7 @@ public class RobotContainer {
     // j.oY.whileTrue(new RepeatCommand(new InstantCommand(() -> climber.up())));
     j.oY.whileTrue(new RepeatCommand(new climberUp(climber)));
     j.oY.whileTrue(new InstantCommand(() -> angler.goVertical()));
+    j.oY.whileFalse(new InstantCommand(() -> angler.stopAngler()));
     j.oA.whileTrue(new RepeatCommand(new InstantCommand(() -> climber.down())));
     j.oY.whileFalse(new InstantCommand(() -> climber.stop()));
     j.oA.whileFalse(new InstantCommand(() -> climber.stop()));
@@ -260,14 +273,14 @@ public class RobotContainer {
     j.oLB.whileTrue(new InstantCommand(() -> intake.outtake()));
     j.oLB.whileFalse(new InstantCommand(() -> intake.stopIntake()));
     j.oB.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
-    j.dRB.whileTrue(new InstantCommand(() -> trapper.intake()));
+    // j.dRB.whileTrue(new InstantCommand(() -> trapper.intake()));
   
 
     j.oUp.whileFalse(new InstantCommand(() -> trapper.stopTrapper())); //send trapper home
     j.oDown.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     // j.oRB.whileFalse(new sendTrapperHome(trapper));
-    j.dRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    // j.dRB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oLB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
     j.oB.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
 
@@ -289,8 +302,8 @@ public class RobotContainer {
 
   
     //trapper in endgame
-    j.oLeft.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
-    j.oLeft.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
+    // j.oLeft.whileTrue(new InstantCommand(() -> trapper.shootTrap()));
+    // j.oLeft.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
 
     j.dPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
   }
@@ -309,7 +322,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.3));//1.2
     NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.17)));//1.2
     NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.36)));//1.2
-    NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4)));//for use in GoFar auto
+    NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.25)));//for use in center three  //used to be 4 b4 qual 125
+    NamedCommands.registerCommand("PrepareToShootMidStageGoFar", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.15)));//for use in GoFar auto
     NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).alongWith(new runWheel(shooter).withTimeout(0.05)).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));//1.2
     NamedCommands.registerCommand("JustIndexAndShoot", new justIndex(intake).alongWith(new runWheel(shooter), new justIntake(intake)));
     NamedCommands.registerCommand("RunShooter", new runWheel(shooter).withTimeout(0.05));

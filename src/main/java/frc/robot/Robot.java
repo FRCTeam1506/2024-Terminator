@@ -96,7 +96,7 @@ public class Robot extends LoggedRobot {
     Command autonInitCommand = new PathPlannerAuto("Forward").ignoringDisable(false);
     autonInitCommand.schedule();
 
-    PathfindingCommand.warmupCommand().schedule();
+    // PathfindingCommand.warmupCommand().schedule();
   }
 
   @Override

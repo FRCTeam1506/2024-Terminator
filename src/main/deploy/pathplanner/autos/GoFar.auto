@@ -57,6 +57,12 @@
                 "data": {
                   "name": "Intake"
                 }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "PrepareToShootMidStage"
+                }
               }
             ]
           }
@@ -64,7 +70,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootMidStage"
+            "name": "IndexToShoot"
           }
         },
         {
@@ -105,7 +111,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PrepareToShootMidStage"
+                  "name": "PrepareToShootMidStageGoFar"
                 }
               }
             ]

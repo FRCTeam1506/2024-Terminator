@@ -47,7 +47,7 @@ public class ShooterSubsystem extends SubsystemBase {
     //   motor1.set(0.45 * 1.3); //og 0.4
     //   motor2.set(0.05*1.2 * 1.3);
     // }
-    motor1.set(0.45); //og 0.4
+    motor1.set(0.6); //og 0.4 //0.45
     motor2.set(0.05*1.2);
   }
 

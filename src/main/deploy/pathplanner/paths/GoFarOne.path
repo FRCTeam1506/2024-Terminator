@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.913825345482359,
-        "y": 1.616095443317848
+        "x": 3.5156569029257874,
+        "y": 1.885444683870822
       },
       "isLocked": false,
       "linkedName": "GoFarOneStart"
@@ -20,16 +20,34 @@
         "y": 0.72
       },
       "prevControl": {
-        "x": 7.02890786666024,
-        "y": 0.6965783269084371
+        "x": 6.900088664656643,
+        "y": 0.8080477216589235
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": "GoFarOneEnd"
     }
   ],
-  "rotationTargets": [],
-  "constraintZones": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.25,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+  "constraintZones": [
+    {
+      "name": "New Constraints Zone",
+      "minWaypointRelativePos": 0.0,
+      "maxWaypointRelativePos": 0.7,
+      "constraints": {
+        "maxVelocity": 4.5,
+        "maxAcceleration": 3.1,
+        "maxAngularVelocity": 540.0,
+        "maxAngularAcceleration": 720.0
+      }
+    }
+  ],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 4.0,

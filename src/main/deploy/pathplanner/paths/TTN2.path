@@ -3,6 +3,7 @@
   "waypoints": [
     {
       "anchor": {
+<<<<<<< Updated upstream
         "x": 7.9,
         "y": 7.4
       },
@@ -10,6 +11,15 @@
       "nextControl": {
         "x": 6.942005936909719,
         "y": 7.113211968374247
+=======
+        "x": 8.3,
+        "y": 7.6
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.342005936909719,
+        "y": 7.3132119683742465
+>>>>>>> Stashed changes
       },
       "isLocked": false,
       "linkedName": "TTN1_End"

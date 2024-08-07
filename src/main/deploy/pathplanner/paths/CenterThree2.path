@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.0266462475863596,
-        "y": 5.939517116409411
+        "x": 1.0095378821285446,
+        "y": 5.422117320696838
       },
       "isLocked": false,
       "linkedName": "CenterThree1End"
     },
     {
       "anchor": {
-        "x": 2.894982565999367,
-        "y": 5.562647359246215
+        "x": 3.05,
+        "y": 5.86
       },
       "prevControl": {
-        "x": 2.894982565999367,
-        "y": 5.562647359246215
+        "x": 3.05,
+        "y": 5.86
       },
       "nextControl": null,
       "isLocked": false,
@@ -30,8 +30,13 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 0.65,
+      "rotationDegrees": 0.0,
+      "rotateFast": false
+    },
+    {
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": 5.0,
       "rotateFast": false
     }
   ],
@@ -49,9 +54,9 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "CenterThree",
+  "folder": null,
   "previewStartingState": {
-    "rotation": -30.5,
+    "rotation": -24.639803656313422,
     "velocity": 0
   },
   "useDefaultConstraints": true

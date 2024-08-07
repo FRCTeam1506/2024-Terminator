@@ -75,6 +75,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "IndexToShoot"
+          }
+        },
+        {
           "type": "deadline",
           "data": {
             "commands": [
@@ -110,6 +116,12 @@
                 }
               }
             ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IndexToShoot"
           }
         },
         {

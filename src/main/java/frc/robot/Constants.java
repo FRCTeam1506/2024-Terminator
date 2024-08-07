@@ -8,6 +8,7 @@ import com.ctre.phoenix6.mechanisms.swerve.SwerveDrivetrain;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModuleConstants;
 
 import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.Amp.AmperMode;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -124,7 +125,7 @@ public final class Constants {
         public static double c = 8.213;
 
         //this offset should be a negative number if you are shooting too low on red, vice versa
-        public static double redOffset = -0.14; //-.14
+        public static double redOffset = -0.19; //-.14 
 
         //TRAP VALUES
         // static double x = 0.73;
@@ -148,6 +149,15 @@ public final class Constants {
         public static final double AmpPosition = 8.3; //7.3
 
     }
+
+    public static final class AmperConstants {
+        public static final int MOTOR_ID = 0;
+        public static AmperMode ampState = AmperMode.RESTING;
+
+        public static final double AMP_POSITION = 1.77;
+        public static final double threshold = 0.3;
+    }
+
 
 
     //THANK YOU BRAZILIAN TEAM 1741 -- https://github.com/RAR1741/RA24_RobotCode/blob/columbus/src/main/java/frc/robot/Constants.java 

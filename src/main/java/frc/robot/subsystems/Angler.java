@@ -128,6 +128,9 @@ public class Angler extends SubsystemBase {
       if(DriverStation.getAlliance().get() == Alliance.Red){
         dist += Constants.ShooterSubsystem.redOffset; //need to shoot higher on red
       }
+      else{
+        dist-=0.149; //shoot higher on blue as well //0.089 worked fine for RR
+      }
       
       double pos = Constants.ShooterSubsystem.a*Math.pow(dist, 2) - Constants.ShooterSubsystem.b*dist + Constants.ShooterSubsystem.c; //desmos eq, check screenshots 2/21/2024 +++
       motor.setControl(m_motmag.withPosition(pos));
@@ -154,7 +157,7 @@ public class Angler extends SubsystemBase {
    */
   public void anglePurposefullyLow(){
     m_motmag.Slot = 0;
-    double reduce = 0.85;
+    double reduce = 0.45;//0.85
 
     double xshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[0]);
     double zshot = Math.abs(LimelightHelpers.getBotPose_TargetSpace("limelight")[2]);
@@ -211,8 +214,12 @@ public class Angler extends SubsystemBase {
   public void ampPosition(){
     anglerInUse = true;
     m_motmag.Slot = 0;
+<<<<<<< Updated upstream
     motor.setControl(m_motmag.withPosition(5.05)); //4.8
     anglerInUse = false;
+=======
+    motor.setControl(m_motmag.withPosition(3.5)); //4.8   5.05
+>>>>>>> Stashed changes
   }
 
   public void trapPosition(){

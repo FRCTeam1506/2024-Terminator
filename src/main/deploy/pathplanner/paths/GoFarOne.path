@@ -28,7 +28,17 @@
       "linkedName": "GoFarOneEnd"
     }
   ],
+<<<<<<< Updated upstream
   "rotationTargets": [],
+=======
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.75,
+      "rotationDegrees": 0,
+      "rotateFast": false
+    }
+  ],
+>>>>>>> Stashed changes
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {

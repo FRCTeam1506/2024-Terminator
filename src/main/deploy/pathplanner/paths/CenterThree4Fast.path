@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.85,
-        "y": 6.95
+        "x": 3.0,
+        "y": 7.25
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.206596259126896,
-        "y": 7.190453639109847
+        "x": 4.356596259126896,
+        "y": 7.490453639109846
       },
       "isLocked": false,
       "linkedName": "EndOf3"
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "CenterThree",
+  "folder": null,
   "previewStartingState": {
     "rotation": 30.0,
     "velocity": 0

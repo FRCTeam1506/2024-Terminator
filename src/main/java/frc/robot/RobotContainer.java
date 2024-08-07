@@ -41,12 +41,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.subsystems.Amp.AmperMode;
+import frc.robot.subsystems.Amp;
 import frc.robot.subsystems.Angler;
 import frc.robot.subsystems.Candle;
 import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.Trapper;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.angler.ampPosition;
 import frc.robot.commands.angler.setPosition;
 import frc.robot.commands.angler.stopAngler;
 import frc.robot.commands.autos.toggleGSA;
@@ -67,9 +71,11 @@ import frc.robot.commands.shooter.angle;
 import frc.robot.commands.shooter.deliverAuto;
 import frc.robot.commands.shooter.mailNotes;
 import frc.robot.commands.shooter.prepareToShoot;
+import frc.robot.commands.shooter.ptsAmp;
 import frc.robot.commands.shooter.runWheel;
 import frc.robot.commands.shooter.shoot;
 import frc.robot.commands.shooter.shootAmp;
+import frc.robot.commands.shooter.shootAmpPower;
 import frc.robot.commands.shooter.shootAuto;
 import frc.robot.commands.shooter.shootConditional;
 import frc.robot.commands.shooter.shootFast;
@@ -107,6 +113,7 @@ public class RobotContainer {
   public final Climber climber = new Climber();
   public final Trapper trapper = new Trapper();
   public final Candle candle = new Candle();
+  public final Amp amper = new Amp();
 
   //Commands
   vision2 visionCommand = new vision2(vision);
@@ -225,8 +232,20 @@ public class RobotContainer {
     j.oX.whileFalse(new InstantCommand(() -> intake.stopIndexer()));
     j.oX.whileFalse(new InstantCommand(() -> angler.stopAngler()));
 
+<<<<<<< Updated upstream
     j.oR3.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
     j.oR3.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
+=======
+    // j.oLeft.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
+    // j.oLeft.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
+
+    j.dRB.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
+    j.dRB.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
+>>>>>>> Stashed changes
+
+    //for flat passing
+    j.dLB.whileTrue(new PREmailNotes(shooter, intake, angler, vision, 0));
+    j.dLB.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
 
     // j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
     // j.oR3.whileFalse(new InstantCommand(() -> shooter.shootStop()));
@@ -275,9 +294,9 @@ public class RobotContainer {
 
     //trapper amp command
     // j.oPS.whileTrue(new InstantCommand(() -> trapper.setAmpPosition()));
-    j.oPS.whileTrue(new trampTheAmp(trapper, shooter, intake));
-    j.oPS.whileFalse(new InstantCommand(() -> trapper.sendTrapperHome()));
-    j.oPS.whileFalse(new InstantCommand(() -> trapper.stopIntake()));
+    // j.oPS.whileTrue(new trampTheAmp(trapper, shooter, intake));
+    // j.oPS.whileFalse(new InstantCommand(() -> trapper.sendTrapperHome()));
+    // j.oPS.whileFalse(new InstantCommand(() -> trapper.stopIntake()));
 
     //potential trap shooting code line 1 and 3
     // j.dRB.whileTrue(new shootTrap(angler, shooter, intake, vision));
@@ -294,6 +313,25 @@ public class RobotContainer {
     j.oLeft.whileFalse(new InstantCommand(() -> trapper.stopTrapper()));
 
     j.dPS.whileTrue(new InstantCommand(() -> trapper.verticalZero()));
+
+    //amp machine commands
+    j.dTouchpad.whileTrue(new InstantCommand(() -> amper.setAmpMode(AmperMode.AMPING)));
+    j.dTouchpad.whileFalse(new InstantCommand(() -> amper.setAmpMode(AmperMode.RESTING)));
+    j.oPS.whileTrue(new InstantCommand(() -> amper.toggleAmpMode()));
+
+    j.oLeft.whileTrue(new InstantCommand(() -> amper.setAmpMode(AmperMode.AMPING)).alongWith(new ptsAmp(angler, shooter, intake)));
+    j.oLeft.whileFalse(new shootAmpPower(shooter).withTimeout(0.4).andThen(new InstantCommand(() -> shooter.shootStop())));
+    j.oLeft.whileFalse(new indexToShoot(intake).withTimeout(0.3).andThen(new InstantCommand(() -> intake.stopIndexer())));
+    j.oLeft.whileFalse(new ampPosition(angler).withTimeout(0.35).andThen(new InstantCommand(() -> angler.stopAngler())));
+    j.oLeft.whileFalse(new WaitCommand(1.35).andThen(new InstantCommand(() -> amper.setAmpMode(AmperMode.RESTING))));
+
+
+    //slow drive and fast drive
+    // j.dLB.whileTrue(new InstantCommand(() -> speedSlow()));
+    // j.dLB.whileFalse(new InstantCommand(() -> speedFast()));
+
+
+
   }
 
   private final intake intakecommand = new intake(intake);
@@ -307,23 +345,30 @@ public class RobotContainer {
     NamedCommands.registerCommand("ZeroGyro", new zeroGyro().withTimeout(0.1));
 
     NamedCommands.registerCommand("Shoot", new shootOLD(shooter, intake, angler, vision));
-    NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.3));//1.2
-    NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.17)));//1.2
+    NamedCommands.registerCommand("ShootConditional", new shootConditional(shooter, intake, angler, vision, trapper).andThen(stopEverything()));
+    NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.36));//1.2 //1.3
+    NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(3.85)));//1.2 //4.17 //3 worked for RR but way to high for FRCC //4 barely too low for FRCC
     NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.36)));//1.2
+<<<<<<< Updated upstream
     NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4)));//for use in GoFar auto
     NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).alongWith(new runWheel(shooter).withTimeout(0.05)).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));//1.2
+=======
+    NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.25)));//for use in center three  //used to be 4 b4 qual 125
+    NamedCommands.registerCommand("PrepareToShootMidStageGoFar", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.15)));//for use in GoFar auto
+    NamedCommands.registerCommand("IndexToShoot", new indexToShoot(intake).alongWith(new runWheel(shooter).withTimeout(0.3)).withTimeout(0.3).andThen(new stopShooter(shooter).withTimeout(0.05), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));//1.2
+>>>>>>> Stashed changes
     NamedCommands.registerCommand("JustIndexAndShoot", new justIndex(intake).alongWith(new runWheel(shooter), new justIntake(intake)));
     NamedCommands.registerCommand("RunShooter", new runWheel(shooter).withTimeout(0.05));
 
     NamedCommands.registerCommand("ShootLine", new shootAuto(shooter, intake, angler, vision, 0.7));
     NamedCommands.registerCommand("ShootStage", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(2.94)));
-    NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(2.69)));
+    NamedCommands.registerCommand("ShootBlackLine", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(2.49))); //2.69 worlds, lowered for RR
     NamedCommands.registerCommand("ShootMidStage", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(4))); // og 0.725 //then 0.785 //then 0.885
     NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(1.89)));
     NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler, 0.5));
     NamedCommands.registerCommand("DeliverAutoSoftly", new deliverAuto(shooter, intake, angler,0.15));
     NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
-    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(0.88))); //5.6 //5.75 //0.95 b4 states
+    NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(0.733))); //5.6 //5.75 //0.95 b4 states //0.88 too low RR //0.78 barely too low on red RR
 
     NamedCommands.registerCommand("AutoNotePost_PTS", new setPosition(angler, getAutoSetpoint(3.03)));
     NamedCommands.registerCommand("AutoNoteCenterNAmp_PTS", new setPosition(angler, getAutoSetpoint(3)));
@@ -410,6 +455,13 @@ public class RobotContainer {
 
   }
 
+  public void speedSlow(){
+    MaxSpeed = MaxSpeed/4;
+  }
+  public void speedFast(){
+    MaxSpeed = MaxSpeed*4;
+  }
+
 
   public Command getAutonomousCommand() {
 
@@ -456,7 +508,7 @@ public class RobotContainer {
 
   public void periodic(){
     // Do this in either robot or subsystem init
-     SmartDashboard.putData("Field", m_field);
+    SmartDashboard.putData("Field", m_field);
     // operatorRumble.setRumble(RumbleType.kRightRumble, 1);
     // Do this in either robot periodic or subsystem periodic ---- odometry
     m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that

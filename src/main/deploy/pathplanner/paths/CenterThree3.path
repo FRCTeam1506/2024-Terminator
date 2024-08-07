@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.894982565999367,
-        "y": 5.562647359246215
+        "x": 3.05,
+        "y": 5.86
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.8292964403332503,
-        "y": 5.785153253616065
+        "x": 1.9843138743338828,
+        "y": 6.0825058943698505
       },
       "isLocked": false,
       "linkedName": "CenterThree2End"
     },
     {
       "anchor": {
-        "x": 2.85,
-        "y": 6.95
+        "x": 3.0,
+        "y": 7.25
       },
       "prevControl": {
-        "x": 2.051802334703099,
-        "y": 6.651755158003897
+        "x": 2.201802334703099,
+        "y": 6.9517551580038965
       },
       "nextControl": null,
       "isLocked": false,
@@ -43,7 +43,7 @@
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "CenterThree",
+  "folder": null,
   "previewStartingState": {
     "rotation": 0,
     "velocity": 0

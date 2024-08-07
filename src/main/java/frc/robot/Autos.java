@@ -74,7 +74,8 @@ public class Autos {
                 return new WaitCommand(15.0);
             
             case TwoMeters:
-                return new PathPlannerAuto("Calibration");
+                // return new PathPlannerAuto("Calibration");
+                return new PathPlannerAuto("SquareCalibrationAuto");
 
             case GetThree:
                 return new PathPlannerAuto("GetThree");

@@ -214,12 +214,7 @@ public class Angler extends SubsystemBase {
   public void ampPosition(){
     anglerInUse = true;
     m_motmag.Slot = 0;
-<<<<<<< Updated upstream
-    motor.setControl(m_motmag.withPosition(5.05)); //4.8
-    anglerInUse = false;
-=======
     motor.setControl(m_motmag.withPosition(3.5)); //4.8   5.05
->>>>>>> Stashed changes
   }
 
   public void trapPosition(){

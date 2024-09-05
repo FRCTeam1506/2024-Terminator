@@ -243,12 +243,16 @@ public class RobotContainer {
     // j.oLeft.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
     // j.oLeft.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
 
-    j.dRB.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
-    j.dRB.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
+    j.dRB.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition, 0.65));
+    j.dRB.whileFalse(new alignToPass(vision, 42).withTimeout(0.3).andThen((new indexToShoot(intake).withTimeout(0.3))).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
 
     //for flat passing
-    j.dLB.whileTrue(new PREmailNotes(shooter, intake, angler, vision, 0));
-    j.dLB.whileFalse((new indexToShoot(intake).withTimeout(0.2)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
+    j.dLB.whileTrue(new PREmailNotes(shooter, intake, angler, vision, 0, 0.65));
+    j.dLB.whileFalse((new indexToShoot(intake).withTimeout(0.3)).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
+
+    //for RUSH(r) passing
+    j.dR3.whileTrue(new PREmailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition + 1.07, 0.65));
+    j.dR3.whileFalse(new indexToShoot(intake).withTimeout(0.3).andThen(new stopAnglerIntakeIndexerShooter(angler, intake, shooter)));
 
     // j.oR3.whileTrue(new mailNotes(shooter, intake, angler, vision, Constants.ShooterSubsystem.mailNotesPosition));
     // j.oR3.whileFalse(new InstantCommand(() -> shooter.shootStop()));
@@ -350,7 +354,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Shoot", new shootOLD(shooter, intake, angler, vision));
     NamedCommands.registerCommand("ShootConditional", new shootConditional(shooter, intake, angler, vision, trapper).andThen(stopEverything()));
-    NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.36));//1.2 //1.3
+    NamedCommands.registerCommand("ShootWhileMoving", new ShootWhileMoving(shooter, intake, angler, vision, 1.41));//1.2 //1.3 //1.36 slightly high red AS
     NamedCommands.registerCommand("PrepareToShoot", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(3.85)));//1.2 //4.17 //3 worked for RR but way to high for FRCC //4 barely too low for FRCC
     NamedCommands.registerCommand("PrepareToShootUnderStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.36)));//1.2
     NamedCommands.registerCommand("PrepareToShootMidStage", new prepareToShoot(angler, shooter, intake, getAutoSetpoint(4.25)));//for use in center three  //used to be 4 b4 qual 125
@@ -366,7 +370,7 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootAmp", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(1.89)));
     NamedCommands.registerCommand("DeliverAuto", new deliverAuto(shooter, intake, angler, 0.5));
     NamedCommands.registerCommand("DeliverAutoSoftly", new deliverAuto(shooter, intake, angler,0.15));
-    NamedCommands.registerCommand("DeliverAutoSoftlyWithoutTimeout", new deliverAutoWithoutTimeout(shooter, intake, angler,0.15));
+    NamedCommands.registerCommand("DeliverAutoSoftlyWithoutTimeout", new deliverAutoWithoutTimeout(shooter, intake, angler,0.32));
     NamedCommands.registerCommand("StopEverything", new ParallelCommandGroup(new stopShooter(shooter), new stopAngler(angler), new stopIntake(intake), new stopIndexer(intake)).withTimeout(0.1));
     NamedCommands.registerCommand("ShootBase", new shootAuto(shooter, intake, angler, vision, getAutoSetpoint(0.733))); //5.6 //5.75 //0.95 b4 states //0.88 too low RR //0.78 barely too low on red RR
 

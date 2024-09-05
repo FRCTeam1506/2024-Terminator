@@ -99,7 +99,7 @@ public class Autos {
             return new PathPlannerAuto("CenterThreeBeta");
 
             case MAD:
-            return new PathPlannerAuto("MAD");
+            return new PathPlannerAuto("Enraged");
 
             case ThreadTheNeedle:
             return new PathPlannerAuto("ThreadTheNeedle");

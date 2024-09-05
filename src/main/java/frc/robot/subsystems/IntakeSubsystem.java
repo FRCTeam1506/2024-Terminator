@@ -53,7 +53,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void justIntake(){
     motor.set(Constants.IntakeSubsystem.DEFAULT_INTAKE_SPEED);
-    indexer.set(Constants.IntakeSubsystem.DEFAULT_INDEXER_SPEED);
+    indexer.set(Constants.IntakeSubsystem.DEFAULT_INDEXER_SPEED*2.5);
     // indexer.set(maxVelocity);
     System.out.println("Intake");
 
@@ -73,7 +73,7 @@ public class IntakeSubsystem extends SubsystemBase {
       if(!irNine.get()){
         Constants.IntakeSubsystem.ring = true;
         stopIntake();
-        Constants.TheShooterSubsystem.shootMax();
+        // Constants.TheShooterSubsystem.shootMax();
       }
       else{
         motor.set(Constants.IntakeSubsystem.DEFAULT_INTAKE_SPEED);

@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 8.352232396333552,
-        "y": 7.3544053507507865
+        "x": 8.340521559787769,
+        "y": 5.644623215066687
       },
       "prevControl": {
-        "x": 8.352232396333552,
-        "y": 6.014405350750787
+        "x": 8.340521559787769,
+        "y": 4.304623215066687
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "MAD2End"
+      "linkedName": "MAD2BetaEnd"
     }
   ],
   "rotationTargets": [
@@ -35,13 +35,13 @@
       "rotateFast": true
     },
     {
-      "waypointRelativePos": 0.4,
-      "rotationDegrees": 180.0,
+      "waypointRelativePos": 0.55,
+      "rotationDegrees": 30.0,
       "rotateFast": true
     },
     {
-      "waypointRelativePos": 0.65,
-      "rotationDegrees": 0.0,
+      "waypointRelativePos": 0.85,
+      "rotationDegrees": 180.0,
       "rotateFast": true
     }
   ],

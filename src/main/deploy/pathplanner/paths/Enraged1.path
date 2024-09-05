@@ -8,51 +8,45 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.611652391065122,
-        "y": 0.5246967810055427
+        "x": 4.2206158914457585,
+        "y": 0.7472026753753922
       },
       "isLocked": false,
       "linkedName": "GoFarOneStart"
     },
     {
       "anchor": {
-        "x": 8.293678213604645,
-        "y": 0.72
+        "x": 8.106304828872139,
+        "y": 1.08
       },
       "prevControl": {
-        "x": 6.900088664656643,
-        "y": 0.8080477216589235
+        "x": 7.33338961685056,
+        "y": 1.2673733847325064
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "GoFarOneEnd"
+      "linkedName": "MAD1End"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.75,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 4.0,
-    "maxAcceleration": 2.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 0,
+    "rotation": 0.0,
     "rotateFast": false
   },
   "reversed": false,
-  "folder": "GoFar",
+  "folder": "MAD",
   "previewStartingState": {
-    "rotation": -68.0,
+    "rotation": 0.0,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

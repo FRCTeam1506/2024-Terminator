@@ -29,14 +29,14 @@ import frc.robot.subsystems.Vision;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class PREmailNotes extends SequentialCommandGroup {
   /** Creates a new shoot. */
-  public PREmailNotes(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision, double anglerSetpoint) {
+  public PREmailNotes(ShooterSubsystem shooter, IntakeSubsystem intake, Angler angler, Vision vision, double anglerSetpoint, double shooterPower) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     Constants.ShooterSubsystem.isShooting = true;
     addCommands(
       new ParallelCommandGroup(
         new setPosition(angler, anglerSetpoint),
-        new runWheelPower(shooter, 0.65)
+        new runWheelPower(shooter, shooterPower)
       ).withTimeout(0.5)
     );
     Constants.ShooterSubsystem.isShooting = false;

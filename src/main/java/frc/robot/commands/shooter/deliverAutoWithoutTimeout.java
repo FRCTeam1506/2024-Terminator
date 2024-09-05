@@ -34,7 +34,7 @@ public class deliverAutoWithoutTimeout extends SequentialCommandGroup {
     addCommands(
       new ParallelCommandGroup(
         new justIntakeFast(intake),
-        new setPosition(angler, 2),//.until(() -> angler.getPos() > angler.getVisionPosition()),
+        new setPosition(angler, 1),//.until(() -> angler.getPos() > angler.getVisionPosition()),
         new shootToDeliverAuto(shooter, speed).withTimeout(0.1)
         // new angle(angler, Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14).until(() -> angler.getPos() > Math.toDegrees(Math.atan(66/(z * 39.37)))/5.14)
       )

@@ -24,22 +24,9 @@
           }
         },
         {
-          "type": "deadline",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "GoFarOne"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
+            "name": "StartIntake"
           }
         },
         {
@@ -49,19 +36,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GoFarTwo"
+                  "pathName": "MAD1"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PrepareToShootMidStage"
+                  "name": "DeliverAutoSoftly"
                 }
               }
             ]
@@ -70,7 +51,7 @@
         {
           "type": "named",
           "data": {
-            "name": "IndexToShoot"
+            "name": "StopEverything"
           }
         },
         {
@@ -80,13 +61,13 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GoFarThree"
+                  "pathName": "NewMAD2"
                 }
               },
               {
                 "type": "named",
                 "data": {
-                  "name": "Intake"
+                  "name": "DeliverAutoSoftlyWithoutTimeout"
                 }
               }
             ]
@@ -99,7 +80,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "GoFarFour"
+                  "pathName": "NewMAD3"
                 }
               },
               {
@@ -111,51 +92,7 @@
               {
                 "type": "named",
                 "data": {
-                  "name": "PrepareToShootMidStageGoFar"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "IndexToShoot"
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "GoFarFive"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "deadline",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "GoFarSix"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "PrepareToShootUnderStage"
+                  "name": "PrepareToShoot"
                 }
               }
             ]

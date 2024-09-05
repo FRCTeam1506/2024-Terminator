@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 public final class Constants {
 
     public static final frc.robot.subsystems.ShooterSubsystem TheShooterSubsystem = new frc.robot.subsystems.ShooterSubsystem();
+    // public static Alliance alliance = DriverStation.getAlliance().get();
 
     public static final class Swerve {        
         static Translation2d fl = new Translation2d(TunerConstants.kFrontLeftXPosInches, TunerConstants.kFrontLeftYPosInches);

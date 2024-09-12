@@ -22,6 +22,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 import com.fasterxml.jackson.databind.util.Named;
 
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -129,7 +130,7 @@ public class RobotContainer {
 
   /* Path follower */
 
-  // private final Telemetry logger = new Telemetry(MaxSpeed);
+  private final Telemetry logger = new Telemetry(MaxSpeed);
   private final Field2d m_field = Constants.Swerve.m_field;
 
   private void configureBindings() {
@@ -152,7 +153,7 @@ public class RobotContainer {
     if (Utils.isSimulation()) {
       drivetrain.seedFieldRelative(new Pose2d(new Translation2d(), Rotation2d.fromDegrees(90)));
     }
-    // drivetrain.registerTelemetry(logger::telemeterize);
+    drivetrain.registerTelemetry(logger::telemeterize);
 
     // j.dUp.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
     // j.dDown.whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
@@ -409,6 +410,9 @@ public class RobotContainer {
     tab.addBoolean("End Game", () -> Constants.ClimberSubsystem.endGame);
     tab.addBoolean("Tramper Limit Switch", () -> trapper.isClicked);
     //shuffleboard for the angler position with a slider
+
+    tab.addDoubleArray("pose array", () -> new double[] {TunerConstants.DriveTrain.getState().Pose.getX(), TunerConstants.DriveTrain.getState().Pose.getY(), TunerConstants.DriveTrain.getState().Pose.getRotation().getRadians()});
+
     
   }
 
@@ -507,6 +511,10 @@ public class RobotContainer {
   public void periodic(){
     // Do this in either robot or subsystem init
     SmartDashboard.putData("Field", m_field);
+    // SmartDashboard.putData(TunerConstants.DriveTrain.getState().Pose);
+    // Shuffleboard.getTab("pose_only").addDoubleArray("pose array", () -> new double[] {TunerConstants.DriveTrain.getState().Pose.getX(), TunerConstants.DriveTrain.getState().Pose.getY(), TunerConstants.DriveTrain.getState().Pose.getRotation().getRadians()});
+
+
     // operatorRumble.setRumble(RumbleType.kRightRumble, 1);
     // Do this in either robot periodic or subsystem periodic ---- odometry
     m_field.setRobotPose(drivetrain.getState().Pose); ////say TunerConstants.DriveTrain.getState().Pose or something like that
@@ -514,6 +522,14 @@ public class RobotContainer {
     // if(drivetrain.getPigeon2().getStickyFaultField().getValue() > 0){
     //   drivetrain.getPigeon2().clearStickyFaults();
     //   // drivetrain.getPigeon2().clear
+    // }
+      
+    // LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    // System.out.println(limelightMeasurement.tagCount + "hi");
+    // if (limelightMeasurement.tagCount >= 1) {
+    //   System.out.println("YOOOOOOOOOO");
+    //   drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 3));
+    //   drivetrain.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
     // }
   }
 }

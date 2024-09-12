@@ -151,5 +151,14 @@ public class Vision extends SubsystemBase {
     //   TunerConstants.DriveTrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), timer.getFPGATimestamp());
     // }
 
+    LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
+    // System.out.println(limelightMeasurement.tagCount + " hi");
+    if (limelightMeasurement.tagCount >= 2) {
+      // System.out.println("YOOOOOOOOOO");
+      TunerConstants.DriveTrain.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 0.7));
+      TunerConstants.DriveTrain.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
+    }
+
+
   }
 }

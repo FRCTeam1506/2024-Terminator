@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.LimelightHelpers;
 
 import com.ctre.phoenix.led.Animation;
 import com.ctre.phoenix.led.CANdle;
@@ -34,6 +35,7 @@ public class Candle extends SubsystemBase {
   }
 
   public void orange(){
+    //is actually blue
     stopGSA();
     candle.setLEDs(orange[0], orange[1], orange[2]);
     Constants.CandleSubsystem.note = true;
@@ -44,6 +46,11 @@ public class Candle extends SubsystemBase {
     stopGSA();
     StrobeAnimation strobe = new StrobeAnimation(orange[0], orange[1], orange[2]);
     candle.animate(strobe);
+  }
+
+  public void white(){
+    stopGSA();
+    candle.setLEDs(255, 255, 255);
   }
 
   public void green(){
@@ -91,8 +98,7 @@ public class Candle extends SubsystemBase {
     if(Constants.CandleSubsystem.noah){
       gsa();
     }
-    else{
-      if(!Constants.IntakeSubsystem.irNine.get()){
+    else if(!Constants.IntakeSubsystem.irNine.get()){
         if(Vision.shooterID == 4 || Vision.shooterID == 7){
           if(Math.abs(Vision.x) < 3.5){
             greenBlinkAnimation();
@@ -103,11 +109,13 @@ public class Candle extends SubsystemBase {
         }else{
           orange();//blue
         }
-      }
-      else{
-        red();
-      }
     }
-
+    else if(LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight").tagCount > 0){
+      white();
+    }
+    else{
+      red();
+    }
   }
+
 }

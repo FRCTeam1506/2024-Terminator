@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.106304828872139,
-        "y": 7.55
+        "x": 8.15,
+        "y": 7.5
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.513631058645855,
-        "y": 6.835638970707328
+        "x": 6.557326229773716,
+        "y": 6.785638970707328
       },
       "isLocked": false,
       "linkedName": "CenterThree4End"

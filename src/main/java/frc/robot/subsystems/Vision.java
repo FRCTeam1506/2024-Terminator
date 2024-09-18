@@ -150,7 +150,7 @@ public class Vision extends SubsystemBase {
     // if(target > 0){
     //   TunerConstants.DriveTrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), timer.getFPGATimestamp());
     // }
-
+/* COMMENTED OUT -- POSE ESTIMATION FROM LIMELIGHT -- FROM KETTERING KICKOFF
     LimelightHelpers.PoseEstimate limelightMeasurement = LimelightHelpers.getBotPoseEstimate_wpiBlue("limelight");
     // System.out.println(limelightMeasurement.tagCount + " hi");
     if (limelightMeasurement.tagCount >= 2) {
@@ -158,7 +158,7 @@ public class Vision extends SubsystemBase {
       TunerConstants.DriveTrain.setVisionMeasurementStdDevs(VecBuilder.fill(0.7, 0.7, 0.7));
       TunerConstants.DriveTrain.addVisionMeasurement(limelightMeasurement.pose, limelightMeasurement.timestampSeconds);
     }
-
+ */
 
   }
 }

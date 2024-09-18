@@ -1,0 +1,25 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.8410072768790318,
+      "y": 7.68230877403267
+    },
+    "rotation": -90.37687936767466
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Copy of NewCalibration"
+          }
+        }
+      ]
+    }
+  },
+  "folder": "TeleOp",
+  "choreoAuto": false
+}

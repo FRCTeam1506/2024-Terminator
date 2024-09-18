@@ -138,7 +138,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
                 new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                         new PIDConstants(Swerve.driveP, Swerve.driveI, Swerve.driveD), // Translation PID constants
                         new PIDConstants(Swerve.rotationP, Swerve.rotationI, Swerve.rotationD), // Rotation PID constants
-                        4.5, // Max module speed, in m/s
+                        6.8, // Max module speed, in m/s //5.8
                         0.4, // Drive base radius in meters. Distance from robot center to furthest module.
                         new ReplanningConfig() // Default path replanning config. See the API for the options here
                 ),

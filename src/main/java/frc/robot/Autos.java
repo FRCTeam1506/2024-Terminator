@@ -75,7 +75,8 @@ public class Autos {
             
             case TwoMeters:
                 // return new PathPlannerAuto("Calibration");
-                return new PathPlannerAuto("SquareCalibrationAuto");
+                // return new PathPlannerAuto("SquareCalibrationAuto");
+                return new PathPlannerAuto("SquareCalibration");
 
             case GetThree:
                 return new PathPlannerAuto("GetThree");
@@ -107,6 +108,7 @@ public class Autos {
             case test:
             // return new ConditionalAutoTest(shooter, intake, angler, vision, "GoFarOne", null, null, null);
             return new PathPlannerAuto("AmpSide");
+
                 
             default:
                 return new WaitCommand(15.0);

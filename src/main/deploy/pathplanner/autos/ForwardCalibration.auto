@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 4.3,
-      "y": 6.921104398556871
+      "x": 0.5293935837515026,
+      "y": 1.8268905011419148
     },
-    "rotation": 180.0
+    "rotation": 2.3556632533040753
   },
   "command": {
     "type": "sequential",
@@ -14,7 +14,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Forward"
+            "pathName": "NewCalibration"
           }
         }
       ]

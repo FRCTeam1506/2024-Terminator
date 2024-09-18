@@ -25,7 +25,7 @@ public final class Constants {
 
     public static final frc.robot.subsystems.ShooterSubsystem TheShooterSubsystem = new frc.robot.subsystems.ShooterSubsystem();
     // public static Alliance alliance = DriverStation.getAlliance().get();
-
+    
     public static final class Swerve {        
         static Translation2d fl = new Translation2d(TunerConstants.kFrontLeftXPosInches, TunerConstants.kFrontLeftYPosInches);
         static Translation2d fr = new Translation2d(TunerConstants.kFrontRightXPosInches, TunerConstants.kFrontRightYPosInches);
@@ -43,10 +43,10 @@ public final class Constants {
 
         // https://www.reddit.com/r/FRC/comments/r6siuy/pid_tuning/
 
-        public static double rotationP = 100 * 2.4; //100
+        public static double rotationP = 100; //* 2.4; //100
         public static double rotationI = 0; //0
         public static double rotationD = 0.2; //0.2
-        public static double driveP = 3*8; //3 //3*8
+        public static double driveP = 3;//3*8; //3 //3*8
         public static double driveI = 0; //0
         public static double driveD = 0; //0
         
